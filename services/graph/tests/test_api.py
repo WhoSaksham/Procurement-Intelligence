@@ -92,3 +92,15 @@ def test_full_graph(client):
     r = client.get("/v1/full", headers=KEY)
     assert r.status_code == 200
     assert len(r.json()["nodes"]) == client.get("/health").json()["stats"]["nodes"]
+
+
+def test_docs_hidden_by_default(client):
+    # The API map is not published unless EXPOSE_DOCS=true (local development).
+    for path in ("/docs", "/redoc", "/openapi.json"):
+        assert client.get(path).status_code == 404, path
+
+
+def test_openapi_still_exportable():
+    # scripts/export_openapi.py generates the contract from the app object directly.
+    schema = app.openapi()
+    assert "/v1/suppliers/resolve" in schema["paths"]

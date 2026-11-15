@@ -32,6 +32,7 @@ If the graph service is not running, the web app serves a saved snapshot of the 
 |---|---|---|---|
 | `GRAPH_API_KEY` | both | `dev-key` | Shared secret sent as `X-API-Key`. Use a long random value outside local dev |
 | `GRAPH_SERVICE_URL` | web (server only) | `http://localhost:8000` | Where the web app's API route reaches the service |
+| `EXPOSE_DOCS` | graph service | `false` | Serve the interactive API docs at `/docs`. Keep it off on public deployments |
 
 ## Tests
 

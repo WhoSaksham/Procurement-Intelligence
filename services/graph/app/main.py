@@ -25,11 +25,15 @@ async def lifespan(app: FastAPI):
     yield
 
 
+_docs = Settings().expose_docs
 app = FastAPI(
     title="Procurement graph service",
     version="1.0.0",
     summary="Knowledge graph, supplier resolution and provenance built with Semantica.",
     lifespan=lifespan,
+    docs_url="/docs" if _docs else None,
+    redoc_url="/redoc" if _docs else None,
+    openapi_url="/openapi.json" if _docs else None,
 )
 
 

@@ -46,7 +46,7 @@ All `/v1` routes require `X-API-Key`; `/health` is open. CORS is off, because on
 | POST | `/v1/suppliers/resolve` | Best match for each submitted name (1–50 names, 1–200 characters each) |
 | GET | `/v1/analytics` | Degree centrality ranking, Louvain communities |
 
-OpenAPI is served at `/docs` and exported to `services/graph/openapi.json`.
+The contract is exported to `services/graph/openapi.json`. Interactive docs (`/docs`, `/redoc`, `/openapi.json`) are off by default so a public deployment doesn't publish its API map; set `EXPOSE_DOCS=true` locally to browse them.
 
 ## What Semantica does, and what is glue
 
