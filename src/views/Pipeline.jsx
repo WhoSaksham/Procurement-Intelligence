@@ -1,16 +1,17 @@
 import { useState } from 'react';
+import { HBars } from '../components/charts.jsx';
 import { PageHead, Tabs } from '../components/ui.jsx';
 import { LAYERS } from '../data/sources.js';
 
 const FEEDS = [
-  { name: 'Major Contract Awards', layer: 'ledger', format: 'CSV / JSON API', cadence: 'Weekly', records: '214,806 rows', lag: '2 days' },
-  { name: 'Projects & Operations', layer: 'ledger', format: 'JSON API', cadence: 'Daily', records: '22,410 projects', lag: '1 day' },
-  { name: 'Finances: disbursements and commitments', layer: 'ledger', format: 'CSV / Socrata API', cadence: 'Monthly', records: '1.9M rows', lag: '9 days' },
-  { name: 'CPIA and Worldwide Governance Indicators', layer: 'ledger', format: 'Indicators API', cadence: 'Annual', records: '214 countries', lag: '—' },
-  { name: 'Procurement notices and prior-review archive', layer: 'procedure', format: 'HTML / PDF', cadence: 'Daily', records: '96,330 notices', lag: '1 day' },
-  { name: 'Implementation Status & Results Reports', layer: 'procedure', format: 'PDF', cadence: 'Daily', records: '61,902 reports', lag: '3 days' },
-  { name: 'Documents & Reports: PADs, ICRs', layer: 'retrospective', format: 'PDF / Word', cadence: 'Daily', records: '38,117 documents', lag: '3 days' },
-  { name: 'IEG evaluations and Open Knowledge Repository', layer: 'retrospective', format: 'PDF', cadence: 'Weekly', records: '4,860 documents', lag: '6 days' },
+  { name: 'Major Contract Awards', layer: 'ledger', format: 'CSV / JSON API', cadence: 'Weekly', records: '214,806 rows', n: 214806, api: 'datacatalogapi.worldbank.org/dexapps/fone/api/apiservice?datasetId=DS00005', lag: '2 days' },
+  { name: 'Projects & Operations', layer: 'ledger', format: 'JSON API', cadence: 'Daily', records: '22,410 projects', n: 22410, api: 'search.worldbank.org/api/v3/projects', lag: '1 day' },
+  { name: 'Finances: disbursements and commitments', layer: 'ledger', format: 'CSV / Socrata API', cadence: 'Monthly', records: '1.9M rows', n: 1900000, api: 'datacatalogapi.worldbank.org/dexapps/fone/api/apiservice?datasetId=DS00001 (IDA), DS00047 (IBRD)', lag: '9 days' },
+  { name: 'CPIA and Worldwide Governance Indicators', layer: 'ledger', format: 'Indicators API', cadence: 'Annual', records: '214 countries', n: 214, api: 'api.worldbank.org/v2/country/all/indicator/IQ.CPA.PUBS.XQ, GOV_WGI_RQ.EST', lag: '—' },
+  { name: 'Procurement notices and prior-review archive', layer: 'procedure', format: 'HTML / PDF', cadence: 'Daily', records: '96,330 notices', n: 96330, api: 'search.worldbank.org/api/v2/procnotices', lag: '1 day' },
+  { name: 'Implementation Status & Results Reports', layer: 'procedure', format: 'PDF', cadence: 'Daily', records: '61,902 reports', n: 61902, api: 'search.worldbank.org/api/v3/wds (docty: ISR)', lag: '3 days' },
+  { name: 'Documents & Reports: PADs, ICRs', layer: 'retrospective', format: 'PDF / Word', cadence: 'Daily', records: '38,117 documents', n: 38117, api: 'search.worldbank.org/api/v3/wds (docty: PAD, ICR)', lag: '3 days' },
+  { name: 'IEG evaluations and Open Knowledge Repository', layer: 'retrospective', format: 'PDF', cadence: 'Weekly', records: '4,860 documents', n: 4860, api: 'datacatalogapi.worldbank.org/dexapps/fone/api/apiservice?datasetId=DS00053, openknowledge.worldbank.org', lag: '6 days' },
 ];
 
 const STAGES = [
@@ -21,6 +22,30 @@ const STAGES = [
   { name: 'Chunk and embed', detail: 'Section-aware chunks with their heading path; tables stored whole and as rows.' },
   { name: 'Index', detail: 'Warehouse tables, graph store, and a hybrid keyword + vector index share the same IDs.' },
   { name: 'Validate', detail: 'Row counts, schema checks, link-score audits and a sample of parsed pages reviewed weekly.' },
+];
+
+// Tenders and signed contracts share no ID; links are built in three passes,
+// strongest evidence first (illustrative counts).
+const LINKING = [
+  { label: 'Procurement notices (tenders)', v: 8420 },
+  { label: 'Pass 1: same package code in both', v: 1540, tone: 'good' },
+  { label: 'Pass 2: through the award notice', v: 610, tone: 'good' },
+  { label: 'Pass 3: matching description, same project', note: 'calibrated on pass 1: at least 90% precision', v: 290, tone: 'good' },
+  { label: 'Linked and timed exactly', v: 2105 },
+  { label: 'Linked, still open under 18 months (censored)', v: 335, tone: 'alt' },
+  { label: 'No contract found: counted, never guessed', v: 5980, tone: 'quiet' },
+];
+
+// Last weekly refresh: each step runs only if the previous one succeeded.
+const RUN = [
+  { step: 'Ingest notices and awards', min: 3.1, status: 'ok' },
+  { step: 'Ingest documents', min: 4.4, status: 'warn', note: '3 scanned PDFs below OCR threshold' },
+  { step: 'Ingest finances and indicators', min: 1.2, status: 'ok' },
+  { step: 'Resolve and link', min: 1.6, status: 'ok' },
+  { step: 'Chunk and embed changed passages', min: 2.2, status: 'ok' },
+  { step: 'Backtest and release gate', min: 1.4, status: 'warn', note: 'Candidate tied the benchmark, not promoted' },
+  { step: 'Score packages and warnings', min: 0.6, status: 'ok' },
+  { step: 'Health checks', min: 0.4, status: 'ok', note: '42 checks, 0 failing, 5 warnings' },
 ];
 
 const ICR_TREE = [
@@ -83,16 +108,22 @@ export default function Pipeline() {
                         <th scope="col">Format</th>
                         <th scope="col">Refresh</th>
                         <th scope="col" className="num">Records</th>
+                        <th scope="col"><span className="sr-only">Volume, log scale</span></th>
                       </tr>
                     </thead>
                     <tbody>
                       {FEEDS.map((f) => (
                         <tr key={f.name}>
-                          <th scope="row">{f.name}</th>
+                          <th scope="row">{f.name}<span className="api">{f.api}</span></th>
                           <td><span className={`layer-tag layer-${f.layer}`}>{LAYERS[f.layer].name}</span></td>
                           <td>{f.format}</td>
                           <td>{f.cadence}</td>
                           <td className="num">{f.records}</td>
+                          <td className="vol-cell">
+                            <span className="vol" title={`${f.records} (log scale)`}>
+                              <span className={`layer-${f.layer}`} style={{ width: `${(Math.log10(f.n) / Math.log10(2e6)) * 100}%` }} />
+                            </span>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -144,6 +175,42 @@ export default function Pipeline() {
                   </div>
                 </div>
               ),
+            },
+            {
+              id: 'linking',
+              label: 'Linking tenders to contracts',
+              content: (
+                <>
+                  <p className="muted small">Notices and contract awards share no key, so the labels the timeline model learns from are built here. Unlinked tenders are counted but never guessed.</p>
+                  <HBars rows={LINKING} />
+                </>
+              ),
+            },
+            {
+              id: 'run',
+              label: 'Weekly run',
+              content: (() => {
+                const total = RUN.reduce((t, r) => t + r.min, 0);
+                let at = 0;
+                return (
+                  <>
+                    <p className="muted small">Sunday 06:00, {total.toFixed(1)} minutes end to end. A failing check stops the job and alerts the owner.</p>
+                    <ol className="run">
+                      {RUN.map((r) => {
+                        const left = (at / total) * 100;
+                        at += r.min;
+                        return (
+                          <li key={r.step} className={`run-${r.status}`}>
+                            <span className="run-step">{r.step}{r.note && <span className="muted small"> {r.note}</span>}</span>
+                            <span className="run-track"><span style={{ left: `${left}%`, width: `${(r.min / total) * 100}%` }} /></span>
+                            <span className="run-min">{r.min.toFixed(1)} min</span>
+                          </li>
+                        );
+                      })}
+                    </ol>
+                  </>
+                );
+              })(),
             },
             {
               id: 'gaps',

@@ -5,6 +5,9 @@ import { Collapse, PageHead } from '../components/ui.jsx';
 
 const SUPPORT_MIN = 0.75;
 
+// Instruction-like text is refused before anything is searched or generated.
+const INJECTION = /\b(ignore|disregard|forget)\b.{0,30}\b(previous|above|prior|earlier|all)\b|\bsystem prompt\b|\byou are now\b|\bact as\b|\bpretend\b/i;
+
 // Pre-computed answers for the demo. Each claim carries the passage it was
 // checked against and the entailment score from the grounding check.
 const ANSWERS = [
@@ -89,6 +92,10 @@ export default function Ask({ question }) {
   const ask = (q) => {
     if (!q.trim()) return;
     setInput(q);
+    if (INJECTION.test(q)) {
+      setAsked({ q, blocked: true, at: Date.now() });
+      return;
+    }
     setAsked({ q, answer: match(q), at: Date.now() });
     setRunning(true);
   };
@@ -127,7 +134,11 @@ export default function Ask({ question }) {
 
       {asked && (
         <section className="panel answer-panel">
-          {running ? (
+          {asked.blocked ? (
+            <div className="empty">
+              <p><strong>Not answered.</strong> The question contains instructions to the assistant, so nothing was searched or generated. Ask about a project, method or risk instead.</p>
+            </div>
+          ) : running ? (
             <AgentTrace key={asked.q + asked.at} steps={STEPS(a?.claims.length ?? 0)} running stepMs={200} onDone={() => setRunning(false)} />
           ) : a ? (
             <>

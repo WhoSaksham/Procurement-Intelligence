@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Map as MlMap, Marker, NavigationControl, setWorkerUrl } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url';
+import { alignment, pointAt } from '../lib/geo.js';
 
 // The bundled worker sits next to the library file; after Vite rebundles it
 // that relative path breaks, so point MapLibre at the emitted asset.
@@ -42,7 +43,9 @@ export const boundsOf = (coords) =>
     [[Infinity, Infinity], [-Infinity, -Infinity]],
   );
 
-const width = (base) => ['interpolate', ['linear'], ['zoom'], 8, base * 0.5, 12, base, 16, base * 2.2];
+// Lines thin out and fade in close views so the road surface stays visible.
+const width = (base) => ['interpolate', ['linear'], ['zoom'], 8, base * 0.5, 12, base, 15, base * 1.2, 18, base * 1.5];
+const fade = (op) => ['interpolate', ['linear'], ['zoom'], 14, op, 17, op * 0.45];
 
 function addOverlay(map, road) {
   map.addSource('road', { type: 'geojson', data: toGeoJSON(road) });
@@ -51,13 +54,13 @@ function addOverlay(map, road) {
     paint: { 'line-color': '#ffffff', 'line-width': width(16), 'line-opacity': 0.55, 'line-blur': 2 } });
   map.addLayer({ id: 'road-flag', type: 'line', source: 'road', filter: ['==', ['get', 'flag'], 1],
     layout: { 'line-cap': 'round', 'line-join': 'round' },
-    paint: { 'line-color': '#ff4fa3', 'line-width': width(13), 'line-opacity': 0.9 } });
+    paint: { 'line-color': '#ff4fa3', 'line-width': width(13), 'line-opacity': fade(0.9) } });
   map.addLayer({ id: 'road-casing', type: 'line', source: 'road',
     layout: { 'line-cap': 'round', 'line-join': 'round' },
-    paint: { 'line-color': '#0b1418', 'line-width': width(8), 'line-opacity': 0.75 } });
+    paint: { 'line-color': '#0b1418', 'line-width': width(8), 'line-opacity': fade(0.75) } });
   map.addLayer({ id: 'road-line', type: 'line', source: 'road', filter: ['!=', ['get', 'status'], 'not-started'],
     layout: { 'line-cap': 'round', 'line-join': 'round' },
-    paint: { 'line-width': width(4.5),
+    paint: { 'line-width': width(4.5), 'line-opacity': fade(1),
       'line-color': ['match', ['get', 'status'], 'sealed', STATUS.sealed.color, 'base', STATUS.base.color, STATUS.earthworks.color] } });
   map.addLayer({ id: 'road-todo', type: 'line', source: 'road', filter: ['==', ['get', 'status'], 'not-started'],
     paint: { 'line-color': STATUS['not-started'].color, 'line-width': width(2.5), 'line-dasharray': [2, 2], 'line-opacity': 0.9 } });
@@ -70,11 +73,12 @@ function setImagery(map, opts) {
   map.addLayer({ id: 'imagery', type: 'raster', source: 'imagery', paint: { 'raster-fade-duration': 150 } }, map.getLayer('road-selected') ? 'road-selected' : undefined);
 }
 
-export default function MapCanvas({ road, ends, basemap, year, terrain, selected, onSelect, onReady, padding }) {
+export default function MapCanvas({ road, ends, basemap, year, terrain, selected, onSelect, onReady, padding, cursor }) {
   const el = useRef(null);
   const mapRef = useRef(null);
   const loaded = useRef(false);
   const markers = useRef([]);
+  const cursorMarker = useRef(null);
   const latest = useRef({ onSelect });
   latest.current.onSelect = onSelect;
 
@@ -101,7 +105,7 @@ export default function MapCanvas({ road, ends, basemap, year, terrain, selected
       maxPitch: 75,
       attributionControl: { compact: true, customAttribution: 'Roads © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors' },
     });
-    map.addControl(new NavigationControl({ visualizePitch: true }), 'bottom-right');
+    map.addControl(new NavigationControl({ visualizePitch: true }), 'top-right');
     map.on('load', () => {
       // On small screens keep credits behind the (i) button so they don't cover the map.
       if (el.current.clientWidth < 640) el.current.querySelector('.maplibregl-compact-show')?.classList.remove('maplibregl-compact-show');
@@ -142,14 +146,24 @@ export default function MapCanvas({ road, ends, basemap, year, terrain, selected
     });
     const map = mapRef.current;
     markers.current.forEach((m) => m.remove());
-    markers.current = ends.map((name, i) => {
-      const segs = road.segments;
+    const segs = road.segments;
+    const towns = ends.map((name, i) => {
       const at = i === 0 ? segs[0].coords[0] : segs[segs.length - 1].coords.at(-1);
       const node = document.createElement('div');
       node.className = 'town-marker';
       node.textContent = name;
       return new Marker({ element: node, anchor: 'bottom' }).setLngLat(at).addTo(map);
     });
+    // Kilometre posts every 10 km, as supervision reports refer to chainage.
+    const line = alignment(road);
+    const posts = [];
+    for (let k = 10; k < line.length - 3; k += 10) {
+      const node = document.createElement('div');
+      node.className = 'km-post';
+      node.textContent = `km ${k}`;
+      posts.push(new Marker({ element: node, anchor: 'left', offset: [6, 0] }).setLngLat(pointAt(line, k)).addTo(map));
+    }
+    markers.current = [...towns, ...posts];
   }, [road]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -162,15 +176,32 @@ export default function MapCanvas({ road, ends, basemap, year, terrain, selected
   useEffect(() => {
     whenReady((map) => {
       if (terrain) {
-        map.setTerrain({ source: 'dem', exaggeration: 1.8 });
+        map.setTerrain({ source: 'dem', exaggeration: 1.5 });
         try { map.setSky({ 'sky-color': '#a9c7dc', 'horizon-color': '#e4ecef', 'sky-horizon-blend': 0.6 }); } catch { /* optional */ }
-        map.easeTo({ pitch: 62, bearing: -25, duration: 1200 });
+        // Tilt only from a flat view, so a close view or drive keeps its own camera.
+        if (map.getPitch() < 20) map.easeTo({ pitch: 62, bearing: -25, duration: 1200 });
       } else {
         map.setTerrain(null);
         map.easeTo({ pitch: 0, bearing: 0, duration: 800 });
       }
     });
   }, [terrain]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // A single moving marker for the profile cursor or the drive position.
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    if (!cursor) {
+      cursorMarker.current?.remove();
+      cursorMarker.current = null;
+      return;
+    }
+    if (!cursorMarker.current) {
+      const node = document.createElement('div');
+      node.className = 'cursor-dot';
+      cursorMarker.current = new Marker({ element: node }).setLngLat(cursor).addTo(map);
+    } else cursorMarker.current.setLngLat(cursor);
+  }, [cursor]);
 
   return <div className="map-canvas" ref={el} />;
 }

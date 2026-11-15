@@ -24,7 +24,16 @@ const METHOD_EFFECT = {
   CQS: -0.32,
 };
 
-export const country = (id) => COUNTRIES.find((c) => c.id === id);
+// User-entered countries and score overrides sit on top of the built-in list.
+let custom = {};
+export const setCustomCountries = (list) => {
+  custom = Object.fromEntries(list.map((c) => [c.id, c]));
+};
+export const country = (id) => custom[id] ?? COUNTRIES.find((c) => c.id === id) ?? COUNTRIES[0];
+export const allCountries = () => [
+  ...COUNTRIES.map((c) => custom[c.id] ?? c),
+  ...Object.values(custom).filter((c) => !COUNTRIES.some((b) => b.id === c.id)),
+];
 
 // Each feature returns [label, timelineLogEffect, rebidLogit, amendLogit, slipLogit]
 function features(pkg, stringency = 0) {
@@ -113,7 +122,7 @@ export function eligibility(pkg, method) {
 export function compareMethods(pkg, stringency) {
   return METHODS[pkg.category].map((method) => {
     const r = predict({ ...pkg, method }, stringency);
-    return { method, p50: r.p50, p80: r.p80, rebid: r.rebid.p, current: method === pkg.method, limit: eligibility(pkg, method) };
+    return { method, p20: r.p20, p50: r.p50, p80: r.p80, rebid: r.rebid.p, current: method === pkg.method, limit: eligibility(pkg, method) };
   });
 }
 
@@ -140,8 +149,22 @@ export function benchmarkCriteria(pkg, c) {
   };
 }
 
+// How many close comparables back the estimate. Below 20 the cohort is widened
+// to the whole region and category, and the app says so.
+export function comparables(pkg) {
+  const c = country(pkg.country);
+  const close = Math.round(312 * Math.exp(-0.9 * Math.abs(Math.log(pkg.value / 15))) * (c.custom && !COUNTRIES.some((b) => b.id === c.id) ? 0.12 : 1) * (pkg.method === 'Direct selection' ? 0.3 : 1));
+  return close >= 20 ? { n: close, widened: false } : { n: close * 6 + 48, close, widened: true };
+}
+
+// Simple benchmark: median days for the method and category alone, with no
+// country, size or agency adjustment. The model must beat it to be shown.
+export function benchmarkDays(pkg) {
+  return BASE_DAYS[pkg.category] * Math.exp(METHOD_EFFECT[pkg.method] ?? 0) * Math.pow(Math.log(2), 1 / SHAPE);
+}
+
 // Deterministic sample of historical durations for the comparable cohort.
-export function cohortSample(pkg, n = 312) {
+export function cohortSample(pkg, n = comparables(pkg).n) {
   let seed = 7;
   const rand = () => {
     seed = (seed * 16807) % 2147483647;

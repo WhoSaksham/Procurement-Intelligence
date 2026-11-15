@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Sparkline } from '../components/charts.jsx';
+import { Sparkline, TargetBar } from '../components/charts.jsx';
 import { PageHead, Tabs } from '../components/ui.jsx';
 import { LAYERS } from '../data/sources.js';
 
@@ -63,6 +63,8 @@ const INCOMING = [
 ];
 
 const HEALTH = [
+  { name: 'Timeline model vs simple benchmark, held-out tenders', value: '61 vs 68 days', limit: 'Typical error; must beat the benchmark to ship', ok: true },
+  { name: 'Actual signatures inside the 80% range', value: '77%', limit: 'Target 70–90%', ok: true },
   { name: 'Timeline model concordance', value: '0.71', limit: 'Retrain below 0.68', ok: true },
   { name: 'Re-tender model calibration error', value: '0.034', limit: 'Retrain above 0.05', ok: true },
   { name: 'Feature drift, largest (contract value)', value: 'PSI 0.11', limit: 'Review above 0.20', ok: true },
@@ -145,6 +147,7 @@ export default function Learn() {
                           <th scope="col" className="num">Target</th>
                           <th scope="col" className="num">Month 6</th>
                           <th scope="col">Months 1–6</th>
+                          <th scope="col">Baseline to target</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -155,6 +158,7 @@ export default function Learn() {
                             <td className="num">{k.target}</td>
                             <td className="num"><strong>{k.now}</strong></td>
                             <td><Sparkline values={k.series} target={k.tgt} better={k.better} /></td>
+                            <td><TargetBar base={k.series[0]} now={k.series.at(-1)} target={k.tgt} /></td>
                           </tr>
                         ))}
                       </tbody>
