@@ -1,0 +1,159 @@
+[
+  {
+    "row_id": "4118",
+    "name": "Meridian Roadworks Ltd",
+    "source": "ca2",
+    "locator": "Award row 4118, 2021",
+    "contract_id": "C1"
+  },
+  {
+    "row_id": "5012",
+    "name": "MERIDIAN ROAD WORKS LIMITED",
+    "source": "ca2",
+    "locator": "Award row 5012, 2024",
+    "contract_id": "RRA-W-07"
+  },
+  {
+    "row_id": "2977",
+    "name": "Meridian Rdwks (K) Ltd",
+    "source": "ca1",
+    "locator": "Award row 2977, 2019"
+  },
+  {
+    "row_id": "3150",
+    "name": "Meridian Roadworks Limited",
+    "source": "ca1",
+    "locator": "Award row 3150, 2020"
+  },
+  {
+    "row_id": "4390",
+    "name": "Meridian Roadworks Ltd / Tana Civil JV",
+    "source": "ca1",
+    "locator": "Award row 4390, 2022"
+  },
+  {
+    "row_id": "4117",
+    "name": "Tana Civil Contractors",
+    "source": "ca2",
+    "locator": "Award row 4117, 2021",
+    "contract_id": "C2"
+  },
+  {
+    "row_id": "5019",
+    "name": "TANA CIVIL CONTRACTORS LIMITED",
+    "source": "ca2",
+    "locator": "Award row 5019, 2024",
+    "contract_id": "RRA-W-08"
+  },
+  {
+    "row_id": "3361",
+    "name": "Tana Civil Contractors Ltd.",
+    "source": "ca1",
+    "locator": "Award row 3361, 2020"
+  },
+  {
+    "row_id": "4977",
+    "name": "Kestrel Engineering Associates JV",
+    "source": "ca4",
+    "locator": "Award row 4977, 2023",
+    "contract_id": "RRA-C-02",
+    "members": [
+      "Kestrel Engineering Associates",
+      "Bluegate Consulting Ltd"
+    ]
+  },
+  {
+    "row_id": "4201",
+    "name": "Kestrel Engineering Associates",
+    "source": "ca4",
+    "locator": "Award row 4201, 2022",
+    "contract_id": "C5"
+  },
+  {
+    "row_id": "3720",
+    "name": "KESTREL ENGINEERING ASSOCIATES LTD",
+    "source": "ca4",
+    "locator": "Award row 3720, 2021"
+  },
+  {
+    "row_id": "3725",
+    "name": "Bluegate Consulting Limited",
+    "source": "ca4",
+    "locator": "Award row 3725, 2021"
+  },
+  {
+    "row_id": "5044",
+    "name": "Survey Dynamics GmbH",
+    "source": "ca1",
+    "locator": "Award row 5044, 2024",
+    "contract_id": "RRA-G-04"
+  },
+  {
+    "row_id": "4012",
+    "name": "SURVEY DYNAMICS GMBH",
+    "source": "ca1",
+    "locator": "Award row 4012, 2021"
+  },
+  {
+    "row_id": "3402",
+    "name": "Rift Valley Builders Ltd",
+    "source": "ca3",
+    "locator": "Award row 3402, 2020",
+    "contract_id": "C3"
+  },
+  {
+    "row_id": "3511",
+    "name": "Rift Valley Builders Limited",
+    "source": "ca3",
+    "locator": "Award row 3511, 2020"
+  },
+  {
+    "row_id": "3633",
+    "name": "RIFT VALLEY BUILDERS",
+    "source": "ca3",
+    "locator": "Award row 3633, 2021"
+  },
+  {
+    "row_id": "3388",
+    "name": "Sahel Infrastructure Group",
+    "source": "ca3",
+    "locator": "Award row 3388, 2020",
+    "contract_id": "C4"
+  },
+  {
+    "row_id": "3940",
+    "name": "Sahel Infrastructure Grp SA",
+    "source": "ca3",
+    "locator": "Award row 3940, 2021"
+  },
+  {
+    "row_id": "4455",
+    "name": "SAHEL INFRASTRUCTURE GROUP",
+    "source": "ca3",
+    "locator": "Award row 4455, 2022"
+  },
+  {
+    "row_id": "3801",
+    "name": "Lakeside Engineering Partners",
+    "source": "ca4",
+    "locator": "Award row 3801, 2021"
+  },
+  {
+    "row_id": "4620",
+    "name": "Lakeside Engg. Partners Ltd",
+    "source": "ca4",
+    "locator": "Award row 4620, 2022"
+  },
+  {
+    "row_id": "4788",
+    "name": "LAKESIDE ENGINEERING PARTNERS",
+    "source": "ca4",
+    "locator": "Award row 4788, 2023"
+  },
+  {
+    "row_id": "4801",
+    "name": "Lakeside Engineering Partners / Rift Valley Builders JV",
+    "source": "ca3",
+    "locator": "Award row 4801, 2023"
+  }
+]

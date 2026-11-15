@@ -1,0 +1,236 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "./charts.css";
+@import "./map.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design tokens. Raw palette first (paper-and-ink surfaces, three evidence
+ * layers, status), then shadcn/ui's semantic variables mapped onto them so
+ * stock components inherit the product's look. See docs/design-system.md.
+ */
+:root {
+  /* Surfaces and ink */
+  --paper: #eff1ee;
+  --surface: #fcfcfb;
+  --sunk: #f3f5f2;
+  --ink: #1a2930;
+  --ink-2: #44535b;
+  --muted-ink: #5d6a72;
+  --rule: #dde2de;
+  --rule-strong: #bcc5c0;
+
+  /* Evidence layers (validated as a categorical set for CVD and contrast) */
+  --ledger: #0a8a70;
+  --procedure: #4b5fd6;
+  --retro: #c2581c;
+  --ledger-tint: #e2f2ed;
+  --procedure-tint: #e8ebfa;
+  --retro-tint: #f8e9df;
+  /* Layer colours for text on their tints and on light status fills (AA 4.5:1) */
+  --ledger-ink: #076b57;
+  --procedure-ink: #3a4cc0;
+  --retro-ink: #9a4313;
+
+  /* Status and diverging */
+  --worse: #a63a50;
+  --worse-tint: #f6e4e8;
+  --better: #4f7a92;
+  --watch: #7a5800;
+  --watch-tint: #f6eed9;
+  --good: #276b3f;
+  --good-tint: #e3f0e6;
+
+  /* Rail (always dark ink) */
+  --rail: #1a2930;
+  --rail-foreground: #cdd7d3;
+  --rail-strong: #f4f7f5;
+  --rail-hover: #22343c;
+  --rail-active: #2c4049;
+  --rail-rule: #2f434c;
+  --rail-muted: #8a9a93;
+
+  /* Layout */
+  --rail-w: 216px;
+  --drawer-w: 420px;
+  --radius: 0.75rem;
+
+  /* shadcn/ui semantic mapping */
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--surface);
+  --secondary: var(--sunk);
+  --secondary-foreground: var(--ink);
+  --muted: var(--sunk);
+  --muted-foreground: var(--muted-ink);
+  --accent: var(--procedure-tint);
+  --accent-foreground: var(--ink);
+  --destructive: var(--worse);
+  --border: var(--rule);
+  --input: var(--rule-strong);
+  --ring: var(--procedure);
+  --chart-1: var(--ledger);
+  --chart-2: var(--procedure);
+  --chart-3: var(--retro);
+  --chart-4: var(--watch);
+  --chart-5: var(--better);
+  --sidebar: var(--rail);
+  --sidebar-foreground: var(--rail-foreground);
+  --sidebar-primary: var(--rail-strong);
+  --sidebar-primary-foreground: var(--rail);
+  --sidebar-accent: var(--rail-active);
+  --sidebar-accent-foreground: var(--rail-strong);
+  --sidebar-border: var(--rail-rule);
+  --sidebar-ring: var(--procedure);
+}
+
+.dark {
+  --paper: #0f1619;
+  --surface: #162125;
+  --sunk: #121b1e;
+  --ink: #e4ebe8;
+  --ink-2: #b6c3bf;
+  --muted-ink: #8f9d99;
+  --rule: #26343a;
+  --rule-strong: #3a4a50;
+
+  --ledger: #34b394;
+  --procedure: #8291f2;
+  --retro: #e07a3c;
+  --ledger-tint: #15302a;
+  --procedure-tint: #1f2546;
+  --retro-tint: #3a2417;
+  --ledger-ink: #34b394;
+  --procedure-ink: #8291f2;
+  --retro-ink: #e07a3c;
+
+  --worse: #e0778c;
+  --worse-tint: #3b1e25;
+  --better: #8bb3c9;
+  --watch: #d9a93a;
+  --watch-tint: #33290f;
+  --good: #6cc08a;
+  --good-tint: #183022;
+
+  --rail: #0b1114;
+  --rail-hover: #16222a;
+  --rail-active: #1f2f37;
+  --rail-rule: #1e2c33;
+
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+}
+
+@theme inline {
+  --font-sans: var(--font-public-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: var(--font-source-serif), Georgia, serif;
+  --font-heading: var(--font-source-serif), Georgia, serif;
+
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-sunk: var(--sunk);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted-ink: var(--muted-ink);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-ledger: var(--ledger);
+  --color-procedure: var(--procedure);
+  --color-retro: var(--retro);
+  --color-ledger-tint: var(--ledger-tint);
+  --color-procedure-tint: var(--procedure-tint);
+  --color-retro-tint: var(--retro-tint);
+  --color-ledger-ink: var(--ledger-ink);
+  --color-procedure-ink: var(--procedure-ink);
+  --color-retro-ink: var(--retro-ink);
+  --color-worse: var(--worse);
+  --color-worse-tint: var(--worse-tint);
+  --color-better: var(--better);
+  --color-watch: var(--watch);
+  --color-watch-tint: var(--watch-tint);
+  --color-good: var(--good);
+  --color-good-tint: var(--good-tint);
+  --color-rail: var(--rail);
+  --color-rail-foreground: var(--rail-foreground);
+  --color-rail-strong: var(--rail-strong);
+  --color-rail-hover: var(--rail-hover);
+  --color-rail-active: var(--rail-active);
+  --color-rail-rule: var(--rail-rule);
+  --color-rail-muted: var(--rail-muted);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.33);
+  --radius-2xl: calc(var(--radius) * 1.66);
+
+  --spacing-rail: var(--rail-w);
+  --spacing-drawer: var(--drawer-w);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-size: 15px;
+    line-height: 1.5;
+    font-feature-settings: "tnum" 1;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  :focus-visible {
+    outline: 2px solid var(--procedure);
+    outline-offset: 2px;
+  }
+}

@@ -1,0 +1,62 @@
+/*
+ * Chart extras. The charts themselves are Recharts (components/charts) and
+ * take their colours from design tokens directly; this layer only styles the
+ * HTML around them: legends, tooltips, the comparables slider, the target bar
+ * and the evidence-weight rows.
+ */
+@layer components {
+  .chart { margin: 0; }
+  .chart-legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 12.5px; color: var(--ink-2); margin-bottom: 6px; }
+  .chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .lg-line { width: 18px; height: 0; border-top: 2px solid var(--ink); display: inline-block; }
+  .lg-dash { border-top: 2px dashed var(--muted-ink); }
+  .lg-rule { width: 0; height: 12px; border-left: 2px dashed var(--worse); display: inline-block; }
+  .lg-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ink); display: inline-block; }
+  .lg-diamond { width: 9px; height: 9px; background: var(--retro); transform: rotate(45deg); display: inline-block; }
+  .lg-plan { width: 18px; height: 8px; border-radius: 3px; border: 1.5px solid var(--rule-strong); background: var(--sunk); display: inline-block; }
+  .lg-actual { width: 18px; height: 8px; border-radius: 3px; background: var(--ink); display: inline-block; }
+  .lg-band { width: 18px; height: 10px; background: var(--rule); display: inline-block; border-radius: 2px; }
+
+  .chart-tooltip {
+    background: var(--ink); color: var(--paper); font-size: 12.5px; padding: 7px 10px; border-radius: 6px;
+    pointer-events: none; display: flex; flex-direction: column; white-space: nowrap;
+  }
+  .chart-tooltip .muted { opacity: 0.75; }
+  .fine { font-size: 12.5px; color: var(--muted-ink); margin-top: 12px; max-width: 80ch; }
+
+  /* Comparables strip: a native range input laid over the plot (invisible track, wide invisible thumb). */
+  .strip { margin: 0; }
+  .strip-read { font-size: 14px; margin-bottom: 4px; }
+  .strip-range { appearance: none; background: transparent; margin: 0; cursor: ew-resize; touch-action: none; }
+  .strip-range:focus-visible { outline: 2px solid var(--procedure); outline-offset: 2px; border-radius: 4px; }
+  .strip-range::-webkit-slider-runnable-track { height: 100%; background: transparent; }
+  .strip-range::-moz-range-track { height: 100%; background: transparent; }
+  .strip-range::-webkit-slider-thumb { appearance: none; width: 14px; height: 100%; background: transparent; border: 0; cursor: ew-resize; }
+  .strip-range::-moz-range-thumb { width: 14px; height: 100%; background: transparent; border: 0; cursor: ew-resize; }
+
+  /* Target bar (Learn KPIs) */
+  .target-bar { display: inline-flex; align-items: center; gap: 8px; min-width: 130px; }
+  .tb-track { flex: 1; height: 8px; background: var(--sunk); border-radius: 4px; overflow: hidden; }
+  .tb-fill { display: block; height: 100%; background: var(--ink-2); border-radius: 4px; }
+  .tb-fill.is-met { background: var(--good); }
+  .target-bar em { font-style: normal; font-size: 12.5px; font-weight: 700; min-width: 34px; text-align: right; }
+
+  /* Elevation profile, drawn over the dark map panel */
+  .profile-chart { position: relative; }
+  .p-tip { background: #fff; color: #1a2930; font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 6px; white-space: nowrap; pointer-events: none; }
+
+  /* Evidence weights (Package → Evidence conflict) */
+  .weights { display: grid; gap: 6px; margin: 4px 0 6px; }
+  .weight-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr) 44px; gap: 12px; align-items: center; font-size: 13.5px; }
+  .w-label { font-weight: 600; }
+  .w-says { color: var(--ink-2); }
+  .w-track { height: 10px; background: var(--sunk); border-radius: 3px; }
+  .w-track span { display: block; height: 100%; border-radius: 3px; background: var(--retro); }
+  .w-track span.is-minor { background: var(--procedure); }
+  .w-val { text-align: right; font-weight: 700; }
+
+  @media (max-width: 900px) {
+    .weight-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 44px; }
+    .weight-row .w-says { display: none; }
+  }
+}

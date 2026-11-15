@@ -1,0 +1,4948 @@
+{
+ "generated_at": "2026-11-15T15:50:20.597Z",
+ "health": {
+  "status": "ok",
+  "semantica_version": "0.7.0",
+  "stats": {
+   "nodes": 53,
+   "edges": 72,
+   "suppliers_raw": 24,
+   "suppliers_canonical": 8,
+   "joint_ventures": 3,
+   "merges": 13,
+   "build_ms": 13,
+   "semantica_version": "0.7.0"
+  }
+ },
+ "full": {
+  "focus": null,
+  "nodes": [
+   {
+    "id": "KE",
+    "type": "Country",
+    "label": "Kenya",
+    "layer": "ledger",
+    "attrs": {
+     "CPIA public sector mgmt": "3.6",
+     "WGI regulatory quality": "38th pct",
+     "FCV": "No"
+    },
+    "column": 0,
+    "row": 0,
+    "centrality": 0.3636,
+    "community": 0
+   },
+   {
+    "id": "TR",
+    "type": "Sector",
+    "label": "Transport (TR)",
+    "layer": "context",
+    "attrs": {
+     "Sector code": "TR · rural and inter-urban roads"
+    },
+    "column": 0,
+    "row": 1,
+    "centrality": 0.2727,
+    "community": 0
+   },
+   {
+    "id": "RRA",
+    "type": "Agency",
+    "label": "Rural Roads Authority",
+    "layer": "context",
+    "attrs": {
+     "Prior operations": "2",
+     "Prior-review contracts": "11"
+    },
+    "column": 0,
+    "row": 2,
+    "centrality": 0.4545,
+    "community": 0
+   },
+   {
+    "id": "P165530",
+    "type": "Project",
+    "label": "P165530 Feeder Roads",
+    "layer": "ledger",
+    "attrs": {
+     "Commitment": "US$95M",
+     "Approved": "2017-03",
+     "Closed": "2023-06"
+    },
+    "column": 1,
+    "row": 0,
+    "centrality": 0.6364,
+    "community": 0
+   },
+   {
+    "id": "P171204",
+    "type": "Project",
+    "label": "P171204 Rural Access",
+    "layer": "ledger",
+    "attrs": {
+     "Commitment": "US$150M",
+     "Approved": "2019-06",
+     "Closed": "2024-12",
+     "E&S risk": "Substantial"
+    },
+    "column": 1,
+    "row": 1,
+    "centrality": 1,
+    "community": 0
+   },
+   {
+    "id": "P180112",
+    "type": "Project",
+    "label": "P180112 Rural Roads II",
+    "layer": "ledger",
+    "attrs": {
+     "Commitment": "US$210M",
+     "Approved": "2023-09",
+     "Status": "Active",
+     "E&S risk": "Substantial"
+    },
+    "column": 1,
+    "row": 2,
+    "centrality": 0.6364,
+    "community": 1
+   },
+   {
+    "id": "PAD",
+    "type": "PAD",
+    "label": "Appraisal document",
+    "layer": "retrospective",
+    "attrs": {
+     "Procurement risk": "Substantial",
+     "Pages": "118"
+    },
+    "column": 1,
+    "row": 3,
+    "centrality": 0.1818,
+    "community": 0
+   },
+   {
+    "id": "ESF",
+    "type": "Guidance",
+    "label": "ESHS guidance note",
+    "layer": "retrospective",
+    "attrs": {
+     "Issued": "2022-06"
+    },
+    "column": 1,
+    "row": 4,
+    "centrality": 0.0909,
+    "community": 4
+   },
+   {
+    "id": "REG",
+    "type": "Guidance",
+    "label": "Procurement Regulations",
+    "layer": "procedure",
+    "attrs": {
+     "Edition": "2023-09"
+    },
+    "column": 1,
+    "row": 5,
+    "centrality": 0.0909,
+    "community": 2
+   },
+   {
+    "id": "SBD",
+    "type": "Guidance",
+    "label": "Standard Bidding Document, Works",
+    "layer": "procedure",
+    "attrs": {
+     "Edition": "2023-09",
+     "Sections": "I–VIII"
+    },
+    "column": 1,
+    "row": 6,
+    "centrality": 0.2727,
+    "community": 3
+   },
+   {
+    "id": "CPF",
+    "type": "Strategy",
+    "label": "Kenya CPF FY23–27",
+    "layer": "retrospective",
+    "attrs": {
+     "Issued": "2022-11"
+    },
+    "column": 1,
+    "row": 7,
+    "centrality": 0.0909,
+    "community": 0
+   },
+   {
+    "id": "C4",
+    "type": "Contract",
+    "label": "FR-ICB-01",
+    "layer": "ledger",
+    "attrs": {
+     "Value": "US$9.3M",
+     "Method": "RFB, open international",
+     "Review": "Prior"
+    },
+    "column": 2,
+    "row": 0,
+    "centrality": 0.1818,
+    "community": 0
+   },
+   {
+    "id": "C3",
+    "type": "Contract",
+    "label": "FR-NCB-02 Lot 1",
+    "layer": "ledger",
+    "attrs": {
+     "Value": "US$4.6M",
+     "Method": "RFB, open national",
+     "Review": "Post"
+    },
+    "column": 2,
+    "row": 1,
+    "centrality": 0.1818,
+    "community": 6
+   },
+   {
+    "id": "C5",
+    "type": "Contract",
+    "label": "RA-CS-04 Supervision",
+    "layer": "ledger",
+    "attrs": {
+     "Value": "US$1.9M",
+     "Method": "QCBS",
+     "Review": "Prior"
+    },
+    "column": 2,
+    "row": 2,
+    "centrality": 0.1818,
+    "community": 1
+   },
+   {
+    "id": "RRA-C-02",
+    "type": "Contract",
+    "label": "RRA-C-02 Supervision",
+    "layer": "ledger",
+    "attrs": {
+     "Value": "US$2.4M",
+     "Signed": "2023-11-20",
+     "Method": "QCBS"
+    },
+    "column": 2,
+    "row": 3,
+    "centrality": 0.3636,
+    "community": 1
+   },
+   {
+    "id": "RRA-G-04",
+    "type": "Contract",
+    "label": "RRA-G-04 Survey equipment",
+    "layer": "ledger",
+    "attrs": {
+     "Value": "US$0.9M",
+     "Signed": "2024-08-15",
+     "Method": "RFB, open international"
+    },
+    "column": 2,
+    "row": 4,
+    "centrality": 0.1818,
+    "community": 1
+   },
+   {
+    "id": "RRA-W-07",
+    "type": "Contract",
+    "label": "RRA-W-07 Kitui–Mwingi",
+    "layer": "ledger",
+    "attrs": {
+     "Value": "US$12.6M",
+     "Signed": "2024-02-12",
+     "Progress": "37% vs 58% planned"
+    },
+    "column": 2,
+    "row": 5,
+    "centrality": 0.7273,
+    "community": 4
+   },
+   {
+    "id": "RRA-W-08",
+    "type": "Contract",
+    "label": "RRA-W-08 Wote–Kathonzweni",
+    "layer": "ledger",
+    "attrs": {
+     "Value": "US$6.9M",
+     "Signed": "2024-05-03",
+     "Progress": "44% vs 49% planned"
+    },
+    "column": 2,
+    "row": 6,
+    "centrality": 0.3636,
+    "community": 1
+   },
+   {
+    "id": "C2",
+    "type": "Contract",
+    "label": "RW-ICB-03 Lot 1",
+    "layer": "ledger",
+    "attrs": {
+     "Value": "US$11.8M",
+     "Method": "RFB, open international",
+     "Review": "Prior"
+    },
+    "column": 2,
+    "row": 7,
+    "centrality": 0.1818,
+    "community": 2
+   },
+   {
+    "id": "C1",
+    "type": "Contract",
+    "label": "RW-ICB-03 Lot 2",
+    "layer": "ledger",
+    "attrs": {
+     "Value": "US$14.2M → 16.9M",
+     "Method": "RFB, open international",
+     "Review": "Prior"
+    },
+    "column": 2,
+    "row": 8,
+    "centrality": 0.5455,
+    "community": 2
+   },
+   {
+    "id": "BER",
+    "type": "Bid evaluation",
+    "label": "Evaluation report, Lot 2",
+    "layer": "procedure",
+    "attrs": {
+     "Bids": "9 received, 2 responsive",
+     "Outcome": "Re-tendered"
+    },
+    "column": 2,
+    "row": 9,
+    "centrality": 0.1818,
+    "community": 3
+   },
+   {
+    "id": "ISR7",
+    "type": "ISR",
+    "label": "ISR 7 (2023-06)",
+    "layer": "procedure",
+    "attrs": {
+     "Implementation progress": "Satisfactory"
+    },
+    "column": 2,
+    "row": 10,
+    "centrality": 0.1818,
+    "community": 5
+   },
+   {
+    "id": "ISR9",
+    "type": "ISR",
+    "label": "ISR 9 (2024-05)",
+    "layer": "procedure",
+    "attrs": {
+     "Implementation progress": "Moderately Unsatisfactory"
+    },
+    "column": 2,
+    "row": 11,
+    "centrality": 0.2727,
+    "community": 4
+   },
+   {
+    "id": "ICR",
+    "type": "ICR",
+    "label": "Completion report",
+    "layer": "retrospective",
+    "attrs": {
+     "Implementation rating": "Moderately Unsatisfactory",
+     "Pages": "112",
+     "Chunks": "241"
+    },
+    "column": 2,
+    "row": 12,
+    "centrality": 0.3636,
+    "community": 5
+   },
+   {
+    "id": "ICR2",
+    "type": "ICR",
+    "label": "Completion report, P165530",
+    "layer": "retrospective",
+    "attrs": {
+     "Pages": "96",
+     "Chunks": "198"
+    },
+    "column": 2,
+    "row": 13,
+    "centrality": 0.1818,
+    "community": 2
+   },
+   {
+    "id": "IEG",
+    "type": "IEG review",
+    "label": "IEG assessment",
+    "layer": "retrospective",
+    "attrs": {
+     "Rating": "Validates MU"
+    },
+    "column": 2,
+    "row": 14,
+    "centrality": 0.0909,
+    "community": 5
+   },
+   {
+    "id": "IEG-T",
+    "type": "IEG review",
+    "label": "IEG rural transport review",
+    "layer": "retrospective",
+    "attrs": {
+     "Scope": "Thematic, 41 projects"
+    },
+    "column": 2,
+    "row": 15,
+    "centrality": 0.2727,
+    "community": 0
+   },
+   {
+    "id": "S2W07",
+    "type": "Satellite analysis",
+    "label": "Sentinel-2 change, Kitui–Mwingi",
+    "layer": "ledger",
+    "attrs": {
+     "Window": "2019 vs 2024",
+     "Flag": "km 44–57 no change"
+    },
+    "column": 2,
+    "row": 16,
+    "centrality": 0.1818,
+    "community": 4
+   },
+   {
+    "id": "S2W08",
+    "type": "Satellite analysis",
+    "label": "Sentinel-2 change, Wote road",
+    "layer": "ledger",
+    "attrs": {
+     "Window": "2019 vs 2024",
+     "Flag": "Matches reports"
+    },
+    "column": 2,
+    "row": 17,
+    "centrality": 0.0909,
+    "community": 1
+   },
+   {
+    "id": "SUP-007790",
+    "type": "Supplier",
+    "label": "Bluegate Consulting Ltd",
+    "layer": "ledger",
+    "attrs": {
+     "Canonical ID": "SUP-007790",
+     "Name variants": "1",
+     "Registered in": "KE"
+    },
+    "column": 3,
+    "row": 0,
+    "centrality": 0.0909,
+    "community": 1
+   },
+   {
+    "id": "SUP-007731",
+    "type": "Supplier",
+    "label": "Kestrel Engineering Associates",
+    "layer": "ledger",
+    "attrs": {
+     "Canonical ID": "SUP-007731",
+     "Name variants": "2",
+     "Registered in": "UG",
+     "Awards in graph": "1"
+    },
+    "column": 3,
+    "row": 1,
+    "centrality": 0.1818,
+    "community": 1
+   },
+   {
+    "id": "SUP-006204",
+    "type": "Supplier",
+    "label": "Lakeside Engineering Partners",
+    "layer": "ledger",
+    "attrs": {
+     "Canonical ID": "SUP-006204",
+     "Name variants": "3",
+     "Registered in": "TZ"
+    },
+    "column": 3,
+    "row": 2,
+    "centrality": 0.0909,
+    "community": 6
+   },
+   {
+    "id": "SUP-004417",
+    "type": "Supplier",
+    "label": "Meridian Roadworks Ltd",
+    "layer": "ledger",
+    "attrs": {
+     "Canonical ID": "SUP-004417",
+     "Name variants": "4",
+     "Registered in": "KE",
+     "Awards in graph": "2"
+    },
+    "column": 3,
+    "row": 3,
+    "centrality": 0.2727,
+    "community": 2
+   },
+   {
+    "id": "SUP-003318",
+    "type": "Supplier",
+    "label": "Rift Valley Builders Ltd",
+    "layer": "ledger",
+    "attrs": {
+     "Canonical ID": "SUP-003318",
+     "Name variants": "3",
+     "Registered in": "KE",
+     "Awards in graph": "1"
+    },
+    "column": 3,
+    "row": 4,
+    "centrality": 0.1818,
+    "community": 6
+   },
+   {
+    "id": "SUP-005561",
+    "type": "Supplier",
+    "label": "Sahel Infrastructure Group",
+    "layer": "ledger",
+    "attrs": {
+     "Canonical ID": "SUP-005561",
+     "Name variants": "3",
+     "Registered in": "SN",
+     "Awards in graph": "1"
+    },
+    "column": 3,
+    "row": 5,
+    "centrality": 0.0909,
+    "community": 0
+   },
+   {
+    "id": "SUP-009120",
+    "type": "Supplier",
+    "label": "Survey Dynamics GmbH",
+    "layer": "ledger",
+    "attrs": {
+     "Canonical ID": "SUP-009120",
+     "Name variants": "2",
+     "Registered in": "DE",
+     "Awards in graph": "1"
+    },
+    "column": 3,
+    "row": 6,
+    "centrality": 0.0909,
+    "community": 1
+   },
+   {
+    "id": "SUP-004502",
+    "type": "Supplier",
+    "label": "Tana Civil Contractors Ltd",
+    "layer": "ledger",
+    "attrs": {
+     "Canonical ID": "SUP-004502",
+     "Name variants": "3",
+     "Registered in": "KE",
+     "Awards in graph": "2"
+    },
+    "column": 3,
+    "row": 7,
+    "centrality": 0.2727,
+    "community": 2
+   },
+   {
+    "id": "JV-4977",
+    "type": "Joint venture",
+    "label": "Kestrel Engineering Associates JV",
+    "layer": "ledger",
+    "attrs": {
+     "Award row": "4977",
+     "Members": "2"
+    },
+    "column": 3,
+    "row": 8,
+    "centrality": 0.2727,
+    "community": 1
+   },
+   {
+    "id": "JV-4801",
+    "type": "Joint venture",
+    "label": "Lakeside Engineering Partners / Rift Valley Builders JV",
+    "layer": "ledger",
+    "attrs": {
+     "Award row": "4801",
+     "Members": "2"
+    },
+    "column": 3,
+    "row": 9,
+    "centrality": 0.1818,
+    "community": 6
+   },
+   {
+    "id": "JV-4390",
+    "type": "Joint venture",
+    "label": "Meridian Roadworks Ltd / Tana Civil JV",
+    "layer": "ledger",
+    "attrs": {
+     "Award row": "4390",
+     "Members": "2"
+    },
+    "column": 3,
+    "row": 10,
+    "centrality": 0.1818,
+    "community": 2
+   },
+   {
+    "id": "L2",
+    "type": "Lesson",
+    "label": "Finding: payment delays",
+    "layer": "retrospective",
+    "attrs": {
+     "Location": "Section III, para 52, p. 27",
+     "Topics": "contract management, counterpart funds"
+    },
+    "column": 3,
+    "row": 11,
+    "centrality": 0.2727,
+    "community": 5
+   },
+   {
+    "id": "L3",
+    "type": "Lesson",
+    "label": "Lesson: drainage surveys",
+    "layer": "retrospective",
+    "attrs": {
+     "Location": "Section V, para 74, p. 38",
+     "Topics": "design, variations"
+    },
+    "column": 3,
+    "row": 12,
+    "centrality": 0.2727,
+    "community": 2
+   },
+   {
+    "id": "L1",
+    "type": "Lesson",
+    "label": "Lesson: size criteria per lot",
+    "layer": "retrospective",
+    "attrs": {
+     "Location": "Section V, para 88, p. 41",
+     "Topics": "qualification criteria, lotting"
+    },
+    "column": 3,
+    "row": 13,
+    "centrality": 0.1818,
+    "community": 5
+   },
+   {
+    "id": "PS-notice1",
+    "type": "Passage",
+    "label": "30 business days to bid (OIC)",
+    "layer": "procedure",
+    "attrs": {
+     "Paragraph": "6.36"
+    },
+    "column": 3,
+    "row": 14,
+    "centrality": 0.1818,
+    "community": 2
+   },
+   {
+    "id": "PS-ber1",
+    "type": "Passage",
+    "label": "7 of 9 bids failed turnover",
+    "layer": "procedure",
+    "attrs": {
+     "Page": "14"
+    },
+    "column": 3,
+    "row": 15,
+    "centrality": 0.1818,
+    "community": 3
+   },
+   {
+    "id": "PS-pad1",
+    "type": "Passage",
+    "label": "Agency capacity: Substantial risk",
+    "layer": "retrospective",
+    "attrs": {
+     "Page": "61"
+    },
+    "column": 3,
+    "row": 16,
+    "centrality": 0.1818,
+    "community": 0
+   },
+   {
+    "id": "PS-sbd3",
+    "type": "Passage",
+    "label": "Brands only with 'or equivalent'",
+    "layer": "procedure",
+    "attrs": {
+     "Section": "VII"
+    },
+    "column": 3,
+    "row": 17,
+    "centrality": 0.0909,
+    "community": 3
+   },
+   {
+    "id": "PS-isr2",
+    "type": "Passage",
+    "label": "Certificates paid in 61–80 days",
+    "layer": "procedure",
+    "attrs": {
+     "Section": "Key issues"
+    },
+    "column": 3,
+    "row": 18,
+    "centrality": 0.1818,
+    "community": 4
+   },
+   {
+    "id": "PS-esf1",
+    "type": "Passage",
+    "label": "ESHS performance security",
+    "layer": "retrospective",
+    "attrs": {
+     "Section": "4"
+    },
+    "column": 3,
+    "row": 19,
+    "centrality": 0.1818,
+    "community": 4
+   },
+   {
+    "id": "PS-sbd2",
+    "type": "Passage",
+    "label": "Experience: 2 contracts at 80%",
+    "layer": "procedure",
+    "attrs": {
+     "Section": "III, 4.2(a)"
+    },
+    "column": 3,
+    "row": 20,
+    "centrality": 0.0909,
+    "community": 3
+   },
+   {
+    "id": "PS-cpf1",
+    "type": "Passage",
+    "label": "National e-GP accepted for NCB",
+    "layer": "retrospective",
+    "attrs": {
+     "Page": "88"
+    },
+    "column": 3,
+    "row": 21,
+    "centrality": 0.1818,
+    "community": 0
+   },
+   {
+    "id": "PS-ieg1",
+    "type": "Passage",
+    "label": "New agencies 2× re-tender rate",
+    "layer": "retrospective",
+    "attrs": {
+     "Page": "22"
+    },
+    "column": 3,
+    "row": 22,
+    "centrality": 0.1818,
+    "community": 0
+   },
+   {
+    "id": "PS-sbd1",
+    "type": "Passage",
+    "label": "Turnover: 1.5–2.5× cash flow",
+    "layer": "procedure",
+    "attrs": {
+     "Section": "III, note 2"
+    },
+    "column": 3,
+    "row": 23,
+    "centrality": 0.1818,
+    "community": 3
+   }
+  ],
+  "edges": [
+   {
+    "source": "P171204",
+    "target": "KE",
+    "relation": "located in",
+    "basis": "Project ID → country code",
+    "confidence": 1,
+    "role": null,
+    "source_id": "proj1"
+   },
+   {
+    "source": "P165530",
+    "target": "KE",
+    "relation": "located in",
+    "basis": "Project ID → country code",
+    "confidence": 1,
+    "role": null,
+    "source_id": "proj1"
+   },
+   {
+    "source": "P180112",
+    "target": "KE",
+    "relation": "located in",
+    "basis": "Project ID → country code",
+    "confidence": 1,
+    "role": null,
+    "source_id": "proj1"
+   },
+   {
+    "source": "P171204",
+    "target": "TR",
+    "relation": "sector",
+    "basis": "Sector code",
+    "confidence": 1,
+    "role": null,
+    "source_id": "proj1"
+   },
+   {
+    "source": "P165530",
+    "target": "TR",
+    "relation": "sector",
+    "basis": "Sector code",
+    "confidence": 1,
+    "role": null,
+    "source_id": "proj1"
+   },
+   {
+    "source": "P180112",
+    "target": "TR",
+    "relation": "sector",
+    "basis": "Sector code",
+    "confidence": 1,
+    "role": null,
+    "source_id": "proj1"
+   },
+   {
+    "source": "P171204",
+    "target": "RRA",
+    "relation": "implemented by",
+    "basis": "Agency name, fuzzy match",
+    "confidence": 0.96,
+    "role": null,
+    "source_id": "proj1"
+   },
+   {
+    "source": "P165530",
+    "target": "RRA",
+    "relation": "implemented by",
+    "basis": "Agency name, fuzzy match",
+    "confidence": 0.93,
+    "role": null,
+    "source_id": "proj1"
+   },
+   {
+    "source": "P180112",
+    "target": "RRA",
+    "relation": "implemented by",
+    "basis": "Agency name, exact",
+    "confidence": 1,
+    "role": null,
+    "source_id": "proj1"
+   },
+   {
+    "source": "PAD",
+    "target": "P171204",
+    "relation": "appraises",
+    "basis": "Document metadata Project ID",
+    "confidence": 1,
+    "role": null,
+    "source_id": "pad1"
+   },
+   {
+    "source": "C1",
+    "target": "P171204",
+    "relation": "financed by",
+    "basis": "Project ID on award row",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ca2"
+   },
+   {
+    "source": "C2",
+    "target": "P171204",
+    "relation": "financed by",
+    "basis": "Project ID on award row",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ca2"
+   },
+   {
+    "source": "C3",
+    "target": "P165530",
+    "relation": "financed by",
+    "basis": "Project ID on award row",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ca3"
+   },
+   {
+    "source": "C4",
+    "target": "P165530",
+    "relation": "financed by",
+    "basis": "Project ID on award row",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ca3"
+   },
+   {
+    "source": "C5",
+    "target": "P171204",
+    "relation": "financed by",
+    "basis": "Project ID on award row",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ca4"
+   },
+   {
+    "source": "RRA-W-07",
+    "target": "P180112",
+    "relation": "financed by",
+    "basis": "Project ID on award row",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ca2"
+   },
+   {
+    "source": "RRA-W-08",
+    "target": "P180112",
+    "relation": "financed by",
+    "basis": "Project ID on award row",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ca2"
+   },
+   {
+    "source": "RRA-C-02",
+    "target": "P180112",
+    "relation": "financed by",
+    "basis": "Project ID on award row",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ca4"
+   },
+   {
+    "source": "RRA-G-04",
+    "target": "P180112",
+    "relation": "financed by",
+    "basis": "Project ID on award row",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ca1"
+   },
+   {
+    "source": "RRA-C-02",
+    "target": "RRA-W-07",
+    "relation": "supervises",
+    "basis": "Contract reference in TOR",
+    "confidence": 0.95,
+    "role": null,
+    "source_id": "ca4"
+   },
+   {
+    "source": "RRA-C-02",
+    "target": "RRA-W-08",
+    "relation": "supervises",
+    "basis": "Contract reference in TOR",
+    "confidence": 0.95,
+    "role": null,
+    "source_id": "ca4"
+   },
+   {
+    "source": "BER",
+    "target": "C1",
+    "relation": "evaluates",
+    "basis": "Notice number + lot + date within 90 days",
+    "confidence": 0.91,
+    "role": null,
+    "source_id": "ber1"
+   },
+   {
+    "source": "ISR7",
+    "target": "P171204",
+    "relation": "supervises",
+    "basis": "Document metadata Project ID",
+    "confidence": 1,
+    "role": null,
+    "source_id": "isr1"
+   },
+   {
+    "source": "ISR9",
+    "target": "P171204",
+    "relation": "supervises",
+    "basis": "Document metadata Project ID",
+    "confidence": 1,
+    "role": null,
+    "source_id": "isr2"
+   },
+   {
+    "source": "ICR",
+    "target": "P171204",
+    "relation": "evaluates",
+    "basis": "Document metadata Project ID",
+    "confidence": 1,
+    "role": null,
+    "source_id": "icr2"
+   },
+   {
+    "source": "ICR2",
+    "target": "P165530",
+    "relation": "evaluates",
+    "basis": "Document metadata Project ID",
+    "confidence": 1,
+    "role": null,
+    "source_id": "icr3"
+   },
+   {
+    "source": "IEG",
+    "target": "ICR",
+    "relation": "validates",
+    "basis": "Project ID + document type",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ieg2"
+   },
+   {
+    "source": "IEG-T",
+    "target": "P171204",
+    "relation": "reviews",
+    "basis": "Project list in evaluation annex",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ieg1"
+   },
+   {
+    "source": "IEG-T",
+    "target": "P165530",
+    "relation": "reviews",
+    "basis": "Project list in evaluation annex",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ieg1"
+   },
+   {
+    "source": "S2W07",
+    "target": "RRA-W-07",
+    "relation": "observes",
+    "basis": "Alignment buffer 30 m",
+    "confidence": 1,
+    "role": null,
+    "source_id": "s2w07"
+   },
+   {
+    "source": "S2W08",
+    "target": "RRA-W-08",
+    "relation": "observes",
+    "basis": "Alignment buffer 30 m",
+    "confidence": 1,
+    "role": null,
+    "source_id": "s2w08"
+   },
+   {
+    "source": "S2W07",
+    "target": "ISR9",
+    "relation": "contradicts",
+    "basis": "Reported vs observed progress, km 44–57",
+    "confidence": 0.86,
+    "role": null,
+    "source_id": "s2w07"
+   },
+   {
+    "source": "L1",
+    "target": "ICR",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "role": null,
+    "source_id": "icr1"
+   },
+   {
+    "source": "L2",
+    "target": "ICR",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "role": null,
+    "source_id": "icr2"
+   },
+   {
+    "source": "L3",
+    "target": "ICR2",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "role": null,
+    "source_id": "icr3"
+   },
+   {
+    "source": "L1",
+    "target": "C1",
+    "relation": "explains",
+    "basis": "Lot mention + sector code + award within project window",
+    "confidence": 0.84,
+    "role": null,
+    "source_id": "icr1"
+   },
+   {
+    "source": "L2",
+    "target": "ISR7",
+    "relation": "contradicts",
+    "basis": "Same rating dimension and period",
+    "confidence": 0.88,
+    "role": null,
+    "source_id": "icr2"
+   },
+   {
+    "source": "L3",
+    "target": "C1",
+    "relation": "similar risk",
+    "basis": "Embedding similarity of BoQ drainage items",
+    "confidence": 0.79,
+    "role": null,
+    "source_id": "icr3"
+   },
+   {
+    "source": "L3",
+    "target": "RRA-W-07",
+    "relation": "similar risk",
+    "basis": "Embedding similarity of BoQ drainage items",
+    "confidence": 0.81,
+    "role": null,
+    "source_id": "icr3"
+   },
+   {
+    "source": "L2",
+    "target": "RRA-W-07",
+    "relation": "similar risk",
+    "basis": "Payment-delay signal on ISR + same agency",
+    "confidence": 0.83,
+    "role": null,
+    "source_id": "isr2"
+   },
+   {
+    "source": "PS-sbd1",
+    "target": "SBD",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "role": null,
+    "source_id": "sbd1"
+   },
+   {
+    "source": "PS-sbd2",
+    "target": "SBD",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "role": null,
+    "source_id": "sbd2"
+   },
+   {
+    "source": "PS-sbd3",
+    "target": "SBD",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "role": null,
+    "source_id": "sbd3"
+   },
+   {
+    "source": "PS-notice1",
+    "target": "REG",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "role": null,
+    "source_id": "notice1"
+   },
+   {
+    "source": "PS-ber1",
+    "target": "BER",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ber1"
+   },
+   {
+    "source": "PS-isr2",
+    "target": "ISR9",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "role": null,
+    "source_id": "isr2"
+   },
+   {
+    "source": "PS-pad1",
+    "target": "PAD",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "role": null,
+    "source_id": "pad1"
+   },
+   {
+    "source": "PS-ieg1",
+    "target": "IEG-T",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ieg1"
+   },
+   {
+    "source": "PS-esf1",
+    "target": "ESF",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "role": null,
+    "source_id": "esf1"
+   },
+   {
+    "source": "PS-cpf1",
+    "target": "CPF",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "role": null,
+    "source_id": "cpf1"
+   },
+   {
+    "source": "PS-ber1",
+    "target": "PS-sbd1",
+    "relation": "cites",
+    "basis": "Criterion reference in evaluation",
+    "confidence": 0.9,
+    "role": null,
+    "source_id": "ber1"
+   },
+   {
+    "source": "PS-pad1",
+    "target": "RRA",
+    "relation": "assesses",
+    "basis": "Agency name in risk annex",
+    "confidence": 0.92,
+    "role": null,
+    "source_id": "pad1"
+   },
+   {
+    "source": "PS-ieg1",
+    "target": "RRA",
+    "relation": "applies to",
+    "basis": "Agency experience band",
+    "confidence": 0.8,
+    "role": null,
+    "source_id": "ieg1"
+   },
+   {
+    "source": "PS-cpf1",
+    "target": "KE",
+    "relation": "applies to",
+    "basis": "Country of strategy",
+    "confidence": 1,
+    "role": null,
+    "source_id": "cpf1"
+   },
+   {
+    "source": "PS-esf1",
+    "target": "RRA-W-07",
+    "relation": "applies to",
+    "basis": "E&S risk class Substantial",
+    "confidence": 0.9,
+    "role": null,
+    "source_id": "esf1"
+   },
+   {
+    "source": "PS-notice1",
+    "target": "C1",
+    "relation": "applies to",
+    "basis": "Method: open international",
+    "confidence": 0.9,
+    "role": null,
+    "source_id": "notice1"
+   },
+   {
+    "source": "PS-isr2",
+    "target": "RRA-W-07",
+    "relation": "applies to",
+    "basis": "Same agency and payment issue",
+    "confidence": 0.85,
+    "role": null,
+    "source_id": "isr2"
+   },
+   {
+    "source": "C1",
+    "target": "SUP-004417",
+    "relation": "awarded to",
+    "basis": "Supplier name resolution",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ca2"
+   },
+   {
+    "source": "RRA-W-07",
+    "target": "SUP-004417",
+    "relation": "awarded to",
+    "basis": "Supplier name resolution",
+    "confidence": 0.936,
+    "role": null,
+    "source_id": "ca2"
+   },
+   {
+    "source": "C2",
+    "target": "SUP-004502",
+    "relation": "awarded to",
+    "basis": "Supplier name resolution",
+    "confidence": 0.969,
+    "role": null,
+    "source_id": "ca2"
+   },
+   {
+    "source": "RRA-W-08",
+    "target": "SUP-004502",
+    "relation": "awarded to",
+    "basis": "Supplier name resolution",
+    "confidence": 0.973,
+    "role": null,
+    "source_id": "ca2"
+   },
+   {
+    "source": "C5",
+    "target": "SUP-007731",
+    "relation": "awarded to",
+    "basis": "Supplier name resolution",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ca4"
+   },
+   {
+    "source": "RRA-G-04",
+    "target": "SUP-009120",
+    "relation": "awarded to",
+    "basis": "Supplier name resolution",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ca1"
+   },
+   {
+    "source": "C3",
+    "target": "SUP-003318",
+    "relation": "awarded to",
+    "basis": "Supplier name resolution",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ca3"
+   },
+   {
+    "source": "C4",
+    "target": "SUP-005561",
+    "relation": "awarded to",
+    "basis": "Supplier name resolution",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ca3"
+   },
+   {
+    "source": "JV-4390",
+    "target": "SUP-004417",
+    "relation": "member of",
+    "basis": "JV member name resolution",
+    "confidence": 1,
+    "role": "lead",
+    "source_id": "ca1"
+   },
+   {
+    "source": "JV-4390",
+    "target": "SUP-004502",
+    "relation": "member of",
+    "basis": "JV member name resolution",
+    "confidence": 0.891,
+    "role": "member",
+    "source_id": "ca1"
+   },
+   {
+    "source": "JV-4977",
+    "target": "SUP-007731",
+    "relation": "member of",
+    "basis": "JV member name resolution",
+    "confidence": 1,
+    "role": "lead",
+    "source_id": "ca4"
+   },
+   {
+    "source": "JV-4977",
+    "target": "SUP-007790",
+    "relation": "member of",
+    "basis": "JV member name resolution",
+    "confidence": 1,
+    "role": "member",
+    "source_id": "ca4"
+   },
+   {
+    "source": "RRA-C-02",
+    "target": "JV-4977",
+    "relation": "awarded to",
+    "basis": "Joint venture award row",
+    "confidence": 1,
+    "role": null,
+    "source_id": "ca4"
+   },
+   {
+    "source": "JV-4801",
+    "target": "SUP-006204",
+    "relation": "member of",
+    "basis": "JV member name resolution",
+    "confidence": 1,
+    "role": "lead",
+    "source_id": "ca3"
+   },
+   {
+    "source": "JV-4801",
+    "target": "SUP-003318",
+    "relation": "member of",
+    "basis": "JV member name resolution",
+    "confidence": 1,
+    "role": "member",
+    "source_id": "ca3"
+   }
+  ]
+ },
+ "nodes": {
+  "KE": {
+   "node": {
+    "id": "KE",
+    "type": "Country",
+    "label": "Kenya",
+    "layer": "ledger",
+    "attrs": {
+     "CPIA public sector mgmt": "3.6",
+     "WGI regulatory quality": "38th pct",
+     "FCV": "No"
+    },
+    "column": 0,
+    "row": 0,
+    "centrality": 0.3636,
+    "community": 0
+   },
+   "neighbours": [
+    {
+     "source": "P171204",
+     "target": "KE",
+     "relation": "located in",
+     "basis": "Project ID → country code",
+     "confidence": 1,
+     "role": null,
+     "source_id": "proj1"
+    },
+    {
+     "source": "P165530",
+     "target": "KE",
+     "relation": "located in",
+     "basis": "Project ID → country code",
+     "confidence": 1,
+     "role": null,
+     "source_id": "proj1"
+    },
+    {
+     "source": "P180112",
+     "target": "KE",
+     "relation": "located in",
+     "basis": "Project ID → country code",
+     "confidence": 1,
+     "role": null,
+     "source_id": "proj1"
+    },
+    {
+     "source": "PS-cpf1",
+     "target": "KE",
+     "relation": "applies to",
+     "basis": "Country of strategy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "cpf1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "wgi1",
+     "locator": "CPIA cluster D · WGI RQ 2024",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319000+00:00"
+    }
+   ]
+  },
+  "TR": {
+   "node": {
+    "id": "TR",
+    "type": "Sector",
+    "label": "Transport (TR)",
+    "layer": "context",
+    "attrs": {
+     "Sector code": "TR · rural and inter-urban roads"
+    },
+    "column": 0,
+    "row": 1,
+    "centrality": 0.2727,
+    "community": 0
+   },
+   "neighbours": [
+    {
+     "source": "P171204",
+     "target": "TR",
+     "relation": "sector",
+     "basis": "Sector code",
+     "confidence": 1,
+     "role": null,
+     "source_id": "proj1"
+    },
+    {
+     "source": "P165530",
+     "target": "TR",
+     "relation": "sector",
+     "basis": "Sector code",
+     "confidence": 1,
+     "role": null,
+     "source_id": "proj1"
+    },
+    {
+     "source": "P180112",
+     "target": "TR",
+     "relation": "sector",
+     "basis": "Sector code",
+     "confidence": 1,
+     "role": null,
+     "source_id": "proj1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "proj1",
+     "locator": "Projects API · sector code",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319288+00:00"
+    }
+   ]
+  },
+  "RRA": {
+   "node": {
+    "id": "RRA",
+    "type": "Agency",
+    "label": "Rural Roads Authority",
+    "layer": "context",
+    "attrs": {
+     "Prior operations": "2",
+     "Prior-review contracts": "11"
+    },
+    "column": 0,
+    "row": 2,
+    "centrality": 0.4545,
+    "community": 0
+   },
+   "neighbours": [
+    {
+     "source": "P171204",
+     "target": "RRA",
+     "relation": "implemented by",
+     "basis": "Agency name, fuzzy match",
+     "confidence": 0.96,
+     "role": null,
+     "source_id": "proj1"
+    },
+    {
+     "source": "P165530",
+     "target": "RRA",
+     "relation": "implemented by",
+     "basis": "Agency name, fuzzy match",
+     "confidence": 0.93,
+     "role": null,
+     "source_id": "proj1"
+    },
+    {
+     "source": "P180112",
+     "target": "RRA",
+     "relation": "implemented by",
+     "basis": "Agency name, exact",
+     "confidence": 1,
+     "role": null,
+     "source_id": "proj1"
+    },
+    {
+     "source": "PS-pad1",
+     "target": "RRA",
+     "relation": "assesses",
+     "basis": "Agency name in risk annex",
+     "confidence": 0.92,
+     "role": null,
+     "source_id": "pad1"
+    },
+    {
+     "source": "PS-ieg1",
+     "target": "RRA",
+     "relation": "applies to",
+     "basis": "Agency experience band",
+     "confidence": 0.8,
+     "role": null,
+     "source_id": "ieg1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "proj1",
+     "locator": "Projects API · implementing agency field",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319317+00:00"
+    }
+   ]
+  },
+  "P165530": {
+   "node": {
+    "id": "P165530",
+    "type": "Project",
+    "label": "P165530 Feeder Roads",
+    "layer": "ledger",
+    "attrs": {
+     "Commitment": "US$95M",
+     "Approved": "2017-03",
+     "Closed": "2023-06"
+    },
+    "column": 1,
+    "row": 0,
+    "centrality": 0.6364,
+    "community": 0
+   },
+   "neighbours": [
+    {
+     "source": "P165530",
+     "target": "KE",
+     "relation": "located in",
+     "basis": "Project ID → country code",
+     "confidence": 1,
+     "role": null,
+     "source_id": "proj1"
+    },
+    {
+     "source": "P165530",
+     "target": "TR",
+     "relation": "sector",
+     "basis": "Sector code",
+     "confidence": 1,
+     "role": null,
+     "source_id": "proj1"
+    },
+    {
+     "source": "P165530",
+     "target": "RRA",
+     "relation": "implemented by",
+     "basis": "Agency name, fuzzy match",
+     "confidence": 0.93,
+     "role": null,
+     "source_id": "proj1"
+    },
+    {
+     "source": "C3",
+     "target": "P165530",
+     "relation": "financed by",
+     "basis": "Project ID on award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca3"
+    },
+    {
+     "source": "C4",
+     "target": "P165530",
+     "relation": "financed by",
+     "basis": "Project ID on award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca3"
+    },
+    {
+     "source": "ICR2",
+     "target": "P165530",
+     "relation": "evaluates",
+     "basis": "Document metadata Project ID",
+     "confidence": 1,
+     "role": null,
+     "source_id": "icr3"
+    },
+    {
+     "source": "IEG-T",
+     "target": "P165530",
+     "relation": "reviews",
+     "basis": "Project list in evaluation annex",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ieg1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "icr3",
+     "locator": "Projects API · P165530",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319350+00:00"
+    }
+   ]
+  },
+  "P171204": {
+   "node": {
+    "id": "P171204",
+    "type": "Project",
+    "label": "P171204 Rural Access",
+    "layer": "ledger",
+    "attrs": {
+     "Commitment": "US$150M",
+     "Approved": "2019-06",
+     "Closed": "2024-12",
+     "E&S risk": "Substantial"
+    },
+    "column": 1,
+    "row": 1,
+    "centrality": 1,
+    "community": 0
+   },
+   "neighbours": [
+    {
+     "source": "P171204",
+     "target": "KE",
+     "relation": "located in",
+     "basis": "Project ID → country code",
+     "confidence": 1,
+     "role": null,
+     "source_id": "proj1"
+    },
+    {
+     "source": "P171204",
+     "target": "TR",
+     "relation": "sector",
+     "basis": "Sector code",
+     "confidence": 1,
+     "role": null,
+     "source_id": "proj1"
+    },
+    {
+     "source": "P171204",
+     "target": "RRA",
+     "relation": "implemented by",
+     "basis": "Agency name, fuzzy match",
+     "confidence": 0.96,
+     "role": null,
+     "source_id": "proj1"
+    },
+    {
+     "source": "PAD",
+     "target": "P171204",
+     "relation": "appraises",
+     "basis": "Document metadata Project ID",
+     "confidence": 1,
+     "role": null,
+     "source_id": "pad1"
+    },
+    {
+     "source": "C1",
+     "target": "P171204",
+     "relation": "financed by",
+     "basis": "Project ID on award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca2"
+    },
+    {
+     "source": "C2",
+     "target": "P171204",
+     "relation": "financed by",
+     "basis": "Project ID on award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca2"
+    },
+    {
+     "source": "C5",
+     "target": "P171204",
+     "relation": "financed by",
+     "basis": "Project ID on award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca4"
+    },
+    {
+     "source": "ISR7",
+     "target": "P171204",
+     "relation": "supervises",
+     "basis": "Document metadata Project ID",
+     "confidence": 1,
+     "role": null,
+     "source_id": "isr1"
+    },
+    {
+     "source": "ISR9",
+     "target": "P171204",
+     "relation": "supervises",
+     "basis": "Document metadata Project ID",
+     "confidence": 1,
+     "role": null,
+     "source_id": "isr2"
+    },
+    {
+     "source": "ICR",
+     "target": "P171204",
+     "relation": "evaluates",
+     "basis": "Document metadata Project ID",
+     "confidence": 1,
+     "role": null,
+     "source_id": "icr2"
+    },
+    {
+     "source": "IEG-T",
+     "target": "P171204",
+     "relation": "reviews",
+     "basis": "Project list in evaluation annex",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ieg1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "fin1",
+     "locator": "Projects API · P171204",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319336+00:00"
+    }
+   ]
+  },
+  "P180112": {
+   "node": {
+    "id": "P180112",
+    "type": "Project",
+    "label": "P180112 Rural Roads II",
+    "layer": "ledger",
+    "attrs": {
+     "Commitment": "US$210M",
+     "Approved": "2023-09",
+     "Status": "Active",
+     "E&S risk": "Substantial"
+    },
+    "column": 1,
+    "row": 2,
+    "centrality": 0.6364,
+    "community": 1
+   },
+   "neighbours": [
+    {
+     "source": "P180112",
+     "target": "KE",
+     "relation": "located in",
+     "basis": "Project ID → country code",
+     "confidence": 1,
+     "role": null,
+     "source_id": "proj1"
+    },
+    {
+     "source": "P180112",
+     "target": "TR",
+     "relation": "sector",
+     "basis": "Sector code",
+     "confidence": 1,
+     "role": null,
+     "source_id": "proj1"
+    },
+    {
+     "source": "P180112",
+     "target": "RRA",
+     "relation": "implemented by",
+     "basis": "Agency name, exact",
+     "confidence": 1,
+     "role": null,
+     "source_id": "proj1"
+    },
+    {
+     "source": "RRA-W-07",
+     "target": "P180112",
+     "relation": "financed by",
+     "basis": "Project ID on award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca2"
+    },
+    {
+     "source": "RRA-W-08",
+     "target": "P180112",
+     "relation": "financed by",
+     "basis": "Project ID on award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca2"
+    },
+    {
+     "source": "RRA-C-02",
+     "target": "P180112",
+     "relation": "financed by",
+     "basis": "Project ID on award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca4"
+    },
+    {
+     "source": "RRA-G-04",
+     "target": "P180112",
+     "relation": "financed by",
+     "basis": "Project ID on award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "proj1",
+     "locator": "Projects API · P180112",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319363+00:00"
+    }
+   ]
+  },
+  "PAD": {
+   "node": {
+    "id": "PAD",
+    "type": "PAD",
+    "label": "Appraisal document",
+    "layer": "retrospective",
+    "attrs": {
+     "Procurement risk": "Substantial",
+     "Pages": "118"
+    },
+    "column": 1,
+    "row": 3,
+    "centrality": 0.1818,
+    "community": 0
+   },
+   "neighbours": [
+    {
+     "source": "PAD",
+     "target": "P171204",
+     "relation": "appraises",
+     "basis": "Document metadata Project ID",
+     "confidence": 1,
+     "role": null,
+     "source_id": "pad1"
+    },
+    {
+     "source": "PS-pad1",
+     "target": "PAD",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "pad1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "pad1",
+     "locator": "Annex 3, Procurement arrangements · p. 61",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319379+00:00"
+    }
+   ]
+  },
+  "ESF": {
+   "node": {
+    "id": "ESF",
+    "type": "Guidance",
+    "label": "ESHS guidance note",
+    "layer": "retrospective",
+    "attrs": {
+     "Issued": "2022-06"
+    },
+    "column": 1,
+    "row": 4,
+    "centrality": 0.0909,
+    "community": 4
+   },
+   "neighbours": [
+    {
+     "source": "PS-esf1",
+     "target": "ESF",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "esf1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "esf1",
+     "locator": "Section 4 · ESHS in bidding documents",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319412+00:00"
+    }
+   ]
+  },
+  "REG": {
+   "node": {
+    "id": "REG",
+    "type": "Guidance",
+    "label": "Procurement Regulations",
+    "layer": "procedure",
+    "attrs": {
+     "Edition": "2023-09"
+    },
+    "column": 1,
+    "row": 5,
+    "centrality": 0.0909,
+    "community": 2
+   },
+   "neighbours": [
+    {
+     "source": "PS-notice1",
+     "target": "REG",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "notice1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "notice1",
+     "locator": "Procurement Regulations for IPF Borrowers",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319402+00:00"
+    }
+   ]
+  },
+  "SBD": {
+   "node": {
+    "id": "SBD",
+    "type": "Guidance",
+    "label": "Standard Bidding Document, Works",
+    "layer": "procedure",
+    "attrs": {
+     "Edition": "2023-09",
+     "Sections": "I–VIII"
+    },
+    "column": 1,
+    "row": 6,
+    "centrality": 0.2727,
+    "community": 3
+   },
+   "neighbours": [
+    {
+     "source": "PS-sbd1",
+     "target": "SBD",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "sbd1"
+    },
+    {
+     "source": "PS-sbd2",
+     "target": "SBD",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "sbd2"
+    },
+    {
+     "source": "PS-sbd3",
+     "target": "SBD",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "sbd3"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "sbd1",
+     "locator": "Request for Bids, Works",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319390+00:00"
+    }
+   ]
+  },
+  "CPF": {
+   "node": {
+    "id": "CPF",
+    "type": "Strategy",
+    "label": "Kenya CPF FY23–27",
+    "layer": "retrospective",
+    "attrs": {
+     "Issued": "2022-11"
+    },
+    "column": 1,
+    "row": 7,
+    "centrality": 0.0909,
+    "community": 0
+   },
+   "neighbours": [
+    {
+     "source": "PS-cpf1",
+     "target": "CPF",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "cpf1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "cpf1",
+     "locator": "Annex 5, Fiduciary context · p. 88",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319424+00:00"
+    }
+   ]
+  },
+  "C4": {
+   "node": {
+    "id": "C4",
+    "type": "Contract",
+    "label": "FR-ICB-01",
+    "layer": "ledger",
+    "attrs": {
+     "Value": "US$9.3M",
+     "Method": "RFB, open international",
+     "Review": "Prior"
+    },
+    "column": 2,
+    "row": 0,
+    "centrality": 0.1818,
+    "community": 0
+   },
+   "neighbours": [
+    {
+     "source": "C4",
+     "target": "P165530",
+     "relation": "financed by",
+     "basis": "Project ID on award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca3"
+    },
+    {
+     "source": "C4",
+     "target": "SUP-005561",
+     "relation": "awarded to",
+     "basis": "Supplier name resolution",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca3"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca3",
+     "locator": "Award row 3,388",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319468+00:00"
+    }
+   ]
+  },
+  "C3": {
+   "node": {
+    "id": "C3",
+    "type": "Contract",
+    "label": "FR-NCB-02 Lot 1",
+    "layer": "ledger",
+    "attrs": {
+     "Value": "US$4.6M",
+     "Method": "RFB, open national",
+     "Review": "Post"
+    },
+    "column": 2,
+    "row": 1,
+    "centrality": 0.1818,
+    "community": 6
+   },
+   "neighbours": [
+    {
+     "source": "C3",
+     "target": "P165530",
+     "relation": "financed by",
+     "basis": "Project ID on award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca3"
+    },
+    {
+     "source": "C3",
+     "target": "SUP-003318",
+     "relation": "awarded to",
+     "basis": "Supplier name resolution",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca3"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca3",
+     "locator": "Award row 3,402",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319457+00:00"
+    }
+   ]
+  },
+  "C5": {
+   "node": {
+    "id": "C5",
+    "type": "Contract",
+    "label": "RA-CS-04 Supervision",
+    "layer": "ledger",
+    "attrs": {
+     "Value": "US$1.9M",
+     "Method": "QCBS",
+     "Review": "Prior"
+    },
+    "column": 2,
+    "row": 2,
+    "centrality": 0.1818,
+    "community": 1
+   },
+   "neighbours": [
+    {
+     "source": "C5",
+     "target": "P171204",
+     "relation": "financed by",
+     "basis": "Project ID on award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca4"
+    },
+    {
+     "source": "C5",
+     "target": "SUP-007731",
+     "relation": "awarded to",
+     "basis": "Supplier name resolution",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca4"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca4",
+     "locator": "Award row 4,201",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319479+00:00"
+    }
+   ]
+  },
+  "RRA-C-02": {
+   "node": {
+    "id": "RRA-C-02",
+    "type": "Contract",
+    "label": "RRA-C-02 Supervision",
+    "layer": "ledger",
+    "attrs": {
+     "Value": "US$2.4M",
+     "Signed": "2023-11-20",
+     "Method": "QCBS"
+    },
+    "column": 2,
+    "row": 3,
+    "centrality": 0.3636,
+    "community": 1
+   },
+   "neighbours": [
+    {
+     "source": "RRA-C-02",
+     "target": "P180112",
+     "relation": "financed by",
+     "basis": "Project ID on award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca4"
+    },
+    {
+     "source": "RRA-C-02",
+     "target": "RRA-W-07",
+     "relation": "supervises",
+     "basis": "Contract reference in TOR",
+     "confidence": 0.95,
+     "role": null,
+     "source_id": "ca4"
+    },
+    {
+     "source": "RRA-C-02",
+     "target": "RRA-W-08",
+     "relation": "supervises",
+     "basis": "Contract reference in TOR",
+     "confidence": 0.95,
+     "role": null,
+     "source_id": "ca4"
+    },
+    {
+     "source": "RRA-C-02",
+     "target": "JV-4977",
+     "relation": "awarded to",
+     "basis": "Joint venture award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca4"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca4",
+     "locator": "Award row 4,977",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319515+00:00"
+    }
+   ]
+  },
+  "RRA-G-04": {
+   "node": {
+    "id": "RRA-G-04",
+    "type": "Contract",
+    "label": "RRA-G-04 Survey equipment",
+    "layer": "ledger",
+    "attrs": {
+     "Value": "US$0.9M",
+     "Signed": "2024-08-15",
+     "Method": "RFB, open international"
+    },
+    "column": 2,
+    "row": 4,
+    "centrality": 0.1818,
+    "community": 1
+   },
+   "neighbours": [
+    {
+     "source": "RRA-G-04",
+     "target": "P180112",
+     "relation": "financed by",
+     "basis": "Project ID on award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca1"
+    },
+    {
+     "source": "RRA-G-04",
+     "target": "SUP-009120",
+     "relation": "awarded to",
+     "basis": "Supplier name resolution",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca1",
+     "locator": "Award row 5,044",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319526+00:00"
+    }
+   ]
+  },
+  "RRA-W-07": {
+   "node": {
+    "id": "RRA-W-07",
+    "type": "Contract",
+    "label": "RRA-W-07 Kitui–Mwingi",
+    "layer": "ledger",
+    "attrs": {
+     "Value": "US$12.6M",
+     "Signed": "2024-02-12",
+     "Progress": "37% vs 58% planned"
+    },
+    "column": 2,
+    "row": 5,
+    "centrality": 0.7273,
+    "community": 4
+   },
+   "neighbours": [
+    {
+     "source": "RRA-W-07",
+     "target": "P180112",
+     "relation": "financed by",
+     "basis": "Project ID on award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca2"
+    },
+    {
+     "source": "RRA-C-02",
+     "target": "RRA-W-07",
+     "relation": "supervises",
+     "basis": "Contract reference in TOR",
+     "confidence": 0.95,
+     "role": null,
+     "source_id": "ca4"
+    },
+    {
+     "source": "S2W07",
+     "target": "RRA-W-07",
+     "relation": "observes",
+     "basis": "Alignment buffer 30 m",
+     "confidence": 1,
+     "role": null,
+     "source_id": "s2w07"
+    },
+    {
+     "source": "L3",
+     "target": "RRA-W-07",
+     "relation": "similar risk",
+     "basis": "Embedding similarity of BoQ drainage items",
+     "confidence": 0.81,
+     "role": null,
+     "source_id": "icr3"
+    },
+    {
+     "source": "L2",
+     "target": "RRA-W-07",
+     "relation": "similar risk",
+     "basis": "Payment-delay signal on ISR + same agency",
+     "confidence": 0.83,
+     "role": null,
+     "source_id": "isr2"
+    },
+    {
+     "source": "PS-esf1",
+     "target": "RRA-W-07",
+     "relation": "applies to",
+     "basis": "E&S risk class Substantial",
+     "confidence": 0.9,
+     "role": null,
+     "source_id": "esf1"
+    },
+    {
+     "source": "PS-isr2",
+     "target": "RRA-W-07",
+     "relation": "applies to",
+     "basis": "Same agency and payment issue",
+     "confidence": 0.85,
+     "role": null,
+     "source_id": "isr2"
+    },
+    {
+     "source": "RRA-W-07",
+     "target": "SUP-004417",
+     "relation": "awarded to",
+     "basis": "Supplier name resolution",
+     "confidence": 0.936,
+     "role": null,
+     "source_id": "ca2"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca2",
+     "locator": "Award row 5,012",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319493+00:00"
+    }
+   ]
+  },
+  "RRA-W-08": {
+   "node": {
+    "id": "RRA-W-08",
+    "type": "Contract",
+    "label": "RRA-W-08 Wote–Kathonzweni",
+    "layer": "ledger",
+    "attrs": {
+     "Value": "US$6.9M",
+     "Signed": "2024-05-03",
+     "Progress": "44% vs 49% planned"
+    },
+    "column": 2,
+    "row": 6,
+    "centrality": 0.3636,
+    "community": 1
+   },
+   "neighbours": [
+    {
+     "source": "RRA-W-08",
+     "target": "P180112",
+     "relation": "financed by",
+     "basis": "Project ID on award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca2"
+    },
+    {
+     "source": "RRA-C-02",
+     "target": "RRA-W-08",
+     "relation": "supervises",
+     "basis": "Contract reference in TOR",
+     "confidence": 0.95,
+     "role": null,
+     "source_id": "ca4"
+    },
+    {
+     "source": "S2W08",
+     "target": "RRA-W-08",
+     "relation": "observes",
+     "basis": "Alignment buffer 30 m",
+     "confidence": 1,
+     "role": null,
+     "source_id": "s2w08"
+    },
+    {
+     "source": "RRA-W-08",
+     "target": "SUP-004502",
+     "relation": "awarded to",
+     "basis": "Supplier name resolution",
+     "confidence": 0.973,
+     "role": null,
+     "source_id": "ca2"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca2",
+     "locator": "Award row 5,019",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319504+00:00"
+    }
+   ]
+  },
+  "C2": {
+   "node": {
+    "id": "C2",
+    "type": "Contract",
+    "label": "RW-ICB-03 Lot 1",
+    "layer": "ledger",
+    "attrs": {
+     "Value": "US$11.8M",
+     "Method": "RFB, open international",
+     "Review": "Prior"
+    },
+    "column": 2,
+    "row": 7,
+    "centrality": 0.1818,
+    "community": 2
+   },
+   "neighbours": [
+    {
+     "source": "C2",
+     "target": "P171204",
+     "relation": "financed by",
+     "basis": "Project ID on award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca2"
+    },
+    {
+     "source": "C2",
+     "target": "SUP-004502",
+     "relation": "awarded to",
+     "basis": "Supplier name resolution",
+     "confidence": 0.969,
+     "role": null,
+     "source_id": "ca2"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca2",
+     "locator": "Award row 4,117",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319446+00:00"
+    }
+   ]
+  },
+  "C1": {
+   "node": {
+    "id": "C1",
+    "type": "Contract",
+    "label": "RW-ICB-03 Lot 2",
+    "layer": "ledger",
+    "attrs": {
+     "Value": "US$14.2M → 16.9M",
+     "Method": "RFB, open international",
+     "Review": "Prior"
+    },
+    "column": 2,
+    "row": 8,
+    "centrality": 0.5455,
+    "community": 2
+   },
+   "neighbours": [
+    {
+     "source": "C1",
+     "target": "P171204",
+     "relation": "financed by",
+     "basis": "Project ID on award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca2"
+    },
+    {
+     "source": "BER",
+     "target": "C1",
+     "relation": "evaluates",
+     "basis": "Notice number + lot + date within 90 days",
+     "confidence": 0.91,
+     "role": null,
+     "source_id": "ber1"
+    },
+    {
+     "source": "L1",
+     "target": "C1",
+     "relation": "explains",
+     "basis": "Lot mention + sector code + award within project window",
+     "confidence": 0.84,
+     "role": null,
+     "source_id": "icr1"
+    },
+    {
+     "source": "L3",
+     "target": "C1",
+     "relation": "similar risk",
+     "basis": "Embedding similarity of BoQ drainage items",
+     "confidence": 0.79,
+     "role": null,
+     "source_id": "icr3"
+    },
+    {
+     "source": "PS-notice1",
+     "target": "C1",
+     "relation": "applies to",
+     "basis": "Method: open international",
+     "confidence": 0.9,
+     "role": null,
+     "source_id": "notice1"
+    },
+    {
+     "source": "C1",
+     "target": "SUP-004417",
+     "relation": "awarded to",
+     "basis": "Supplier name resolution",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca2"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca2",
+     "locator": "Award row 4,118 · amended 2022-01-09",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319435+00:00"
+    }
+   ]
+  },
+  "BER": {
+   "node": {
+    "id": "BER",
+    "type": "Bid evaluation",
+    "label": "Evaluation report, Lot 2",
+    "layer": "procedure",
+    "attrs": {
+     "Bids": "9 received, 2 responsive",
+     "Outcome": "Re-tendered"
+    },
+    "column": 2,
+    "row": 9,
+    "centrality": 0.1818,
+    "community": 3
+   },
+   "neighbours": [
+    {
+     "source": "BER",
+     "target": "C1",
+     "relation": "evaluates",
+     "basis": "Notice number + lot + date within 90 days",
+     "confidence": 0.91,
+     "role": null,
+     "source_id": "ber1"
+    },
+    {
+     "source": "PS-ber1",
+     "target": "BER",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ber1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ber1",
+     "locator": "Section 5, Post-qualification · p. 14",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319537+00:00"
+    }
+   ]
+  },
+  "ISR7": {
+   "node": {
+    "id": "ISR7",
+    "type": "ISR",
+    "label": "ISR 7 (2023-06)",
+    "layer": "procedure",
+    "attrs": {
+     "Implementation progress": "Satisfactory"
+    },
+    "column": 2,
+    "row": 10,
+    "centrality": 0.1818,
+    "community": 5
+   },
+   "neighbours": [
+    {
+     "source": "ISR7",
+     "target": "P171204",
+     "relation": "supervises",
+     "basis": "Document metadata Project ID",
+     "confidence": 1,
+     "role": null,
+     "source_id": "isr1"
+    },
+    {
+     "source": "L2",
+     "target": "ISR7",
+     "relation": "contradicts",
+     "basis": "Same rating dimension and period",
+     "confidence": 0.88,
+     "role": null,
+     "source_id": "icr2"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "isr1",
+     "locator": "Key ratings · implementation progress",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319548+00:00"
+    }
+   ]
+  },
+  "ISR9": {
+   "node": {
+    "id": "ISR9",
+    "type": "ISR",
+    "label": "ISR 9 (2024-05)",
+    "layer": "procedure",
+    "attrs": {
+     "Implementation progress": "Moderately Unsatisfactory"
+    },
+    "column": 2,
+    "row": 11,
+    "centrality": 0.2727,
+    "community": 4
+   },
+   "neighbours": [
+    {
+     "source": "ISR9",
+     "target": "P171204",
+     "relation": "supervises",
+     "basis": "Document metadata Project ID",
+     "confidence": 1,
+     "role": null,
+     "source_id": "isr2"
+    },
+    {
+     "source": "S2W07",
+     "target": "ISR9",
+     "relation": "contradicts",
+     "basis": "Reported vs observed progress, km 44–57",
+     "confidence": 0.86,
+     "role": null,
+     "source_id": "s2w07"
+    },
+    {
+     "source": "PS-isr2",
+     "target": "ISR9",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "isr2"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "isr2",
+     "locator": "Key issues · procurement",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319559+00:00"
+    }
+   ]
+  },
+  "ICR": {
+   "node": {
+    "id": "ICR",
+    "type": "ICR",
+    "label": "Completion report",
+    "layer": "retrospective",
+    "attrs": {
+     "Implementation rating": "Moderately Unsatisfactory",
+     "Pages": "112",
+     "Chunks": "241"
+    },
+    "column": 2,
+    "row": 12,
+    "centrality": 0.3636,
+    "community": 5
+   },
+   "neighbours": [
+    {
+     "source": "ICR",
+     "target": "P171204",
+     "relation": "evaluates",
+     "basis": "Document metadata Project ID",
+     "confidence": 1,
+     "role": null,
+     "source_id": "icr2"
+    },
+    {
+     "source": "IEG",
+     "target": "ICR",
+     "relation": "validates",
+     "basis": "Project ID + document type",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ieg2"
+    },
+    {
+     "source": "L1",
+     "target": "ICR",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "icr1"
+    },
+    {
+     "source": "L2",
+     "target": "ICR",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "icr2"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "icr2",
+     "locator": "ICR, Rural Access and Connectivity Project",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319569+00:00"
+    }
+   ]
+  },
+  "ICR2": {
+   "node": {
+    "id": "ICR2",
+    "type": "ICR",
+    "label": "Completion report, P165530",
+    "layer": "retrospective",
+    "attrs": {
+     "Pages": "96",
+     "Chunks": "198"
+    },
+    "column": 2,
+    "row": 13,
+    "centrality": 0.1818,
+    "community": 2
+   },
+   "neighbours": [
+    {
+     "source": "ICR2",
+     "target": "P165530",
+     "relation": "evaluates",
+     "basis": "Document metadata Project ID",
+     "confidence": 1,
+     "role": null,
+     "source_id": "icr3"
+    },
+    {
+     "source": "L3",
+     "target": "ICR2",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "icr3"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "icr3",
+     "locator": "ICR, Feeder Roads and Market Access Project",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319580+00:00"
+    }
+   ]
+  },
+  "IEG": {
+   "node": {
+    "id": "IEG",
+    "type": "IEG review",
+    "label": "IEG assessment",
+    "layer": "retrospective",
+    "attrs": {
+     "Rating": "Validates MU"
+    },
+    "column": 2,
+    "row": 14,
+    "centrality": 0.0909,
+    "community": 5
+   },
+   "neighbours": [
+    {
+     "source": "IEG",
+     "target": "ICR",
+     "relation": "validates",
+     "basis": "Project ID + document type",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ieg2"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ieg2",
+     "locator": "Ratings summary · p. 3",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319591+00:00"
+    }
+   ]
+  },
+  "IEG-T": {
+   "node": {
+    "id": "IEG-T",
+    "type": "IEG review",
+    "label": "IEG rural transport review",
+    "layer": "retrospective",
+    "attrs": {
+     "Scope": "Thematic, 41 projects"
+    },
+    "column": 2,
+    "row": 15,
+    "centrality": 0.2727,
+    "community": 0
+   },
+   "neighbours": [
+    {
+     "source": "IEG-T",
+     "target": "P171204",
+     "relation": "reviews",
+     "basis": "Project list in evaluation annex",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ieg1"
+    },
+    {
+     "source": "IEG-T",
+     "target": "P165530",
+     "relation": "reviews",
+     "basis": "Project list in evaluation annex",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ieg1"
+    },
+    {
+     "source": "PS-ieg1",
+     "target": "IEG-T",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ieg1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ieg1",
+     "locator": "Chapter 3 · p. 22",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319604+00:00"
+    }
+   ]
+  },
+  "S2W07": {
+   "node": {
+    "id": "S2W07",
+    "type": "Satellite analysis",
+    "label": "Sentinel-2 change, Kitui–Mwingi",
+    "layer": "ledger",
+    "attrs": {
+     "Window": "2019 vs 2024",
+     "Flag": "km 44–57 no change"
+    },
+    "column": 2,
+    "row": 16,
+    "centrality": 0.1818,
+    "community": 4
+   },
+   "neighbours": [
+    {
+     "source": "S2W07",
+     "target": "RRA-W-07",
+     "relation": "observes",
+     "basis": "Alignment buffer 30 m",
+     "confidence": 1,
+     "role": null,
+     "source_id": "s2w07"
+    },
+    {
+     "source": "S2W07",
+     "target": "ISR9",
+     "relation": "contradicts",
+     "basis": "Reported vs observed progress, km 44–57",
+     "confidence": 0.86,
+     "role": null,
+     "source_id": "s2w07"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "s2w07",
+     "locator": "10 m pixels within 30 m of the alignment",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319616+00:00"
+    }
+   ]
+  },
+  "S2W08": {
+   "node": {
+    "id": "S2W08",
+    "type": "Satellite analysis",
+    "label": "Sentinel-2 change, Wote road",
+    "layer": "ledger",
+    "attrs": {
+     "Window": "2019 vs 2024",
+     "Flag": "Matches reports"
+    },
+    "column": 2,
+    "row": 17,
+    "centrality": 0.0909,
+    "community": 1
+   },
+   "neighbours": [
+    {
+     "source": "S2W08",
+     "target": "RRA-W-08",
+     "relation": "observes",
+     "basis": "Alignment buffer 30 m",
+     "confidence": 1,
+     "role": null,
+     "source_id": "s2w08"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "s2w08",
+     "locator": "10 m pixels within 30 m of the alignment",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319627+00:00"
+    }
+   ]
+  },
+  "SUP-007790": {
+   "node": {
+    "id": "SUP-007790",
+    "type": "Supplier",
+    "label": "Bluegate Consulting Ltd",
+    "layer": "ledger",
+    "attrs": {
+     "Canonical ID": "SUP-007790",
+     "Name variants": "1",
+     "Registered in": "KE"
+    },
+    "column": 3,
+    "row": 0,
+    "centrality": 0.0909,
+    "community": 1
+   },
+   "neighbours": [
+    {
+     "source": "JV-4977",
+     "target": "SUP-007790",
+     "relation": "member of",
+     "basis": "JV member name resolution",
+     "confidence": 1,
+     "role": "member",
+     "source_id": "ca4"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca4",
+     "locator": "Award row 3725, 2021",
+     "quote": "Bluegate Consulting Limited",
+     "activity": "entity_tracking",
+     "confidence": 0.97,
+     "recorded_at": "2026-11-15T15:50:20.320051+00:00"
+    }
+   ]
+  },
+  "SUP-007731": {
+   "node": {
+    "id": "SUP-007731",
+    "type": "Supplier",
+    "label": "Kestrel Engineering Associates",
+    "layer": "ledger",
+    "attrs": {
+     "Canonical ID": "SUP-007731",
+     "Name variants": "2",
+     "Registered in": "UG",
+     "Awards in graph": "1"
+    },
+    "column": 3,
+    "row": 1,
+    "centrality": 0.1818,
+    "community": 1
+   },
+   "neighbours": [
+    {
+     "source": "C5",
+     "target": "SUP-007731",
+     "relation": "awarded to",
+     "basis": "Supplier name resolution",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca4"
+    },
+    {
+     "source": "JV-4977",
+     "target": "SUP-007731",
+     "relation": "member of",
+     "basis": "JV member name resolution",
+     "confidence": 1,
+     "role": "lead",
+     "source_id": "ca4"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca4",
+     "locator": "Award row 3720, 2021",
+     "quote": "KESTREL ENGINEERING ASSOCIATES LTD",
+     "activity": "entity_tracking",
+     "confidence": 0.976,
+     "recorded_at": "2026-11-15T15:50:20.320038+00:00"
+    },
+    {
+     "source_id": "ca4",
+     "locator": "Award row 4201, 2022",
+     "quote": "Kestrel Engineering Associates",
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.320007+00:00"
+    }
+   ]
+  },
+  "SUP-006204": {
+   "node": {
+    "id": "SUP-006204",
+    "type": "Supplier",
+    "label": "Lakeside Engineering Partners",
+    "layer": "ledger",
+    "attrs": {
+     "Canonical ID": "SUP-006204",
+     "Name variants": "3",
+     "Registered in": "TZ"
+    },
+    "column": 3,
+    "row": 2,
+    "centrality": 0.0909,
+    "community": 6
+   },
+   "neighbours": [
+    {
+     "source": "JV-4801",
+     "target": "SUP-006204",
+     "relation": "member of",
+     "basis": "JV member name resolution",
+     "confidence": 1,
+     "role": "lead",
+     "source_id": "ca3"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca4",
+     "locator": "Award row 4620, 2022",
+     "quote": "Lakeside Engg. Partners Ltd",
+     "activity": "entity_tracking",
+     "confidence": 0.874,
+     "recorded_at": "2026-11-15T15:50:20.320301+00:00"
+    },
+    {
+     "source_id": "ca4",
+     "locator": "Award row 4788, 2023",
+     "quote": "LAKESIDE ENGINEERING PARTNERS",
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.320273+00:00"
+    },
+    {
+     "source_id": "ca4",
+     "locator": "Award row 3801, 2021",
+     "quote": "Lakeside Engineering Partners",
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.320245+00:00"
+    }
+   ]
+  },
+  "SUP-004417": {
+   "node": {
+    "id": "SUP-004417",
+    "type": "Supplier",
+    "label": "Meridian Roadworks Ltd",
+    "layer": "ledger",
+    "attrs": {
+     "Canonical ID": "SUP-004417",
+     "Name variants": "4",
+     "Registered in": "KE",
+     "Awards in graph": "2"
+    },
+    "column": 3,
+    "row": 3,
+    "centrality": 0.2727,
+    "community": 2
+   },
+   "neighbours": [
+    {
+     "source": "C1",
+     "target": "SUP-004417",
+     "relation": "awarded to",
+     "basis": "Supplier name resolution",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca2"
+    },
+    {
+     "source": "RRA-W-07",
+     "target": "SUP-004417",
+     "relation": "awarded to",
+     "basis": "Supplier name resolution",
+     "confidence": 0.936,
+     "role": null,
+     "source_id": "ca2"
+    },
+    {
+     "source": "JV-4390",
+     "target": "SUP-004417",
+     "relation": "member of",
+     "basis": "JV member name resolution",
+     "confidence": 1,
+     "role": "lead",
+     "source_id": "ca1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca1",
+     "locator": "Award row 2977, 2019",
+     "quote": "Meridian Rdwks (K) Ltd",
+     "activity": "entity_tracking",
+     "confidence": 0.927,
+     "recorded_at": "2026-11-15T15:50:20.319913+00:00"
+    },
+    {
+     "source_id": "ca1",
+     "locator": "Award row 3150, 2020",
+     "quote": "Meridian Roadworks Limited",
+     "activity": "entity_tracking",
+     "confidence": 0.969,
+     "recorded_at": "2026-11-15T15:50:20.319879+00:00"
+    },
+    {
+     "source_id": "ca2",
+     "locator": "Award row 5012, 2024",
+     "quote": "MERIDIAN ROAD WORKS LIMITED",
+     "activity": "entity_tracking",
+     "confidence": 0.936,
+     "recorded_at": "2026-11-15T15:50:20.319834+00:00"
+    },
+    {
+     "source_id": "ca2",
+     "locator": "Award row 4118, 2021",
+     "quote": "Meridian Roadworks Ltd",
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319786+00:00"
+    }
+   ]
+  },
+  "SUP-003318": {
+   "node": {
+    "id": "SUP-003318",
+    "type": "Supplier",
+    "label": "Rift Valley Builders Ltd",
+    "layer": "ledger",
+    "attrs": {
+     "Canonical ID": "SUP-003318",
+     "Name variants": "3",
+     "Registered in": "KE",
+     "Awards in graph": "1"
+    },
+    "column": 3,
+    "row": 4,
+    "centrality": 0.1818,
+    "community": 6
+   },
+   "neighbours": [
+    {
+     "source": "C3",
+     "target": "SUP-003318",
+     "relation": "awarded to",
+     "basis": "Supplier name resolution",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca3"
+    },
+    {
+     "source": "JV-4801",
+     "target": "SUP-003318",
+     "relation": "member of",
+     "basis": "JV member name resolution",
+     "confidence": 1,
+     "role": "member",
+     "source_id": "ca3"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca3",
+     "locator": "Award row 3633, 2021",
+     "quote": "RIFT VALLEY BUILDERS",
+     "activity": "entity_tracking",
+     "confidence": 0.967,
+     "recorded_at": "2026-11-15T15:50:20.320163+00:00"
+    },
+    {
+     "source_id": "ca3",
+     "locator": "Award row 3511, 2020",
+     "quote": "Rift Valley Builders Limited",
+     "activity": "entity_tracking",
+     "confidence": 0.971,
+     "recorded_at": "2026-11-15T15:50:20.320134+00:00"
+    },
+    {
+     "source_id": "ca3",
+     "locator": "Award row 3402, 2020",
+     "quote": "Rift Valley Builders Ltd",
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.320105+00:00"
+    }
+   ]
+  },
+  "SUP-005561": {
+   "node": {
+    "id": "SUP-005561",
+    "type": "Supplier",
+    "label": "Sahel Infrastructure Group",
+    "layer": "ledger",
+    "attrs": {
+     "Canonical ID": "SUP-005561",
+     "Name variants": "3",
+     "Registered in": "SN",
+     "Awards in graph": "1"
+    },
+    "column": 3,
+    "row": 5,
+    "centrality": 0.0909,
+    "community": 0
+   },
+   "neighbours": [
+    {
+     "source": "C4",
+     "target": "SUP-005561",
+     "relation": "awarded to",
+     "basis": "Supplier name resolution",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca3"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca3",
+     "locator": "Award row 3940, 2021",
+     "quote": "Sahel Infrastructure Grp SA",
+     "activity": "entity_tracking",
+     "confidence": 0.962,
+     "recorded_at": "2026-11-15T15:50:20.320233+00:00"
+    },
+    {
+     "source_id": "ca3",
+     "locator": "Award row 4455, 2022",
+     "quote": "SAHEL INFRASTRUCTURE GROUP",
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.320204+00:00"
+    },
+    {
+     "source_id": "ca3",
+     "locator": "Award row 3388, 2020",
+     "quote": "Sahel Infrastructure Group",
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.320175+00:00"
+    }
+   ]
+  },
+  "SUP-009120": {
+   "node": {
+    "id": "SUP-009120",
+    "type": "Supplier",
+    "label": "Survey Dynamics GmbH",
+    "layer": "ledger",
+    "attrs": {
+     "Canonical ID": "SUP-009120",
+     "Name variants": "2",
+     "Registered in": "DE",
+     "Awards in graph": "1"
+    },
+    "column": 3,
+    "row": 6,
+    "centrality": 0.0909,
+    "community": 1
+   },
+   "neighbours": [
+    {
+     "source": "RRA-G-04",
+     "target": "SUP-009120",
+     "relation": "awarded to",
+     "basis": "Supplier name resolution",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca1",
+     "locator": "Award row 4012, 2021",
+     "quote": "SURVEY DYNAMICS GMBH",
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.320092+00:00"
+    },
+    {
+     "source_id": "ca1",
+     "locator": "Award row 5044, 2024",
+     "quote": "Survey Dynamics GmbH",
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.320063+00:00"
+    }
+   ]
+  },
+  "SUP-004502": {
+   "node": {
+    "id": "SUP-004502",
+    "type": "Supplier",
+    "label": "Tana Civil Contractors Ltd",
+    "layer": "ledger",
+    "attrs": {
+     "Canonical ID": "SUP-004502",
+     "Name variants": "3",
+     "Registered in": "KE",
+     "Awards in graph": "2"
+    },
+    "column": 3,
+    "row": 7,
+    "centrality": 0.2727,
+    "community": 2
+   },
+   "neighbours": [
+    {
+     "source": "C2",
+     "target": "SUP-004502",
+     "relation": "awarded to",
+     "basis": "Supplier name resolution",
+     "confidence": 0.969,
+     "role": null,
+     "source_id": "ca2"
+    },
+    {
+     "source": "RRA-W-08",
+     "target": "SUP-004502",
+     "relation": "awarded to",
+     "basis": "Supplier name resolution",
+     "confidence": 0.973,
+     "role": null,
+     "source_id": "ca2"
+    },
+    {
+     "source": "JV-4390",
+     "target": "SUP-004502",
+     "relation": "member of",
+     "basis": "JV member name resolution",
+     "confidence": 0.891,
+     "role": "member",
+     "source_id": "ca1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca2",
+     "locator": "Award row 4117, 2021",
+     "quote": "Tana Civil Contractors",
+     "activity": "entity_tracking",
+     "confidence": 0.969,
+     "recorded_at": "2026-11-15T15:50:20.319993+00:00"
+    },
+    {
+     "source_id": "ca2",
+     "locator": "Award row 5019, 2024",
+     "quote": "TANA CIVIL CONTRACTORS LIMITED",
+     "activity": "entity_tracking",
+     "confidence": 0.973,
+     "recorded_at": "2026-11-15T15:50:20.319959+00:00"
+    },
+    {
+     "source_id": "ca1",
+     "locator": "Award row 3361, 2020",
+     "quote": "Tana Civil Contractors Ltd.",
+     "activity": "entity_tracking",
+     "confidence": 0.993,
+     "recorded_at": "2026-11-15T15:50:20.319927+00:00"
+    }
+   ]
+  },
+  "JV-4977": {
+   "node": {
+    "id": "JV-4977",
+    "type": "Joint venture",
+    "label": "Kestrel Engineering Associates JV",
+    "layer": "ledger",
+    "attrs": {
+     "Award row": "4977",
+     "Members": "2"
+    },
+    "column": 3,
+    "row": 8,
+    "centrality": 0.2727,
+    "community": 1
+   },
+   "neighbours": [
+    {
+     "source": "JV-4977",
+     "target": "SUP-007731",
+     "relation": "member of",
+     "basis": "JV member name resolution",
+     "confidence": 1,
+     "role": "lead",
+     "source_id": "ca4"
+    },
+    {
+     "source": "JV-4977",
+     "target": "SUP-007790",
+     "relation": "member of",
+     "basis": "JV member name resolution",
+     "confidence": 1,
+     "role": "member",
+     "source_id": "ca4"
+    },
+    {
+     "source": "RRA-C-02",
+     "target": "JV-4977",
+     "relation": "awarded to",
+     "basis": "Joint venture award row",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ca4"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca4",
+     "locator": "Award row 4977, 2023",
+     "quote": "Kestrel Engineering Associates JV",
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.320326+00:00"
+    }
+   ]
+  },
+  "JV-4801": {
+   "node": {
+    "id": "JV-4801",
+    "type": "Joint venture",
+    "label": "Lakeside Engineering Partners / Rift Valley Builders JV",
+    "layer": "ledger",
+    "attrs": {
+     "Award row": "4801",
+     "Members": "2"
+    },
+    "column": 3,
+    "row": 9,
+    "centrality": 0.1818,
+    "community": 6
+   },
+   "neighbours": [
+    {
+     "source": "JV-4801",
+     "target": "SUP-006204",
+     "relation": "member of",
+     "basis": "JV member name resolution",
+     "confidence": 1,
+     "role": "lead",
+     "source_id": "ca3"
+    },
+    {
+     "source": "JV-4801",
+     "target": "SUP-003318",
+     "relation": "member of",
+     "basis": "JV member name resolution",
+     "confidence": 1,
+     "role": "member",
+     "source_id": "ca3"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca3",
+     "locator": "Award row 4801, 2023",
+     "quote": "Lakeside Engineering Partners / Rift Valley Builders JV",
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.320337+00:00"
+    }
+   ]
+  },
+  "JV-4390": {
+   "node": {
+    "id": "JV-4390",
+    "type": "Joint venture",
+    "label": "Meridian Roadworks Ltd / Tana Civil JV",
+    "layer": "ledger",
+    "attrs": {
+     "Award row": "4390",
+     "Members": "2"
+    },
+    "column": 3,
+    "row": 10,
+    "centrality": 0.1818,
+    "community": 2
+   },
+   "neighbours": [
+    {
+     "source": "JV-4390",
+     "target": "SUP-004417",
+     "relation": "member of",
+     "basis": "JV member name resolution",
+     "confidence": 1,
+     "role": "lead",
+     "source_id": "ca1"
+    },
+    {
+     "source": "JV-4390",
+     "target": "SUP-004502",
+     "relation": "member of",
+     "basis": "JV member name resolution",
+     "confidence": 0.891,
+     "role": "member",
+     "source_id": "ca1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ca1",
+     "locator": "Award row 4390, 2022",
+     "quote": "Meridian Roadworks Ltd / Tana Civil JV",
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.320314+00:00"
+    }
+   ]
+  },
+  "L2": {
+   "node": {
+    "id": "L2",
+    "type": "Lesson",
+    "label": "Finding: payment delays",
+    "layer": "retrospective",
+    "attrs": {
+     "Location": "Section III, para 52, p. 27",
+     "Topics": "contract management, counterpart funds"
+    },
+    "column": 3,
+    "row": 11,
+    "centrality": 0.2727,
+    "community": 5
+   },
+   "neighbours": [
+    {
+     "source": "L2",
+     "target": "ICR",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "icr2"
+    },
+    {
+     "source": "L2",
+     "target": "ISR7",
+     "relation": "contradicts",
+     "basis": "Same rating dimension and period",
+     "confidence": 0.88,
+     "role": null,
+     "source_id": "icr2"
+    },
+    {
+     "source": "L2",
+     "target": "RRA-W-07",
+     "relation": "similar risk",
+     "basis": "Payment-delay signal on ISR + same agency",
+     "confidence": 0.83,
+     "role": null,
+     "source_id": "isr2"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "icr2",
+     "locator": "Section III · para 52 · p. 27",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319648+00:00"
+    }
+   ]
+  },
+  "L3": {
+   "node": {
+    "id": "L3",
+    "type": "Lesson",
+    "label": "Lesson: drainage surveys",
+    "layer": "retrospective",
+    "attrs": {
+     "Location": "Section V, para 74, p. 38",
+     "Topics": "design, variations"
+    },
+    "column": 3,
+    "row": 12,
+    "centrality": 0.2727,
+    "community": 2
+   },
+   "neighbours": [
+    {
+     "source": "L3",
+     "target": "ICR2",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "icr3"
+    },
+    {
+     "source": "L3",
+     "target": "C1",
+     "relation": "similar risk",
+     "basis": "Embedding similarity of BoQ drainage items",
+     "confidence": 0.79,
+     "role": null,
+     "source_id": "icr3"
+    },
+    {
+     "source": "L3",
+     "target": "RRA-W-07",
+     "relation": "similar risk",
+     "basis": "Embedding similarity of BoQ drainage items",
+     "confidence": 0.81,
+     "role": null,
+     "source_id": "icr3"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "icr3",
+     "locator": "Section V, Lessons learned · para 74 · p. 38",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319659+00:00"
+    }
+   ]
+  },
+  "L1": {
+   "node": {
+    "id": "L1",
+    "type": "Lesson",
+    "label": "Lesson: size criteria per lot",
+    "layer": "retrospective",
+    "attrs": {
+     "Location": "Section V, para 88, p. 41",
+     "Topics": "qualification criteria, lotting"
+    },
+    "column": 3,
+    "row": 13,
+    "centrality": 0.1818,
+    "community": 5
+   },
+   "neighbours": [
+    {
+     "source": "L1",
+     "target": "ICR",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "icr1"
+    },
+    {
+     "source": "L1",
+     "target": "C1",
+     "relation": "explains",
+     "basis": "Lot mention + sector code + award within project window",
+     "confidence": 0.84,
+     "role": null,
+     "source_id": "icr1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "icr1",
+     "locator": "Section V, Lessons learned · para 88 · p. 41",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319638+00:00"
+    }
+   ]
+  },
+  "PS-notice1": {
+   "node": {
+    "id": "PS-notice1",
+    "type": "Passage",
+    "label": "30 business days to bid (OIC)",
+    "layer": "procedure",
+    "attrs": {
+     "Paragraph": "6.36"
+    },
+    "column": 3,
+    "row": 14,
+    "centrality": 0.1818,
+    "community": 2
+   },
+   "neighbours": [
+    {
+     "source": "PS-notice1",
+     "target": "REG",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "notice1"
+    },
+    {
+     "source": "PS-notice1",
+     "target": "C1",
+     "relation": "applies to",
+     "basis": "Method: open international",
+     "confidence": 0.9,
+     "role": null,
+     "source_id": "notice1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "notice1",
+     "locator": "Open international competition",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319706+00:00"
+    }
+   ]
+  },
+  "PS-ber1": {
+   "node": {
+    "id": "PS-ber1",
+    "type": "Passage",
+    "label": "7 of 9 bids failed turnover",
+    "layer": "procedure",
+    "attrs": {
+     "Page": "14"
+    },
+    "column": 3,
+    "row": 15,
+    "centrality": 0.1818,
+    "community": 3
+   },
+   "neighbours": [
+    {
+     "source": "PS-ber1",
+     "target": "BER",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ber1"
+    },
+    {
+     "source": "PS-ber1",
+     "target": "PS-sbd1",
+     "relation": "cites",
+     "basis": "Criterion reference in evaluation",
+     "confidence": 0.9,
+     "role": null,
+     "source_id": "ber1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ber1",
+     "locator": "Section 5 · p. 14",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319720+00:00"
+    }
+   ]
+  },
+  "PS-pad1": {
+   "node": {
+    "id": "PS-pad1",
+    "type": "Passage",
+    "label": "Agency capacity: Substantial risk",
+    "layer": "retrospective",
+    "attrs": {
+     "Page": "61"
+    },
+    "column": 3,
+    "row": 16,
+    "centrality": 0.1818,
+    "community": 0
+   },
+   "neighbours": [
+    {
+     "source": "PS-pad1",
+     "target": "PAD",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "pad1"
+    },
+    {
+     "source": "PS-pad1",
+     "target": "RRA",
+     "relation": "assesses",
+     "basis": "Agency name in risk annex",
+     "confidence": 0.92,
+     "role": null,
+     "source_id": "pad1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "pad1",
+     "locator": "Annex 3 · p. 61",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319740+00:00"
+    }
+   ]
+  },
+  "PS-sbd3": {
+   "node": {
+    "id": "PS-sbd3",
+    "type": "Passage",
+    "label": "Brands only with 'or equivalent'",
+    "layer": "procedure",
+    "attrs": {
+     "Section": "VII"
+    },
+    "column": 3,
+    "row": 17,
+    "centrality": 0.0909,
+    "community": 3
+   },
+   "neighbours": [
+    {
+     "source": "PS-sbd3",
+     "target": "SBD",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "sbd3"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "sbd3",
+     "locator": "Section VII · general specifications note",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319695+00:00"
+    }
+   ]
+  },
+  "PS-isr2": {
+   "node": {
+    "id": "PS-isr2",
+    "type": "Passage",
+    "label": "Certificates paid in 61–80 days",
+    "layer": "procedure",
+    "attrs": {
+     "Section": "Key issues"
+    },
+    "column": 3,
+    "row": 18,
+    "centrality": 0.1818,
+    "community": 4
+   },
+   "neighbours": [
+    {
+     "source": "PS-isr2",
+     "target": "ISR9",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "isr2"
+    },
+    {
+     "source": "PS-isr2",
+     "target": "RRA-W-07",
+     "relation": "applies to",
+     "basis": "Same agency and payment issue",
+     "confidence": 0.85,
+     "role": null,
+     "source_id": "isr2"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "isr2",
+     "locator": "Key issues · procurement",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319730+00:00"
+    }
+   ]
+  },
+  "PS-esf1": {
+   "node": {
+    "id": "PS-esf1",
+    "type": "Passage",
+    "label": "ESHS performance security",
+    "layer": "retrospective",
+    "attrs": {
+     "Section": "4"
+    },
+    "column": 3,
+    "row": 19,
+    "centrality": 0.1818,
+    "community": 4
+   },
+   "neighbours": [
+    {
+     "source": "PS-esf1",
+     "target": "ESF",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "esf1"
+    },
+    {
+     "source": "PS-esf1",
+     "target": "RRA-W-07",
+     "relation": "applies to",
+     "basis": "E&S risk class Substantial",
+     "confidence": 0.9,
+     "role": null,
+     "source_id": "esf1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "esf1",
+     "locator": "Section 4",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319762+00:00"
+    }
+   ]
+  },
+  "PS-sbd2": {
+   "node": {
+    "id": "PS-sbd2",
+    "type": "Passage",
+    "label": "Experience: 2 contracts at 80%",
+    "layer": "procedure",
+    "attrs": {
+     "Section": "III, 4.2(a)"
+    },
+    "column": 3,
+    "row": 20,
+    "centrality": 0.0909,
+    "community": 3
+   },
+   "neighbours": [
+    {
+     "source": "PS-sbd2",
+     "target": "SBD",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "sbd2"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "sbd2",
+     "locator": "Section III · criterion 4.2(a)",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319681+00:00"
+    }
+   ]
+  },
+  "PS-cpf1": {
+   "node": {
+    "id": "PS-cpf1",
+    "type": "Passage",
+    "label": "National e-GP accepted for NCB",
+    "layer": "retrospective",
+    "attrs": {
+     "Page": "88"
+    },
+    "column": 3,
+    "row": 21,
+    "centrality": 0.1818,
+    "community": 0
+   },
+   "neighbours": [
+    {
+     "source": "PS-cpf1",
+     "target": "CPF",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "cpf1"
+    },
+    {
+     "source": "PS-cpf1",
+     "target": "KE",
+     "relation": "applies to",
+     "basis": "Country of strategy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "cpf1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "cpf1",
+     "locator": "Annex 5 · p. 88",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319773+00:00"
+    }
+   ]
+  },
+  "PS-ieg1": {
+   "node": {
+    "id": "PS-ieg1",
+    "type": "Passage",
+    "label": "New agencies 2× re-tender rate",
+    "layer": "retrospective",
+    "attrs": {
+     "Page": "22"
+    },
+    "column": 3,
+    "row": 22,
+    "centrality": 0.1818,
+    "community": 0
+   },
+   "neighbours": [
+    {
+     "source": "PS-ieg1",
+     "target": "IEG-T",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "ieg1"
+    },
+    {
+     "source": "PS-ieg1",
+     "target": "RRA",
+     "relation": "applies to",
+     "basis": "Agency experience band",
+     "confidence": 0.8,
+     "role": null,
+     "source_id": "ieg1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "ieg1",
+     "locator": "Chapter 3 · p. 22",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319751+00:00"
+    }
+   ]
+  },
+  "PS-sbd1": {
+   "node": {
+    "id": "PS-sbd1",
+    "type": "Passage",
+    "label": "Turnover: 1.5–2.5× cash flow",
+    "layer": "procedure",
+    "attrs": {
+     "Section": "III, note 2"
+    },
+    "column": 3,
+    "row": 23,
+    "centrality": 0.1818,
+    "community": 3
+   },
+   "neighbours": [
+    {
+     "source": "PS-sbd1",
+     "target": "SBD",
+     "relation": "part of",
+     "basis": "Section hierarchy",
+     "confidence": 1,
+     "role": null,
+     "source_id": "sbd1"
+    },
+    {
+     "source": "PS-ber1",
+     "target": "PS-sbd1",
+     "relation": "cites",
+     "basis": "Criterion reference in evaluation",
+     "confidence": 0.9,
+     "role": null,
+     "source_id": "ber1"
+    }
+   ],
+   "provenance": [
+    {
+     "source_id": "sbd1",
+     "locator": "Section III · notes 2",
+     "quote": null,
+     "activity": "entity_tracking",
+     "confidence": 1,
+     "recorded_at": "2026-11-15T15:50:20.319670+00:00"
+    }
+   ]
+  }
+ },
+ "clusters": [
+  {
+   "canonical_id": "SUP-007790",
+   "name": "Bluegate Consulting Ltd",
+   "variants": [
+    {
+     "name": "Bluegate Consulting Limited",
+     "source": "Award row 3725, 2021",
+     "score": 0.97
+    }
+   ],
+   "jv_links": [
+    {
+     "jv_id": "JV-4977",
+     "role": "member"
+    }
+   ]
+  },
+  {
+   "canonical_id": "SUP-007731",
+   "name": "Kestrel Engineering Associates",
+   "variants": [
+    {
+     "name": "Kestrel Engineering Associates",
+     "source": "Award row 4201, 2022",
+     "score": 1
+    },
+    {
+     "name": "KESTREL ENGINEERING ASSOCIATES LTD",
+     "source": "Award row 3720, 2021",
+     "score": 0.976
+    }
+   ],
+   "jv_links": [
+    {
+     "jv_id": "JV-4977",
+     "role": "lead"
+    }
+   ]
+  },
+  {
+   "canonical_id": "SUP-006204",
+   "name": "Lakeside Engineering Partners",
+   "variants": [
+    {
+     "name": "Lakeside Engineering Partners",
+     "source": "Award row 3801, 2021",
+     "score": 1
+    },
+    {
+     "name": "LAKESIDE ENGINEERING PARTNERS",
+     "source": "Award row 4788, 2023",
+     "score": 1
+    },
+    {
+     "name": "Lakeside Engg. Partners Ltd",
+     "source": "Award row 4620, 2022",
+     "score": 0.874
+    }
+   ],
+   "jv_links": [
+    {
+     "jv_id": "JV-4801",
+     "role": "lead"
+    }
+   ]
+  },
+  {
+   "canonical_id": "SUP-004417",
+   "name": "Meridian Roadworks Ltd",
+   "variants": [
+    {
+     "name": "Meridian Roadworks Ltd",
+     "source": "Award row 4118, 2021",
+     "score": 1
+    },
+    {
+     "name": "MERIDIAN ROAD WORKS LIMITED",
+     "source": "Award row 5012, 2024",
+     "score": 0.936
+    },
+    {
+     "name": "Meridian Roadworks Limited",
+     "source": "Award row 3150, 2020",
+     "score": 0.969
+    },
+    {
+     "name": "Meridian Rdwks (K) Ltd",
+     "source": "Award row 2977, 2019",
+     "score": 0.927
+    }
+   ],
+   "jv_links": [
+    {
+     "jv_id": "JV-4390",
+     "role": "lead"
+    }
+   ]
+  },
+  {
+   "canonical_id": "SUP-003318",
+   "name": "Rift Valley Builders Ltd",
+   "variants": [
+    {
+     "name": "Rift Valley Builders Ltd",
+     "source": "Award row 3402, 2020",
+     "score": 1
+    },
+    {
+     "name": "Rift Valley Builders Limited",
+     "source": "Award row 3511, 2020",
+     "score": 0.971
+    },
+    {
+     "name": "RIFT VALLEY BUILDERS",
+     "source": "Award row 3633, 2021",
+     "score": 0.967
+    }
+   ],
+   "jv_links": [
+    {
+     "jv_id": "JV-4801",
+     "role": "member"
+    }
+   ]
+  },
+  {
+   "canonical_id": "SUP-005561",
+   "name": "Sahel Infrastructure Group",
+   "variants": [
+    {
+     "name": "Sahel Infrastructure Group",
+     "source": "Award row 3388, 2020",
+     "score": 1
+    },
+    {
+     "name": "SAHEL INFRASTRUCTURE GROUP",
+     "source": "Award row 4455, 2022",
+     "score": 1
+    },
+    {
+     "name": "Sahel Infrastructure Grp SA",
+     "source": "Award row 3940, 2021",
+     "score": 0.962
+    }
+   ],
+   "jv_links": []
+  },
+  {
+   "canonical_id": "SUP-009120",
+   "name": "Survey Dynamics GmbH",
+   "variants": [
+    {
+     "name": "Survey Dynamics GmbH",
+     "source": "Award row 5044, 2024",
+     "score": 1
+    },
+    {
+     "name": "SURVEY DYNAMICS GMBH",
+     "source": "Award row 4012, 2021",
+     "score": 1
+    }
+   ],
+   "jv_links": []
+  },
+  {
+   "canonical_id": "SUP-004502",
+   "name": "Tana Civil Contractors Ltd",
+   "variants": [
+    {
+     "name": "Tana Civil Contractors Ltd.",
+     "source": "Award row 3361, 2020",
+     "score": 0.993
+    },
+    {
+     "name": "TANA CIVIL CONTRACTORS LIMITED",
+     "source": "Award row 5019, 2024",
+     "score": 0.973
+    },
+    {
+     "name": "Tana Civil Contractors",
+     "source": "Award row 4117, 2021",
+     "score": 0.969
+    }
+   ],
+   "jv_links": [
+    {
+     "jv_id": "JV-4390",
+     "role": "member"
+    }
+   ]
+  }
+ ],
+ "analytics": {
+  "centrality": [
+   {
+    "id": "P171204",
+    "score": 1
+   },
+   {
+    "id": "RRA-W-07",
+    "score": 0.7273
+   },
+   {
+    "id": "P165530",
+    "score": 0.6364
+   },
+   {
+    "id": "P180112",
+    "score": 0.6364
+   },
+   {
+    "id": "C1",
+    "score": 0.5455
+   },
+   {
+    "id": "RRA",
+    "score": 0.4545
+   },
+   {
+    "id": "ICR",
+    "score": 0.3636
+   },
+   {
+    "id": "KE",
+    "score": 0.3636
+   },
+   {
+    "id": "RRA-C-02",
+    "score": 0.3636
+   },
+   {
+    "id": "RRA-W-08",
+    "score": 0.3636
+   },
+   {
+    "id": "IEG-T",
+    "score": 0.2727
+   },
+   {
+    "id": "ISR9",
+    "score": 0.2727
+   },
+   {
+    "id": "JV-4977",
+    "score": 0.2727
+   },
+   {
+    "id": "L2",
+    "score": 0.2727
+   },
+   {
+    "id": "L3",
+    "score": 0.2727
+   },
+   {
+    "id": "SBD",
+    "score": 0.2727
+   },
+   {
+    "id": "SUP-004417",
+    "score": 0.2727
+   },
+   {
+    "id": "SUP-004502",
+    "score": 0.2727
+   },
+   {
+    "id": "TR",
+    "score": 0.2727
+   },
+   {
+    "id": "BER",
+    "score": 0.1818
+   },
+   {
+    "id": "C2",
+    "score": 0.1818
+   },
+   {
+    "id": "C3",
+    "score": 0.1818
+   },
+   {
+    "id": "C4",
+    "score": 0.1818
+   },
+   {
+    "id": "C5",
+    "score": 0.1818
+   },
+   {
+    "id": "ICR2",
+    "score": 0.1818
+   },
+   {
+    "id": "ISR7",
+    "score": 0.1818
+   },
+   {
+    "id": "JV-4390",
+    "score": 0.1818
+   },
+   {
+    "id": "JV-4801",
+    "score": 0.1818
+   },
+   {
+    "id": "L1",
+    "score": 0.1818
+   },
+   {
+    "id": "PAD",
+    "score": 0.1818
+   },
+   {
+    "id": "PS-ber1",
+    "score": 0.1818
+   },
+   {
+    "id": "PS-cpf1",
+    "score": 0.1818
+   },
+   {
+    "id": "PS-esf1",
+    "score": 0.1818
+   },
+   {
+    "id": "PS-ieg1",
+    "score": 0.1818
+   },
+   {
+    "id": "PS-isr2",
+    "score": 0.1818
+   },
+   {
+    "id": "PS-notice1",
+    "score": 0.1818
+   },
+   {
+    "id": "PS-pad1",
+    "score": 0.1818
+   },
+   {
+    "id": "PS-sbd1",
+    "score": 0.1818
+   },
+   {
+    "id": "RRA-G-04",
+    "score": 0.1818
+   },
+   {
+    "id": "S2W07",
+    "score": 0.1818
+   },
+   {
+    "id": "SUP-003318",
+    "score": 0.1818
+   },
+   {
+    "id": "SUP-007731",
+    "score": 0.1818
+   },
+   {
+    "id": "CPF",
+    "score": 0.0909
+   },
+   {
+    "id": "ESF",
+    "score": 0.0909
+   },
+   {
+    "id": "IEG",
+    "score": 0.0909
+   },
+   {
+    "id": "PS-sbd2",
+    "score": 0.0909
+   },
+   {
+    "id": "PS-sbd3",
+    "score": 0.0909
+   },
+   {
+    "id": "REG",
+    "score": 0.0909
+   },
+   {
+    "id": "S2W08",
+    "score": 0.0909
+   },
+   {
+    "id": "SUP-005561",
+    "score": 0.0909
+   },
+   {
+    "id": "SUP-006204",
+    "score": 0.0909
+   },
+   {
+    "id": "SUP-007790",
+    "score": 0.0909
+   },
+   {
+    "id": "SUP-009120",
+    "score": 0.0909
+   }
+  ],
+  "communities": [
+   {
+    "id": "BER",
+    "community": 3
+   },
+   {
+    "id": "C1",
+    "community": 2
+   },
+   {
+    "id": "C2",
+    "community": 2
+   },
+   {
+    "id": "C3",
+    "community": 6
+   },
+   {
+    "id": "C4",
+    "community": 0
+   },
+   {
+    "id": "C5",
+    "community": 1
+   },
+   {
+    "id": "CPF",
+    "community": 0
+   },
+   {
+    "id": "ESF",
+    "community": 4
+   },
+   {
+    "id": "ICR",
+    "community": 5
+   },
+   {
+    "id": "ICR2",
+    "community": 2
+   },
+   {
+    "id": "IEG",
+    "community": 5
+   },
+   {
+    "id": "IEG-T",
+    "community": 0
+   },
+   {
+    "id": "ISR7",
+    "community": 5
+   },
+   {
+    "id": "ISR9",
+    "community": 4
+   },
+   {
+    "id": "JV-4390",
+    "community": 2
+   },
+   {
+    "id": "JV-4801",
+    "community": 6
+   },
+   {
+    "id": "JV-4977",
+    "community": 1
+   },
+   {
+    "id": "KE",
+    "community": 0
+   },
+   {
+    "id": "L1",
+    "community": 5
+   },
+   {
+    "id": "L2",
+    "community": 5
+   },
+   {
+    "id": "L3",
+    "community": 2
+   },
+   {
+    "id": "P165530",
+    "community": 0
+   },
+   {
+    "id": "P171204",
+    "community": 0
+   },
+   {
+    "id": "P180112",
+    "community": 1
+   },
+   {
+    "id": "PAD",
+    "community": 0
+   },
+   {
+    "id": "PS-ber1",
+    "community": 3
+   },
+   {
+    "id": "PS-cpf1",
+    "community": 0
+   },
+   {
+    "id": "PS-esf1",
+    "community": 4
+   },
+   {
+    "id": "PS-ieg1",
+    "community": 0
+   },
+   {
+    "id": "PS-isr2",
+    "community": 4
+   },
+   {
+    "id": "PS-notice1",
+    "community": 2
+   },
+   {
+    "id": "PS-pad1",
+    "community": 0
+   },
+   {
+    "id": "PS-sbd1",
+    "community": 3
+   },
+   {
+    "id": "PS-sbd2",
+    "community": 3
+   },
+   {
+    "id": "PS-sbd3",
+    "community": 3
+   },
+   {
+    "id": "REG",
+    "community": 2
+   },
+   {
+    "id": "RRA",
+    "community": 0
+   },
+   {
+    "id": "RRA-C-02",
+    "community": 1
+   },
+   {
+    "id": "RRA-G-04",
+    "community": 1
+   },
+   {
+    "id": "RRA-W-07",
+    "community": 4
+   },
+   {
+    "id": "RRA-W-08",
+    "community": 1
+   },
+   {
+    "id": "S2W07",
+    "community": 4
+   },
+   {
+    "id": "S2W08",
+    "community": 1
+   },
+   {
+    "id": "SBD",
+    "community": 3
+   },
+   {
+    "id": "SUP-003318",
+    "community": 6
+   },
+   {
+    "id": "SUP-004417",
+    "community": 2
+   },
+   {
+    "id": "SUP-004502",
+    "community": 2
+   },
+   {
+    "id": "SUP-005561",
+    "community": 0
+   },
+   {
+    "id": "SUP-006204",
+    "community": 6
+   },
+   {
+    "id": "SUP-007731",
+    "community": 1
+   },
+   {
+    "id": "SUP-007790",
+    "community": 1
+   },
+   {
+    "id": "SUP-009120",
+    "community": 1
+   },
+   {
+    "id": "TR",
+    "community": 0
+   }
+  ],
+  "modularity": 0.5447530864197531
+ }
+}
