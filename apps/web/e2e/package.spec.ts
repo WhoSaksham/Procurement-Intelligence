@@ -85,6 +85,8 @@ test('a contract added by the analyst is ranked and tagged', async ({ page }) =>
 test('every details tab renders', async ({ page }) => {
   await page.goto('/package');
   const tabs = page.getByRole('tab');
+  // The tabs render once the package and its content have loaded.
+  await expect(tabs.first()).toBeVisible();
   const count = await tabs.count();
   expect(count).toBeGreaterThanOrEqual(9);
   for (let i = 0; i < count; i++) {
@@ -100,9 +102,9 @@ test('package sections are reachable by link', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Execution' })).toBeInViewport();
 });
 
-test('a saved scenario hydrates without warnings', async ({ page, seedScenario }, info) => {
-  await seedScenario({ pkg: { value: 9, plannedDays: 222 } });
-  await page.goto('/package');
+test('a saved package hydrates without warnings', async ({ page, newPackage }, info) => {
+  const id = await newPackage({ pkg: { value: 9, plannedDays: 222 } });
+  await page.goto(`/package?pkg=${id}`);
   await expect(page.getByLabel('Your plan, days')).toHaveValue('222');
   if (info.project.name === 'phone') await page.getByRole('button', { name: 'Package details' }).click();
   await expect(page.getByLabel('Estimate, US$ M')).toHaveValue('9');

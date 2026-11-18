@@ -3,10 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Command as CommandRoot, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandShortcut } from '@/components/ui/command';
-import { useScenario } from '@/lib/store';
+import * as client from '@/lib/api/client';
+import { usePackage } from '@/lib/api/package';
+import { usePortfolio, useQuestions } from '@/lib/api/queries';
 import { useUi } from '@/lib/ui-store';
-import { usePlan } from '@/lib/use-plan';
-import { QUESTIONS } from '@/views/ask/data';
 import { openImportDialog, useScenarioFile } from './DataControls';
 import { isTyping, VIEWS } from './views';
 
@@ -29,10 +29,11 @@ export function CommandPalette() {
   const open = useUi((s) => s.palette);
   const setOpen = useUi((s) => s.setPalette);
   const setContract = useUi((s) => s.setContract);
-  const setPkg = useScenario((s) => s.setPkg);
-  const applyBenchmark = useScenario((s) => s.applyBenchmark);
-  const { pkg, check, result, best, portfolio } = usePlan();
-  const { download, reset } = useScenarioFile();
+  const { id, pkg, analysis, edit, mutate } = usePackage();
+  const portfolio = usePortfolio(id).data?.items ?? [];
+  const questions = useQuestions().data?.questions ?? [];
+  const { download, reset, canReset } = useScenarioFile();
+  const setPkg = (change: Parameters<typeof edit>[0]['pkg']) => edit({ pkg: change });
   const [query, setQuery] = useState('');
 
   // ⌘K / Ctrl+K toggles; "/" opens when not typing.
@@ -52,27 +53,33 @@ export function CommandPalette() {
     return () => window.removeEventListener('keydown', onKey);
   }, [setOpen]);
 
-  const flagged = check.findings.filter((f) => f.status === 'flag').length;
+  const flagged = analysis?.check.findings.filter((f) => f.status === 'flag').length ?? 0;
+  const p80 = analysis ? Math.round(analysis.prediction.p80) : null;
+  const best = analysis?.best;
   const commands: Command[] = [
     ...VIEWS.map((v) => ({ id: `go-${v.href}`, group: 'Go to', label: v.name, hint: v.key, run: () => router.push(v.href) })),
     ...SECTIONS.map((s) => ({ id: `sec-${s.id}`, group: 'Go to', label: `Package: ${s.name}`, run: () => router.push(`/package#stage-${s.id}`) })),
-    {
-      id: 'p80',
-      group: 'Actions',
-      label: `Set planned duration to the P80 estimate (${Math.round(result.p80)} days)`,
-      run: () => {
-        setPkg({ plannedDays: Math.round(result.p80) });
-        router.push('/package#stage-plan');
-      },
-    },
-    ...(flagged
-      ? [{ id: 'fix', group: 'Actions', label: `Apply benchmark values to ${flagged} tender criteria`, run: () => (applyBenchmark(), router.push('/package#stage-tender')) }]
+    ...(p80 !== null
+      ? [
+          {
+            id: 'p80',
+            group: 'Actions',
+            label: `Set planned duration to the P80 estimate (${p80} days)`,
+            run: () => {
+              setPkg({ plannedDays: p80 });
+              router.push('/package#stage-plan');
+            },
+          },
+        ]
       : []),
-    ...(best && best !== pkg.method ? [{ id: 'method', group: 'Actions', label: `Switch method to ${best}`, run: () => setPkg({ method: best }) }] : []),
+    ...(flagged
+      ? [{ id: 'fix', group: 'Actions', label: `Apply benchmark values to ${flagged} tender criteria`, run: () => (void mutate(client.applyBenchmark), router.push('/package#stage-tender')) }]
+      : []),
+    ...(best && pkg && best !== pkg.method ? [{ id: 'method', group: 'Actions', label: `Switch method to ${best}`, run: () => setPkg({ method: best }) }] : []),
     ...portfolio.filter((c) => c.mapped).map((c) => ({ id: `map-${c.id}`, group: 'Actions', label: `Show ${c.id} on the site map`, run: () => router.push(`/map?contract=${c.id}`) })),
-    { id: 'export', group: 'Your data', label: 'Export this scenario as JSON', run: download },
+    { id: 'export', group: 'Your data', label: 'Export this scenario as JSON', run: () => void download() },
     { id: 'import', group: 'Your data', label: 'Import a scenario from JSON', run: openImportDialog },
-    { id: 'reset', group: 'Your data', label: 'Reset to the example scenario', run: reset },
+    ...(canReset ? [{ id: 'reset', group: 'Your data', label: 'Reset this package to the example', run: () => void reset() }] : []),
     ...portfolio.map((c) => ({
       id: `ct-${c.id}`,
       group: 'Contracts',
@@ -82,7 +89,7 @@ export function CommandPalette() {
         router.push('/package#stage-execution');
       },
     })),
-    ...QUESTIONS.map((q, i) => ({ id: `q-${i}`, group: 'Ask the evidence', label: q, run: () => router.push(`/ask?q=${encodeURIComponent(q)}`) })),
+    ...questions.map((q, i) => ({ id: `q-${i}`, group: 'Ask the evidence', label: q, run: () => router.push(`/ask?q=${encodeURIComponent(q)}`) })),
   ];
   const groups = Array.from(new Set(commands.map((c) => c.group)));
   const ask = query.trim();

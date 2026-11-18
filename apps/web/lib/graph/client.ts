@@ -15,7 +15,7 @@ export interface Result<T> {
 }
 
 async function call<T>(path: string, init?: RequestInit): Promise<Result<T>> {
-  const res = await fetch(`/api/graph/${path}`, { cache: 'no-store', ...init });
+  const res = await fetch(`/api/v1/graph/${path}`, { cache: 'no-store', ...init });
   const body = (await res.json().catch(() => null)) as Envelope<T> | null;
   if (!body) throw new GraphError(res.status, 'The graph API returned no data', 'live');
   if ('error' in body) throw new GraphError(res.status, body.error, body.source);

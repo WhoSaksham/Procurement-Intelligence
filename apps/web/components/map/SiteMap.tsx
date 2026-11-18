@@ -4,17 +4,16 @@ import type { Map as MlMap } from 'maplibre-gl';
 import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import { ElevationProfile } from '@/components/charts';
 import { Cite } from '@/components/evidence/Cite';
-import { ROADS } from '@/data/roads';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useRoad } from '@/lib/api/queries';
 import { elevationProfile, profileStats } from '@/lib/elevation';
 import { alignment, headingAt, lerpAngle, pointAt } from '@/lib/geo';
-import type { Contract, RoadSegment } from '@/lib/types';
+import type { Contract, Road, RoadSegment } from '@/lib/types';
 import { useAsync } from '@/lib/use-async';
 import { cn } from '@/lib/utils';
 import { MapCanvas, STATUS, type Basemap } from './MapCanvas';
 import { cssPct } from '@/lib/format';
 
-const ENDS: Record<string, [string, string]> = { 'RRA-W-07': ['Kitui', 'Mwingi'], 'RRA-W-08': ['Wote', 'Kathonzweni'] };
-const CITES: Record<string, string[]> = { 'RRA-W-07': ['s2w07', 'isr2'], 'RRA-W-08': ['s2w08'] };
 const BEFORE = 2019;
 const AFTER = 2024;
 const SEEN = 0.1; // bare-soil index change treated as visible works
@@ -52,8 +51,8 @@ function syncMaps(a: MlMap, b: MlMap) {
 type Drive = { playing: boolean; speed: number };
 
 /** Map for one road contract. Remounted (by key) when the contract changes. */
-function RoadMap({ contract, mapped, onContract }: { contract: Contract; mapped: Contract[]; onContract: (id: string) => void }) {
-  const road = ROADS[contract.id];
+function RoadMap({ contract, road, mapped, onContract }: { contract: Contract; road: Road; mapped: Contract[]; onContract: (id: string) => void }) {
+  const cites = road.cite ?? [];
   const line = useMemo(() => alignment(road), [road]);
   const [imageryYear, setImageryYear] = useState(AFTER);
   const [compare, setCompare] = useState(false);
@@ -165,7 +164,7 @@ function RoadMap({ contract, mapped, onContract }: { contract: Contract; mapped:
     move(e);
   };
 
-  const shared = { road, ends: ENDS[contract.id], basemap: compare ? ('s2' as const) : basemap, terrain, selected, onSelect: setSelected, padding, cursor };
+  const shared = { road, ends: road.ends, basemap: compare ? ('s2' as const) : basemap, terrain, selected, onSelect: setSelected, padding, cursor };
 
   return (
     <div className={cn('sitemap', drive && 'is-driving')}>
@@ -296,7 +295,7 @@ function RoadMap({ contract, mapped, onContract }: { contract: Contract; mapped:
             </p>
             <p className="text-xs text-muted-ink">
               Change seen from space
-              <Cite ids={CITES[contract.id]} />
+              <Cite ids={cites} />
             </p>
           </div>
         </div>
@@ -336,7 +335,7 @@ function RoadMap({ contract, mapped, onContract }: { contract: Contract; mapped:
                     {s.note && (
                       <p>
                         {s.note}
-                        <Cite ids={CITES[contract.id]} />
+                        <Cite ids={cites} />
                       </p>
                     )}
                     <div className="mt-1 flex flex-wrap gap-x-3.5 gap-y-1 text-[13px] font-medium text-procedure-ink">
@@ -365,7 +364,11 @@ function RoadMap({ contract, mapped, onContract }: { contract: Contract; mapped:
 
 /** Road contracts on Sentinel-2 imagery, with close view, drive and elevation. */
 export default function SiteMap({ contractId, portfolio, onContract }: { contractId: string | null; portfolio: Contract[]; onContract: (id: string) => void }) {
-  const mapped = portfolio.filter((p) => p.mapped && ROADS[p.id]);
+  const mapped = portfolio.filter((p) => p.mapped);
   const contract = mapped.find((p) => p.id === contractId) ?? mapped[0];
-  return <RoadMap key={contract.id} contract={contract} mapped={mapped} onContract={onContract} />;
+  const road = useRoad(contract?.id ?? null);
+  if (!contract) return <p className="p-6 text-ink-2">No contract in this portfolio has a mapped road.</p>;
+  if (road.isError) return <p className="p-6 text-ink-2">No road alignment is recorded for {contract.id}.</p>;
+  if (!road.data) return <Skeleton className="h-[calc(100dvh-180px)] min-h-[480px] w-full rounded-none" />;
+  return <RoadMap key={contract.id} contract={contract} road={road.data} mapped={mapped} onContract={onContract} />;
 }

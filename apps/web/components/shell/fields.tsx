@@ -63,6 +63,33 @@ export function NumberField({
   );
 }
 
+/**
+ * Text input that keeps what is being typed (including an empty field) and
+ * only passes on values the API accepts: not blank, at most `maxLength`.
+ * Leaving the field blank restores the saved value.
+ */
+export function TextInput({
+  value,
+  onChange,
+  maxLength,
+  ...rest
+}: Omit<React.ComponentProps<typeof Input>, 'value' | 'onChange'> & { value: string; onChange: (v: string) => void; maxLength: number }) {
+  const [draft, setDraft] = useState<string | null>(null);
+  return (
+    <Input
+      {...rest}
+      maxLength={maxLength}
+      value={draft ?? value}
+      onFocus={() => setDraft(value)}
+      onBlur={() => setDraft(null)}
+      onChange={(e) => {
+        setDraft(e.target.value);
+        if (e.target.value.trim() && e.target.value.length <= maxLength) onChange(e.target.value);
+      }}
+    />
+  );
+}
+
 export interface Option {
   value: string;
   label: string;

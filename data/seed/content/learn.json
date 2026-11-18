@@ -1,0 +1,202 @@
+{
+  "health": [
+    {
+      "name": "Timeline model vs simple benchmark, held-out tenders",
+      "value": "61 vs 68 days",
+      "limit": "Typical error; must beat the benchmark to ship",
+      "ok": true
+    },
+    {
+      "name": "Actual signatures inside the 80% range",
+      "value": "77%",
+      "limit": "Target 70–90%",
+      "ok": true
+    },
+    {
+      "name": "Timeline model concordance",
+      "value": "0.71",
+      "limit": "Retrain below 0.68",
+      "ok": true
+    },
+    {
+      "name": "Re-tender model calibration error",
+      "value": "0.034",
+      "limit": "Retrain above 0.05",
+      "ok": true
+    },
+    {
+      "name": "Feature drift, largest (contract value)",
+      "value": "PSI 0.11",
+      "limit": "Review above 0.20",
+      "ok": true
+    },
+    {
+      "name": "Grounded claims, last 30 days",
+      "value": "97.6%",
+      "limit": "Alert below 95%",
+      "ok": true
+    },
+    {
+      "name": "New labels since last retrain",
+      "value": "412",
+      "limit": "Retrain at 500",
+      "ok": false
+    }
+  ],
+  "phases": [
+    {
+      "name": "Foundations",
+      "months": "Months 0–3",
+      "current": false,
+      "items": [
+        "Connect contract awards, projects, documents and governance feeds",
+        "Parse and index 5 years of transport and water documents",
+        "Agree the evaluation set with 30 procurement specialists"
+      ]
+    },
+    {
+      "name": "Pilot",
+      "months": "Months 4–9",
+      "current": true,
+      "items": [
+        "Two regions, transport and water, about 40 users",
+        "Planning and tender design modules only",
+        "Every recommendation rated useful or not by the user"
+      ]
+    },
+    {
+      "name": "Expand",
+      "months": "Months 10–15",
+      "current": false,
+      "items": [
+        "All sectors in pilot regions; execution monitor live",
+        "Monthly retraining with champion–challenger testing",
+        "Integration with the procurement plan tracking system"
+      ]
+    },
+    {
+      "name": "Scale",
+      "months": "Months 16–24",
+      "current": false,
+      "items": [
+        "All regions and implementing agencies",
+        "Feedback loop runs without manual curation",
+        "Independent audit of grounding and model fairness across countries"
+      ]
+    }
+  ],
+  "kpis": [
+    {
+      "name": "Procurement planning cycle time",
+      "base": "21 days",
+      "target": "12 days",
+      "now": "15 days",
+      "series": [
+        21,
+        20,
+        18,
+        17,
+        16,
+        15
+      ],
+      "tgt": 12,
+      "better": "down"
+    },
+    {
+      "name": "Retrieval recall of known risk factors",
+      "base": "0.52",
+      "target": "0.85",
+      "now": "0.83",
+      "series": [
+        0.52,
+        0.66,
+        0.74,
+        0.79,
+        0.81,
+        0.83
+      ],
+      "tgt": 0.85,
+      "better": "up"
+    },
+    {
+      "name": "Retrieval precision at 10",
+      "base": "0.41",
+      "target": "0.75",
+      "now": "0.72",
+      "series": [
+        0.41,
+        0.55,
+        0.63,
+        0.68,
+        0.7,
+        0.72
+      ],
+      "tgt": 0.75,
+      "better": "up"
+    },
+    {
+      "name": "Re-tender rate, pilot packages",
+      "base": "27%",
+      "target": "18%",
+      "now": "21%",
+      "series": [
+        27,
+        26,
+        24,
+        23,
+        22,
+        21
+      ],
+      "tgt": 18,
+      "better": "down"
+    },
+    {
+      "name": "Planned vs actual duration error",
+      "base": "58%",
+      "target": "25%",
+      "now": "31%",
+      "series": [
+        58,
+        49,
+        42,
+        37,
+        33,
+        31
+      ],
+      "tgt": 25,
+      "better": "down"
+    },
+    {
+      "name": "Weekly active users of 40 invited",
+      "base": "—",
+      "target": "30",
+      "now": "27",
+      "series": [
+        6,
+        12,
+        18,
+        22,
+        25,
+        27
+      ],
+      "tgt": 30,
+      "better": "up"
+    },
+    {
+      "name": "Recommendations rated useful",
+      "base": "—",
+      "target": "70%",
+      "now": "74%",
+      "series": [
+        61,
+        66,
+        69,
+        71,
+        73,
+        74
+      ],
+      "tgt": 70,
+      "better": "up"
+    }
+  ]
+}

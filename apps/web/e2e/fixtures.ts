@@ -17,11 +17,17 @@ const EXTERNAL = [
   /demotiles\.maplibre\.org/,
 ];
 
-export const STORAGE_KEY = 'procurement-scenario-v1';
+/** Where the app kept the scenario before it had a backend; such saves are imported once. */
+export const LEGACY_KEY = 'procurement-scenario-v1';
+
+type Change = { name?: string; pkg?: Record<string, unknown>; criteria?: Record<string, unknown> };
 
 type Fixtures = {
   consoleErrors: string[];
-  seedScenario: (partial: Record<string, unknown>) => Promise<void>;
+  /** Create a package through the API (deleted after the test); returns its id. Open it with `?pkg=<id>`. */
+  newPackage: (change?: Change) => Promise<string>;
+  /** Put an old-style browser save in storage before the page loads. */
+  seedLegacySave: (partial: Record<string, unknown>) => Promise<void>;
   expectNoOverflow: () => Promise<void>;
 };
 
@@ -45,11 +51,31 @@ export const test = base.extend<Fixtures>({
     },
     { auto: true },
   ],
-  seedScenario: async ({ page }, use) => {
+  newPackage: async ({ request }, use) => {
+    const created: string[] = [];
+    await use(async ({ name, pkg, criteria } = {}) => {
+      const res = await request.post('/api/v1/packages', { data: name ? { name } : {} });
+      expect(res.status(), await res.text()).toBe(201);
+      const { id } = (await res.json()) as { id: string };
+      created.push(id);
+      if (pkg || criteria) {
+        const patched = await request.patch(`/api/v1/packages/${id}`, { data: { version: 1, pkg, criteria } });
+        expect(patched.status(), await patched.text()).toBe(200);
+      }
+      return id;
+    });
+    for (const id of created) await request.delete(`/api/v1/packages/${id}`);
+  },
+  seedLegacySave: async ({ page }, use) => {
     await use(async (partial) => {
+      // Only on the first load: a reload must not plant the save again.
       await page.addInitScript(
-        ([key, value]) => window.localStorage.setItem(key, value),
-        [STORAGE_KEY, JSON.stringify(partial)],
+        ([key, value]) => {
+          if (sessionStorage.getItem('legacy-planted')) return;
+          sessionStorage.setItem('legacy-planted', '1');
+          window.localStorage.setItem(key, value);
+        },
+        [LEGACY_KEY, JSON.stringify(partial)],
       );
     });
   },

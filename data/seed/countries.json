@@ -1,0 +1,74 @@
+[
+  {
+    "id": "KE",
+    "name": "Kenya",
+    "region": "Eastern & Southern Africa",
+    "cpia": 3.6,
+    "rq": 38,
+    "fcv": false,
+    "cpiaImputed": false
+  },
+  {
+    "id": "ET",
+    "name": "Ethiopia",
+    "region": "Eastern & Southern Africa",
+    "cpia": 3.2,
+    "rq": 14,
+    "fcv": true,
+    "cpiaImputed": false
+  },
+  {
+    "id": "SL",
+    "name": "Sierra Leone",
+    "region": "Western & Central Africa",
+    "cpia": 3.1,
+    "rq": 17,
+    "fcv": true,
+    "cpiaImputed": false
+  },
+  {
+    "id": "BD",
+    "name": "Bangladesh",
+    "region": "South Asia",
+    "cpia": 3.3,
+    "rq": 19,
+    "fcv": false,
+    "cpiaImputed": false
+  },
+  {
+    "id": "NP",
+    "name": "Nepal",
+    "region": "South Asia",
+    "cpia": 3.4,
+    "rq": 27,
+    "fcv": false,
+    "cpiaImputed": false
+  },
+  {
+    "id": "VN",
+    "name": "Vietnam",
+    "region": "East Asia & Pacific",
+    "cpia": 3.9,
+    "rq": 41,
+    "fcv": false,
+    "cpiaImputed": true
+  },
+  {
+    "id": "PE",
+    "name": "Peru",
+    "region": "Latin America & Caribbean",
+    "cpia": 4,
+    "rq": 63,
+    "fcv": false,
+    "cpiaImputed": true
+  },
+  {
+    "id": "MA",
+    "name": "Morocco",
+    "region": "Middle East & North Africa",
+    "cpia": 3.8,
+    "rq": 44,
+    "fcv": false,
+    "cpiaImputed": true
+  }
+]

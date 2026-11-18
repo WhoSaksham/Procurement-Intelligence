@@ -10,11 +10,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useScenario } from '@/lib/store';
+import * as client from '@/lib/api/client';
+import { useLoadedPackage } from '@/lib/api/package';
+import { LEVEL, warnLevel } from '@/lib/format';
 import type { Contract, ContractDraft } from '@/lib/types';
 import { useUi } from '@/lib/ui-store';
 import { cn } from '@/lib/utils';
-import { LEVEL, warnLevel } from './data';
 import { StageHead } from './parts';
 
 const WARN = { high: 'bg-worse-tint text-worse', medium: 'bg-watch-tint text-watch', low: 'bg-good-tint text-good' } as const;
@@ -32,7 +33,7 @@ function Field({ label, children, id }: { label: string; id: string; children: R
 }
 
 function AddContractForm() {
-  const addContract = useScenario((s) => s.addContract);
+  const { mutate } = useLoadedPackage();
   const setContract = useUi((s) => s.setContract);
   const [d, setD] = useState(EMPTY);
   const id = useId();
@@ -41,8 +42,11 @@ function AddContractForm() {
   const submit = (e: FormEvent) => {
     e.preventDefault();
     if (!d.title.trim()) return;
-    setContract(addContract(d).id);
-    setD(EMPTY);
+    void mutate((id, version) => client.addContract(id, version, d)).then((v) => {
+      if (!v) return;
+      setContract(v.contracts.at(-1)?.id ?? null);
+      setD(EMPTY);
+    });
   };
   const input = 'h-8 bg-surface';
   return (
@@ -79,7 +83,7 @@ function AddContractForm() {
 
 export function ExecutionColumn({ portfolio, selected }: { portfolio: Contract[]; selected: Contract }) {
   const setContract = useUi((s) => s.setContract);
-  const removeContract = useScenario((s) => s.removeContract);
+  const { mutate } = useLoadedPackage();
   const highRisk = portfolio.filter((p) => p.warning >= 0.6).length;
 
   return (
@@ -144,7 +148,7 @@ export function ExecutionColumn({ portfolio, selected }: { portfolio: Contract[]
               </Button>
             )}
             {selected.custom && (
-              <Button variant="ghost" size="sm" onClick={() => removeContract(selected.id)}>
+              <Button variant="ghost" size="sm" onClick={() => void mutate((id, version) => client.removeContract(id, version, selected.id)).then((v) => v && setContract(null))}>
                 Remove this contract
               </Button>
             )}

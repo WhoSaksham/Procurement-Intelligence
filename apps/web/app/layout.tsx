@@ -7,7 +7,8 @@ import { DataControls, ImportInput } from '@/components/shell/DataControls';
 import { KeyNav } from '@/components/shell/KeyNav';
 import { PackageBar } from '@/components/shell/PackageBar';
 import { Rail } from '@/components/shell/Rail';
-import { ScenarioHydrator } from '@/components/shell/ScenarioHydrator';
+import { BackendGate } from '@/components/shell/BackendState';
+import { Providers } from '@/components/shell/Providers';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import './globals.css';
@@ -25,23 +26,24 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
     <html lang="en" suppressHydrationWarning className={`${sans.variable} ${serif.variable} antialiased`}>
       <body className="min-h-dvh">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
+          <Providers>
           <TooltipProvider>
             <div className="min-h-dvh lg:grid lg:grid-cols-[var(--rail-w)_minmax(0,1fr)]">
               <Rail footer={<DataControls />} />
               <div className="flex min-w-0 flex-col">
                 <PackageBar />
                 <main id="main" className="w-full max-w-[1280px] flex-1 px-4 pt-6 pb-16 md:px-8">
-                  {children}
+                  <BackendGate>{children}</BackendGate>
                 </main>
               </div>
             </div>
-            <ScenarioHydrator />
             <KeyNav />
             <CommandPalette />
             <EvidenceSheet />
             <ImportInput />
             <Toaster position="bottom-center" />
           </TooltipProvider>
+          </Providers>
         </ThemeProvider>
       </body>
     </html>

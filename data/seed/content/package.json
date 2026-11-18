@@ -1,0 +1,292 @@
+{
+  "risks": [
+    {
+      "key": "rebid",
+      "name": "Re-tender",
+      "cite": [
+        "ca1",
+        "ieg1"
+      ]
+    },
+    {
+      "key": "amend",
+      "name": "Amendment >10%",
+      "cite": [
+        "ca2",
+        "icr3"
+      ]
+    },
+    {
+      "key": "slip",
+      "name": "Slippage >6 months",
+      "cite": [
+        "icr2",
+        "fin1"
+      ]
+    }
+  ],
+  "precedents": [
+    {
+      "name": "Rural Access and Connectivity Project, Lot 2 works",
+      "id": "P171204",
+      "match": 0.91,
+      "why": "Same agency, sector and method; US$14.2M",
+      "outcome": "Re-tendered once (+143 days); amended +19%",
+      "cite": [
+        "ber1",
+        "ca2",
+        "icr1"
+      ]
+    },
+    {
+      "name": "Feeder Roads and Market Access Project, Package W3",
+      "id": "P165530",
+      "match": 0.84,
+      "why": "Rural roads, open international RFB, US$11.0M",
+      "outcome": "Signed in 171 days; variation orders 17%",
+      "cite": [
+        "icr3"
+      ]
+    },
+    {
+      "name": "Rural transport portfolio, 23 operations",
+      "id": "IEG review",
+      "match": 0.78,
+      "why": "Thematic evaluation covering this agency type",
+      "outcome": "First-time agencies 2.1× more likely to re-tender",
+      "cite": [
+        "ieg1"
+      ]
+    }
+  ],
+  "pastSpecs": [
+    {
+      "title": "Rural roads Lot 2 (2020)",
+      "sim": 0.88,
+      "result": "Re-tendered; turnover criterion excluded 7 of 9 bidders",
+      "cite": [
+        "ber1"
+      ]
+    },
+    {
+      "title": "Rural roads Lots 4–6 (2021)",
+      "sim": 0.86,
+      "result": "Awarded first time; 17 bids; criteria sized per lot",
+      "cite": [
+        "icr1",
+        "ca3"
+      ]
+    },
+    {
+      "title": "Feeder roads W3 (2019)",
+      "sim": 0.79,
+      "result": "Awarded; drainage variations of 17% later",
+      "cite": [
+        "icr3"
+      ]
+    }
+  ],
+  "conflict": [
+    {
+      "src": "isr1",
+      "label": "ISR 7, June 2023",
+      "says": "Satisfactory",
+      "authority": 0.6,
+      "independence": 0.4,
+      "hindsight": 0.5,
+      "corroboration": 0.3
+    },
+    {
+      "src": "icr2",
+      "label": "ICR, February 2025",
+      "says": "Moderately Unsatisfactory",
+      "authority": 0.8,
+      "independence": 0.6,
+      "hindsight": 1,
+      "corroboration": 0.9
+    },
+    {
+      "src": "ieg2",
+      "label": "IEG review, September 2025",
+      "says": "Moderately Unsatisfactory",
+      "authority": 1,
+      "independence": 1,
+      "hindsight": 1,
+      "corroboration": 0.9
+    },
+    {
+      "src": "fin1",
+      "label": "Disbursement feed, 2024",
+      "says": "34% disbursed vs 55% planned",
+      "authority": 0.9,
+      "independence": 1,
+      "hindsight": 0.7,
+      "corroboration": 0.9
+    }
+  ],
+  "peers": [
+    {
+      "m": 0,
+      "p25": 2,
+      "p50": 4,
+      "p75": 8
+    },
+    {
+      "m": 6,
+      "p25": 5,
+      "p50": 8,
+      "p75": 14
+    },
+    {
+      "m": 12,
+      "p25": 9,
+      "p50": 15,
+      "p75": 25
+    },
+    {
+      "m": 18,
+      "p25": 16,
+      "p50": 26,
+      "p75": 39
+    },
+    {
+      "m": 24,
+      "p25": 27,
+      "p50": 40,
+      "p75": 56
+    },
+    {
+      "m": 30,
+      "p25": 42,
+      "p50": 57,
+      "p75": 71
+    },
+    {
+      "m": 36,
+      "p25": 58,
+      "p50": 72,
+      "p75": 83
+    },
+    {
+      "m": 42,
+      "p25": 73,
+      "p50": 83,
+      "p75": 90
+    },
+    {
+      "m": 48,
+      "p25": 84,
+      "p50": 91,
+      "p75": 95
+    },
+    {
+      "m": 54,
+      "p25": 91,
+      "p50": 95,
+      "p75": 97
+    },
+    {
+      "m": 60,
+      "p25": 95,
+      "p50": 97,
+      "p75": 99
+    },
+    {
+      "m": 66,
+      "p25": 98,
+      "p50": 99,
+      "p75": 99
+    },
+    {
+      "m": 72,
+      "p25": 99,
+      "p50": 99,
+      "p75": 100
+    }
+  ],
+  "actual": [
+    {
+      "m": 0,
+      "v": 2
+    },
+    {
+      "m": 3,
+      "v": 2
+    },
+    {
+      "m": 6,
+      "v": 3
+    },
+    {
+      "m": 9,
+      "v": 5
+    },
+    {
+      "m": 12,
+      "v": 6
+    },
+    {
+      "m": 15,
+      "v": 9
+    },
+    {
+      "m": 18,
+      "v": 12
+    },
+    {
+      "m": 21,
+      "v": 16
+    },
+    {
+      "m": 24,
+      "v": 21
+    },
+    {
+      "m": 27,
+      "v": 27
+    },
+    {
+      "m": 30,
+      "v": 34
+    }
+  ],
+  "winners": [
+    {
+      "label": "Meridian Roadworks Ltd",
+      "note": "domestic",
+      "v": 9
+    },
+    {
+      "label": "Tana Civil Contractors",
+      "note": "domestic",
+      "v": 7
+    },
+    {
+      "label": "Highland Paving Co.",
+      "note": "domestic",
+      "v": 6
+    },
+    {
+      "label": "Rift Valley Engineering",
+      "note": "domestic",
+      "v": 5
+    },
+    {
+      "label": "Sahel Road Builders JV",
+      "note": "foreign",
+      "v": 4,
+      "tone": "alt"
+    },
+    {
+      "label": "Coastal Infrastructure Group",
+      "note": "foreign",
+      "v": 3,
+      "tone": "alt"
+    },
+    {
+      "label": "31 other firms",
+      "v": 21,
+      "tone": "quiet"
+    }
+  ]
+}

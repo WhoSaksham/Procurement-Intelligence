@@ -2,23 +2,25 @@
 
 import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { LAYERS, SOURCES } from '@/data/sources';
+import { useReference, useSource } from '@/lib/api/queries';
 import { useUi } from '@/lib/ui-store';
-import { citeNumber, LAYER_CHIP } from './Cite';
+import { LAYER_CHIP, useCiteNumber } from './Cite';
 
 /** The exact passage behind a citation, with the supporting span highlighted. */
 export function EvidenceSheet() {
   const id = useUi((s) => s.evidence);
   const openEvidence = useUi((s) => s.openEvidence);
-  const s = id ? SOURCES[id] : null;
+  const { data: s } = useSource(id);
+  const layers = useReference().data?.layers;
+  const citeNumber = useCiteNumber();
   return (
-    <Sheet open={!!s} onOpenChange={(o) => !o && openEvidence(null)}>
+    <Sheet open={!!id} onOpenChange={(o) => !o && openEvidence(null)}>
       <SheetContent className="w-full gap-0 sm:max-w-[var(--drawer-w)]">
-        {s && id && (
+        {s && id === s.id && layers ? (
           <>
             <SheetHeader className="gap-2 pr-10">
               <Badge variant="outline" className={`w-fit ${LAYER_CHIP[s.layer]}`}>
-                {LAYERS[s.layer].name}: {LAYERS[s.layer].question.toLowerCase()}
+                {layers[s.layer]?.name}: {layers[s.layer]?.question.toLowerCase()}
               </Badge>
               <SheetDescription>
                 Source {citeNumber(id)} · {s.kind}
@@ -42,6 +44,11 @@ export function EvidenceSheet() {
               </p>
             </div>
           </>
+        ) : (
+          <SheetHeader>
+            <SheetTitle className="font-serif text-xl">Loading source…</SheetTitle>
+            <SheetDescription>Fetching the passage behind this citation.</SheetDescription>
+          </SheetHeader>
         )}
       </SheetContent>
     </Sheet>

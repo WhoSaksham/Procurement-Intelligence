@@ -45,7 +45,7 @@ test('a custom country changes the forecast', async ({ page }, info) => {
   await expect.poll(() => p50(page)).toBeGreaterThan(before);
 });
 
-test('importing a malformed file shows an error and keeps the scenario', async ({ page }, info) => {
+test('importing a malformed file shows an error and keeps the scenario', async ({ page, consoleErrors }, info) => {
   await page.goto('/package');
   const before = await p50(page);
   if (info.project.name === 'phone') await page.getByRole('button', { name: 'Open menu' }).click();
@@ -53,6 +53,8 @@ test('importing a malformed file shows an error and keeps the scenario', async (
   await expect(page.getByText('bad.json is not a scenario file')).toBeVisible();
   await page.keyboard.press('Escape');
   expect(await p50(page)).toBe(before);
+  // The API rejects the file with a 400, which the browser logs; that is expected here.
+  consoleErrors.splice(0, consoleErrors.length, ...consoleErrors.filter((e) => !/400/.test(e)));
 });
 
 test('export, reset and import round-trip the scenario', async ({ page }, info) => {
@@ -94,9 +96,9 @@ test('a citation chip opens its source passage', async ({ page }) => {
   await expect(sheet.locator('mark')).toContainText('median 168 days');
 });
 
-test('the saved scenario loads without hydration warnings', async ({ page, seedScenario }, info) => {
-  await seedScenario({ pkg: { value: 9 } });
-  await page.goto('/package');
+test('a saved package loads without hydration warnings', async ({ page, newPackage }, info) => {
+  const id = await newPackage({ pkg: { value: 9 } });
+  await page.goto(`/package?pkg=${id}`);
   await openMore(page, info.project.name === 'phone');
   await expect(page.getByLabel('Estimate, US$ M')).toHaveValue('9');
 });

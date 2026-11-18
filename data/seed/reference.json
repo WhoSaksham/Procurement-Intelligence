@@ -1,0 +1,147 @@
+{
+  "sectors": [
+    "Transport",
+    "Water",
+    "Energy",
+    "Health",
+    "Education",
+    "Agriculture",
+    "Digital"
+  ],
+  "categories": [
+    "Civil Works",
+    "Goods",
+    "Consulting Services",
+    "Non-consulting Services"
+  ],
+  "methods": {
+    "Civil Works": [
+      "RFB, open international",
+      "RFB, open national",
+      "RFQ",
+      "Limited competition",
+      "Direct selection"
+    ],
+    "Goods": [
+      "RFB, open international",
+      "RFB, open national",
+      "RFQ",
+      "Direct selection"
+    ],
+    "Consulting Services": [
+      "QCBS",
+      "QBS",
+      "CQS",
+      "Direct selection"
+    ],
+    "Non-consulting Services": [
+      "RFB, open international",
+      "RFB, open national",
+      "RFQ",
+      "Direct selection"
+    ]
+  },
+  "defaultPackage": {
+    "name": "Rural roads rehabilitation, Phase II",
+    "country": "KE",
+    "sector": "Transport",
+    "category": "Civil Works",
+    "method": "RFB, open international",
+    "value": 18.4,
+    "durationMonths": 24,
+    "review": "Prior",
+    "agency": "some",
+    "lots": 1,
+    "esRisk": "Substantial",
+    "plannedDays": 120
+  },
+  "defaultCriteria": {
+    "turnover": 30,
+    "similarContracts": 3,
+    "similarValuePct": 100,
+    "bidSecurityPct": 2,
+    "submissionDays": 30,
+    "validityDays": 120,
+    "jvAllowed": false,
+    "specText": "Supply and lay asphalt concrete wearing course, 50 mm thick, using a Caterpillar AP655 paver or approved. Bitumen shall be 60/70 penetration grade. Culverts shall be precast concrete, minimum 900 mm diameter, to be designed by the Contractor."
+  },
+  "layers": {
+    "ledger": {
+      "name": "Ledger data",
+      "question": "What happened",
+      "note": "Contract awards, projects, disbursements, governance indicators"
+    },
+    "procedure": {
+      "name": "Procedure documents",
+      "question": "How it was run",
+      "note": "Bidding documents, notices, ISRs, evaluation reports"
+    },
+    "retrospective": {
+      "name": "Evaluations",
+      "question": "Why it worked or failed",
+      "note": "ICRs, IEG reviews, PADs, guidance notes"
+    }
+  },
+  "ratingScale": [
+    "HU",
+    "U",
+    "MU",
+    "MS",
+    "S",
+    "HS"
+  ],
+  "ratingNames": {
+    "HS": "Highly Satisfactory",
+    "S": "Satisfactory",
+    "MS": "Moderately Satisfactory",
+    "MU": "Moderately Unsatisfactory",
+    "U": "Unsatisfactory",
+    "HU": "Highly Unsatisfactory"
+  },
+  "isrHistory": [
+    {
+      "label": "ISR 3",
+      "date": "2021-06",
+      "rating": "MS"
+    },
+    {
+      "label": "ISR 4",
+      "date": "2021-12",
+      "rating": "MS"
+    },
+    {
+      "label": "ISR 5",
+      "date": "2022-06",
+      "rating": "S"
+    },
+    {
+      "label": "ISR 6",
+      "date": "2022-12",
+      "rating": "S"
+    },
+    {
+      "label": "ISR 7",
+      "date": "2023-06",
+      "rating": "S",
+      "cite": "isr1"
+    },
+    {
+      "label": "ISR 8",
+      "date": "2023-12",
+      "rating": "MS"
+    },
+    {
+      "label": "ISR 9",
+      "date": "2024-05",
+      "rating": "MU",
+      "cite": "isr2"
+    },
+    {
+      "label": "ICR",
+      "date": "2025-02",
+      "rating": "MU",
+      "cite": "icr2",
+      "retrospective": true
+    }
+  ]
+}

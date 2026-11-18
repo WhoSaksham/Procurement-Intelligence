@@ -10,5 +10,9 @@ class Settings(BaseSettings):
     # Interactive API docs (/docs, /redoc, /openapi.json). Off unless explicitly enabled,
     # so a public deployment does not publish its API map.
     expose_docs: bool = False
-    seed_dir: Path = Path(__file__).resolve().parents[1] / "data" / "seed"
+    # Graph seed source: MongoDB when MONGO_URL is set (normal runs), otherwise
+    # JSON files in SEED_DIR (tests and offline runs use tests/fixtures/seed).
+    mongo_url: str | None = None
+    mongo_db: str = "procurement"
+    seed_dir: Path | None = None
 

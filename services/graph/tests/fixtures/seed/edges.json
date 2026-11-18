@@ -1,0 +1,515 @@
+[
+  {
+    "source": "P171204",
+    "target": "KE",
+    "relation": "located in",
+    "basis": "Project ID → country code",
+    "confidence": 1,
+    "source_id": "proj1",
+    "locator": "Projects API · country code"
+  },
+  {
+    "source": "P165530",
+    "target": "KE",
+    "relation": "located in",
+    "basis": "Project ID → country code",
+    "confidence": 1,
+    "source_id": "proj1",
+    "locator": "Projects API · country code"
+  },
+  {
+    "source": "P180112",
+    "target": "KE",
+    "relation": "located in",
+    "basis": "Project ID → country code",
+    "confidence": 1,
+    "source_id": "proj1",
+    "locator": "Projects API · country code"
+  },
+  {
+    "source": "P171204",
+    "target": "TR",
+    "relation": "sector",
+    "basis": "Sector code",
+    "confidence": 1,
+    "source_id": "proj1",
+    "locator": "Projects API · sector code"
+  },
+  {
+    "source": "P165530",
+    "target": "TR",
+    "relation": "sector",
+    "basis": "Sector code",
+    "confidence": 1,
+    "source_id": "proj1",
+    "locator": "Projects API · sector code"
+  },
+  {
+    "source": "P180112",
+    "target": "TR",
+    "relation": "sector",
+    "basis": "Sector code",
+    "confidence": 1,
+    "source_id": "proj1",
+    "locator": "Projects API · sector code"
+  },
+  {
+    "source": "P171204",
+    "target": "RRA",
+    "relation": "implemented by",
+    "basis": "Agency name, fuzzy match",
+    "confidence": 0.96,
+    "source_id": "proj1",
+    "locator": "Implementing agency field"
+  },
+  {
+    "source": "P165530",
+    "target": "RRA",
+    "relation": "implemented by",
+    "basis": "Agency name, fuzzy match",
+    "confidence": 0.93,
+    "source_id": "proj1",
+    "locator": "Implementing agency field"
+  },
+  {
+    "source": "P180112",
+    "target": "RRA",
+    "relation": "implemented by",
+    "basis": "Agency name, exact",
+    "confidence": 1,
+    "source_id": "proj1",
+    "locator": "Implementing agency field"
+  },
+  {
+    "source": "PAD",
+    "target": "P171204",
+    "relation": "appraises",
+    "basis": "Document metadata Project ID",
+    "confidence": 1,
+    "source_id": "pad1",
+    "locator": "Document metadata"
+  },
+  {
+    "source": "C1",
+    "target": "P171204",
+    "relation": "financed by",
+    "basis": "Project ID on award row",
+    "confidence": 1,
+    "source_id": "ca2",
+    "locator": "Award row 4,118"
+  },
+  {
+    "source": "C2",
+    "target": "P171204",
+    "relation": "financed by",
+    "basis": "Project ID on award row",
+    "confidence": 1,
+    "source_id": "ca2",
+    "locator": "Award row 4,117"
+  },
+  {
+    "source": "C3",
+    "target": "P165530",
+    "relation": "financed by",
+    "basis": "Project ID on award row",
+    "confidence": 1,
+    "source_id": "ca3",
+    "locator": "Award row 3,402"
+  },
+  {
+    "source": "C4",
+    "target": "P165530",
+    "relation": "financed by",
+    "basis": "Project ID on award row",
+    "confidence": 1,
+    "source_id": "ca3",
+    "locator": "Award row 3,388"
+  },
+  {
+    "source": "C5",
+    "target": "P171204",
+    "relation": "financed by",
+    "basis": "Project ID on award row",
+    "confidence": 1,
+    "source_id": "ca4",
+    "locator": "Award row 4,201"
+  },
+  {
+    "source": "RRA-W-07",
+    "target": "P180112",
+    "relation": "financed by",
+    "basis": "Project ID on award row",
+    "confidence": 1,
+    "source_id": "ca2",
+    "locator": "Award row 5,012"
+  },
+  {
+    "source": "RRA-W-08",
+    "target": "P180112",
+    "relation": "financed by",
+    "basis": "Project ID on award row",
+    "confidence": 1,
+    "source_id": "ca2",
+    "locator": "Award row 5,019"
+  },
+  {
+    "source": "RRA-C-02",
+    "target": "P180112",
+    "relation": "financed by",
+    "basis": "Project ID on award row",
+    "confidence": 1,
+    "source_id": "ca4",
+    "locator": "Award row 4,977"
+  },
+  {
+    "source": "RRA-G-04",
+    "target": "P180112",
+    "relation": "financed by",
+    "basis": "Project ID on award row",
+    "confidence": 1,
+    "source_id": "ca1",
+    "locator": "Award row 5,044"
+  },
+  {
+    "source": "RRA-C-02",
+    "target": "RRA-W-07",
+    "relation": "supervises",
+    "basis": "Contract reference in TOR",
+    "confidence": 0.95,
+    "source_id": "ca4",
+    "locator": "Terms of reference, scope"
+  },
+  {
+    "source": "RRA-C-02",
+    "target": "RRA-W-08",
+    "relation": "supervises",
+    "basis": "Contract reference in TOR",
+    "confidence": 0.95,
+    "source_id": "ca4",
+    "locator": "Terms of reference, scope"
+  },
+  {
+    "source": "BER",
+    "target": "C1",
+    "relation": "evaluates",
+    "basis": "Notice number + lot + date within 90 days",
+    "confidence": 0.91,
+    "source_id": "ber1",
+    "locator": "Section 5 · p. 14"
+  },
+  {
+    "source": "ISR7",
+    "target": "P171204",
+    "relation": "supervises",
+    "basis": "Document metadata Project ID",
+    "confidence": 1,
+    "source_id": "isr1",
+    "locator": "Document metadata"
+  },
+  {
+    "source": "ISR9",
+    "target": "P171204",
+    "relation": "supervises",
+    "basis": "Document metadata Project ID",
+    "confidence": 1,
+    "source_id": "isr2",
+    "locator": "Document metadata"
+  },
+  {
+    "source": "ICR",
+    "target": "P171204",
+    "relation": "evaluates",
+    "basis": "Document metadata Project ID",
+    "confidence": 1,
+    "source_id": "icr2",
+    "locator": "Document metadata"
+  },
+  {
+    "source": "ICR2",
+    "target": "P165530",
+    "relation": "evaluates",
+    "basis": "Document metadata Project ID",
+    "confidence": 1,
+    "source_id": "icr3",
+    "locator": "Document metadata"
+  },
+  {
+    "source": "IEG",
+    "target": "ICR",
+    "relation": "validates",
+    "basis": "Project ID + document type",
+    "confidence": 1,
+    "source_id": "ieg2",
+    "locator": "Ratings summary · p. 3"
+  },
+  {
+    "source": "IEG-T",
+    "target": "P171204",
+    "relation": "reviews",
+    "basis": "Project list in evaluation annex",
+    "confidence": 1,
+    "source_id": "ieg1",
+    "locator": "Annex 2"
+  },
+  {
+    "source": "IEG-T",
+    "target": "P165530",
+    "relation": "reviews",
+    "basis": "Project list in evaluation annex",
+    "confidence": 1,
+    "source_id": "ieg1",
+    "locator": "Annex 2"
+  },
+  {
+    "source": "S2W07",
+    "target": "RRA-W-07",
+    "relation": "observes",
+    "basis": "Alignment buffer 30 m",
+    "confidence": 1,
+    "source_id": "s2w07",
+    "locator": "Chainage summary"
+  },
+  {
+    "source": "S2W08",
+    "target": "RRA-W-08",
+    "relation": "observes",
+    "basis": "Alignment buffer 30 m",
+    "confidence": 1,
+    "source_id": "s2w08",
+    "locator": "Chainage summary"
+  },
+  {
+    "source": "S2W07",
+    "target": "ISR9",
+    "relation": "contradicts",
+    "basis": "Reported vs observed progress, km 44–57",
+    "confidence": 0.86,
+    "source_id": "s2w07",
+    "locator": "Segment km 44–57"
+  },
+  {
+    "source": "L1",
+    "target": "ICR",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "source_id": "icr1",
+    "locator": "Section V"
+  },
+  {
+    "source": "L2",
+    "target": "ICR",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "source_id": "icr2",
+    "locator": "Section III"
+  },
+  {
+    "source": "L3",
+    "target": "ICR2",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "source_id": "icr3",
+    "locator": "Section V"
+  },
+  {
+    "source": "L1",
+    "target": "C1",
+    "relation": "explains",
+    "basis": "Lot mention + sector code + award within project window",
+    "confidence": 0.84,
+    "source_id": "icr1",
+    "locator": "para 88"
+  },
+  {
+    "source": "L2",
+    "target": "ISR7",
+    "relation": "contradicts",
+    "basis": "Same rating dimension and period",
+    "confidence": 0.88,
+    "source_id": "icr2",
+    "locator": "para 52"
+  },
+  {
+    "source": "L3",
+    "target": "C1",
+    "relation": "similar risk",
+    "basis": "Embedding similarity of BoQ drainage items",
+    "confidence": 0.79,
+    "source_id": "icr3",
+    "locator": "para 74"
+  },
+  {
+    "source": "L3",
+    "target": "RRA-W-07",
+    "relation": "similar risk",
+    "basis": "Embedding similarity of BoQ drainage items",
+    "confidence": 0.81,
+    "source_id": "icr3",
+    "locator": "para 74"
+  },
+  {
+    "source": "L2",
+    "target": "RRA-W-07",
+    "relation": "similar risk",
+    "basis": "Payment-delay signal on ISR + same agency",
+    "confidence": 0.83,
+    "source_id": "isr2",
+    "locator": "Key issues"
+  },
+  {
+    "source": "PS-sbd1",
+    "target": "SBD",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "source_id": "sbd1",
+    "locator": "Section III"
+  },
+  {
+    "source": "PS-sbd2",
+    "target": "SBD",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "source_id": "sbd2",
+    "locator": "Section III"
+  },
+  {
+    "source": "PS-sbd3",
+    "target": "SBD",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "source_id": "sbd3",
+    "locator": "Section VII"
+  },
+  {
+    "source": "PS-notice1",
+    "target": "REG",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "source_id": "notice1",
+    "locator": "Paragraph 6.36"
+  },
+  {
+    "source": "PS-ber1",
+    "target": "BER",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "source_id": "ber1",
+    "locator": "Section 5"
+  },
+  {
+    "source": "PS-isr2",
+    "target": "ISR9",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "source_id": "isr2",
+    "locator": "Key issues"
+  },
+  {
+    "source": "PS-pad1",
+    "target": "PAD",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "source_id": "pad1",
+    "locator": "Annex 3"
+  },
+  {
+    "source": "PS-ieg1",
+    "target": "IEG-T",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "source_id": "ieg1",
+    "locator": "Chapter 3"
+  },
+  {
+    "source": "PS-esf1",
+    "target": "ESF",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "source_id": "esf1",
+    "locator": "Section 4"
+  },
+  {
+    "source": "PS-cpf1",
+    "target": "CPF",
+    "relation": "part of",
+    "basis": "Section hierarchy",
+    "confidence": 1,
+    "source_id": "cpf1",
+    "locator": "Annex 5"
+  },
+  {
+    "source": "PS-ber1",
+    "target": "PS-sbd1",
+    "relation": "cites",
+    "basis": "Criterion reference in evaluation",
+    "confidence": 0.9,
+    "source_id": "ber1",
+    "locator": "p. 14"
+  },
+  {
+    "source": "PS-pad1",
+    "target": "RRA",
+    "relation": "assesses",
+    "basis": "Agency name in risk annex",
+    "confidence": 0.92,
+    "source_id": "pad1",
+    "locator": "Annex 3"
+  },
+  {
+    "source": "PS-ieg1",
+    "target": "RRA",
+    "relation": "applies to",
+    "basis": "Agency experience band",
+    "confidence": 0.8,
+    "source_id": "ieg1",
+    "locator": "Chapter 3"
+  },
+  {
+    "source": "PS-cpf1",
+    "target": "KE",
+    "relation": "applies to",
+    "basis": "Country of strategy",
+    "confidence": 1,
+    "source_id": "cpf1",
+    "locator": "Annex 5"
+  },
+  {
+    "source": "PS-esf1",
+    "target": "RRA-W-07",
+    "relation": "applies to",
+    "basis": "E&S risk class Substantial",
+    "confidence": 0.9,
+    "source_id": "esf1",
+    "locator": "Section 4"
+  },
+  {
+    "source": "PS-notice1",
+    "target": "C1",
+    "relation": "applies to",
+    "basis": "Method: open international",
+    "confidence": 0.9,
+    "source_id": "notice1",
+    "locator": "Paragraph 6.36"
+  },
+  {
+    "source": "PS-isr2",
+    "target": "RRA-W-07",
+    "relation": "applies to",
+    "basis": "Same agency and payment issue",
+    "confidence": 0.85,
+    "source_id": "isr2",
+    "locator": "Key issues"
+  }
+]

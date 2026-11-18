@@ -3,20 +3,18 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { isStale } from '@/lib/scenario';
-import { useScenario } from '@/lib/store';
+import * as client from '@/lib/api/client';
+import { useLoadedPackage } from '@/lib/api/package';
 
 const when = (iso: string) => new Date(iso).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' });
 
-/** Record who signed off the brief; any later edit shows it as changed. */
+/** Record who signed off the brief; any later edit shows it as changed (the API decides). */
 export function SignOff() {
-  const pkg = useScenario((s) => s.pkg);
-  const criteria = useScenario((s) => s.criteria);
-  const signoff = useScenario((s) => s.signoff);
-  const signOff = useScenario((s) => s.signOff);
+  const { view, analysis, mutate } = useLoadedPackage();
   const [signing, setSigning] = useState(false);
   const [name, setName] = useState('');
-  const stale = isStale(signoff, pkg, criteria);
+  const signoff = view.signoff;
+  const stale = analysis.stale;
 
   if (signing) {
     return (
@@ -25,11 +23,10 @@ export function SignOff() {
         onSubmit={(e) => {
           e.preventDefault();
           if (!name.trim()) return;
-          signOff(name);
-          setSigning(false);
+          void mutate((id, version) => client.signOff(id, version, name)).then((v) => v && setSigning(false));
         }}
       >
-        <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" aria-label="Your name" autoFocus className="h-8 w-44 bg-surface" />
+        <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" aria-label="Your name" autoFocus maxLength={80} className="h-8 w-44 bg-surface" />
         <Button type="submit" size="sm">
           Sign off
         </Button>

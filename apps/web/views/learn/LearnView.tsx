@@ -1,7 +1,8 @@
 'use client';
 
 import { CheckIcon, DotIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { Sparkline, TargetBar } from '@/components/charts';
 import { LAYER_CHIP } from '@/components/evidence/Cite';
 import { PageHead } from '@/components/page-head';
@@ -9,28 +10,44 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { LAYERS } from '@/data/sources';
+import * as client from '@/lib/api/client';
+import { qk, useLearnEvents, useReference } from '@/lib/api/queries';
+import type { LearnState } from '@/lib/api/types';
 import { cn } from '@/lib/utils';
-import { HEALTH, INCOMING, INITIAL_EVENTS, KPIS, PHASES, type LearnEvent } from './data';
+import { useLearnContent } from './content';
 
 const BORDER = { ledger: 'border-l-ledger', procedure: 'border-l-procedure', retrospective: 'border-l-retro' } as const;
 
 export function LearnView() {
-  const [events, setEvents] = useState<LearnEvent[]>(INITIAL_EVENTS);
-  const [next, setNext] = useState(0);
-  const simulate = () => {
-    if (next >= INCOMING.length) return;
-    setEvents((e) => [{ ...INCOMING[next], when: '2025-11-01', fresh: true }, ...e.map((x) => ({ ...x, fresh: false }))]);
-    setNext((n) => n + 1);
-  };
+  const qc = useQueryClient();
+  const state = useLearnEvents().data;
+  const content = useLearnContent().data;
+  const layers = useReference().data?.layers;
+  // Events are shared and persisted: receiving one changes the feed for every visitor.
+  const apply = (fn: () => Promise<LearnState>) => ({
+    mutationFn: fn,
+    onSuccess: (s: LearnState) => qc.setQueryData(qk.learn, s),
+    onError: (e: unknown) => toast.error(e instanceof Error ? e.message : 'Could not update events'),
+  });
+  const next = useMutation(apply(client.nextLearnEvent));
+  const reset = useMutation(apply(client.resetLearnEvents));
+  if (!state || !content || !layers) return <Skeleton aria-label="Loading events" className="h-96 w-full" />;
+  const { events, remaining } = state;
+  const { kpis: KPIS, health: HEALTH, phases: PHASES } = content;
 
   return (
     <>
       <PageHead title="Learn" lede="New records flow back into the indexes and models. Each event shows exactly what it changed.">
-        <Button variant="outline" size="sm" onClick={simulate} disabled={next >= INCOMING.length}>
-          {next >= INCOMING.length ? 'No more sample events' : 'Receive next event'}
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" size="sm" onClick={() => next.mutate()} disabled={remaining === 0 || next.isPending}>
+            {remaining === 0 ? 'No more sample events' : 'Receive next event'}
+          </Button>
+          <Button variant="ghost" size="sm" onClick={() => reset.mutate()} disabled={reset.isPending}>
+            Reset events
+          </Button>
+        </div>
       </PageHead>
       <Card>
         <CardContent>
@@ -48,7 +65,7 @@ export function LearnView() {
                   <li key={ev.title} className={cn('rounded-lg border border-l-4 border-rule p-3', BORDER[ev.layer], ev.fresh && 'bg-watch-tint')}>
                     <p className="flex flex-wrap items-center gap-2 text-xs text-muted-ink">
                       <Badge variant="outline" className={LAYER_CHIP[ev.layer]}>
-                        {LAYERS[ev.layer].name}
+                        {layers[ev.layer]?.name}
                       </Badge>
                       <time>{ev.when}</time>
                       {ev.fresh && <span className="font-semibold text-watch">New</span>}
@@ -87,7 +104,7 @@ export function LearnView() {
                       <TableCell className="text-right">{k.target}</TableCell>
                       <TableCell className="text-right font-semibold">{k.now}</TableCell>
                       <TableCell>
-                        <Sparkline values={k.series} target={k.tgt} better={k.better as 'up' | 'down'} />
+                        <Sparkline values={k.series} target={k.tgt} better={k.better} />
                       </TableCell>
                       <TableCell>
                         <TargetBar base={k.series[0]} now={k.series[k.series.length - 1]} target={k.tgt} />

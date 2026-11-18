@@ -10,6 +10,28 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  api:
+    name: API · lint, types, tests, contracts
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: services/api/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - name: OpenAPI document is up to date
+        run: npm run openapi -- --check
+      - name: Graph service test fixture is up to date
+        run: npm run export:graph-seed -- --check
+
   web:
     name: Web · lint, types, unit tests, build
     runs-on: ubuntu-latest
@@ -45,15 +67,17 @@ jobs:
 
   e2e:
     name: End-to-end · Playwright
-    needs: [web, graph]
+    needs: [api, web, graph]
     runs-on: ubuntu-latest
     env:
-      GRAPH_API_KEY: ci-key
-      GRAPH_EXTERNAL: '1'
+      API_KEY: ci-key
+      GRAPH_API_KEY: ci-graph-key
+      E2E: '1'
+      API_EXTERNAL: '1'
     steps:
       - uses: actions/checkout@v4
-      - name: Start the graph service
-        run: docker compose up -d --build --wait graph
+      - name: Start MongoDB, the API and the graph service
+        run: docker compose up -d --build --wait mongo api graph
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -74,6 +98,6 @@ jobs:
           name: playwright-report
           path: apps/web/playwright-report
           retention-days: 7
-      - name: Graph service logs
+      - name: Service logs
         if: failure()
-        run: docker compose logs graph
+        run: docker compose logs api graph

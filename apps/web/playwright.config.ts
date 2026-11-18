@@ -4,10 +4,15 @@ import { defineConfig, devices } from '@playwright/test';
 // (production builds stay silent about them). Used by e2e/hydration.spec.ts.
 const dev = process.env.E2E_DEV === '1';
 const PORT = dev ? 3000 : 3200; // dev reuses a running `next dev`; tests never collide with it
-const GRAPH_PORT = 8000;
-const API_KEY = process.env.GRAPH_API_KEY ?? 'dev-key';
-// In CI the graph service runs from Docker Compose and is reused.
-const external = process.env.GRAPH_EXTERNAL === '1';
+// In CI, MongoDB, the API and the graph service run from Docker Compose and are reused.
+const external = process.env.API_EXTERNAL === '1';
+// Locally the stack gets its own ports and database, so a dev stack on :4000/:8000 is left alone.
+const API_PORT = external ? 4000 : 4100;
+const GRAPH_PORT = 8100;
+const API_KEY = process.env.API_KEY ?? 'dev-key';
+const GRAPH_API_KEY = process.env.GRAPH_API_KEY ?? 'dev-key';
+const MONGO = 'mongodb://localhost:27017';
+const DB = 'procurement-e2e';
 
 export default defineConfig({
   testDir: './e2e',
@@ -32,20 +37,47 @@ export default defineConfig({
       ? []
       : [
           {
-            command: `uv run --directory ../../services/graph uvicorn app.main:app --port ${GRAPH_PORT}`,
-            url: `http://localhost:${GRAPH_PORT}/health`,
-            env: { GRAPH_API_KEY: API_KEY },
+            name: 'mongo',
+            command: 'docker compose -f ../../docker-compose.yml up mongo',
+            port: 27017,
+            reuseExistingServer: true,
+            timeout: 180_000,
+          },
+          {
+            name: 'api',
+            // Reseed the e2e database so every run starts from the seed.
+            command: 'npm run seed -- --force && npx tsx src/server.ts',
+            cwd: '../../services/api',
+            url: `http://localhost:${API_PORT}/ready`,
+            env: {
+              PORT: String(API_PORT),
+              MONGO_URL: `${MONGO}/${DB}`,
+              API_KEY,
+              GRAPH_SERVICE_URL: `http://localhost:${GRAPH_PORT}`,
+              GRAPH_API_KEY,
+              E2E: '1',
+              LOG_LEVEL: 'warn',
+            },
             reuseExistingServer: !process.env.CI,
             timeout: 120_000,
           },
+          {
+            name: 'graph',
+            // The graph service reads the collections the API seeds, so wait for the API first.
+            command: `sh -c 'until curl -sf http://localhost:${API_PORT}/ready >/dev/null; do sleep 1; done; exec uv run --directory ../../services/graph uvicorn app.main:app --port ${GRAPH_PORT}'`,
+            url: `http://localhost:${GRAPH_PORT}/health`,
+            env: { GRAPH_API_KEY, MONGO_URL: MONGO, MONGO_DB: DB },
+            reuseExistingServer: !process.env.CI,
+            timeout: 180_000,
+          },
         ]),
     {
+      name: 'web',
       command: dev ? `npx next dev --port ${PORT}` : `npm run build && npm run start -- --port ${PORT}`,
-      url: `http://localhost:${PORT}/`,
+      url: `http://localhost:${PORT}/package`,
       env: {
-        GRAPH_SERVICE_URL: `http://localhost:${GRAPH_PORT}`,
-        GRAPH_API_KEY: API_KEY,
-        E2E: '1',
+        API_URL: `http://localhost:${API_PORT}`,
+        API_KEY,
       },
       reuseExistingServer: !process.env.CI,
       timeout: 240_000,

@@ -12,9 +12,11 @@
     "typecheck": "next typegen && tsc --noEmit",
     "types:graph": "openapi-typescript ../../services/graph/openapi.json -o lib/graph/schema.d.ts",
     "postinstall": "node scripts/copy-maplibre-worker.mjs",
-    "test:e2e:dev": "E2E_DEV=1 playwright test --project=desktop"
+    "test:e2e:dev": "E2E_DEV=1 playwright test --project=desktop",
+    "types:api": "openapi-typescript ../../services/api/openapi.json -o lib/api/schema.d.ts"
   },
   "dependencies": {
+    "@tanstack/react-query": "5.108.0",
     "@xyflow/react": "^12.12.1",
     "class-variance-authority": "^0.7.1",
     "cmdk": "^1.1.1",

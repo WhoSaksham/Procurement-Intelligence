@@ -1,54 +1,70 @@
 # Procurement Intelligence
 
-A procurement intelligence platform on World Bank open-data sources. One working package moves through the procurement lifecycle, and every recommendation links to the record or document passage that supports it. The knowledge graph behind it is built live by a Python service using [Semantica](https://github.com/semantica-agi/semantica).
+A procurement intelligence platform on World Bank open-data sources. One working package moves through the procurement lifecycle, and every recommendation links to the record or document passage that supports it.
 
-- **`apps/web`**: Next.js 16 (App Router, TypeScript), Tailwind CSS v4, shadcn/ui, Recharts (via shadcn charts), React Flow for the knowledge graph, MapLibre.
-- **`services/graph`**: FastAPI and Semantica. Builds the graph, resolves supplier names, records provenance, computes graph analytics.
-- **Docs**: [architecture](docs/architecture.md), [design system](docs/design-system.md), [design spec](docs/superpowers/specs/2026-11-15-nextjs-semantica-playwright-design.md).
+Three services, one repository:
+
+- **`apps/web`**: Next.js 16 (App Router, TypeScript), Tailwind CSS v4, shadcn/ui, Recharts, React Flow for the knowledge graph, MapLibre. A pure client of the API: it holds no domain data and computes no forecasts.
+- **`services/api`**: Node.js, Express 5, MongoDB (Mongoose). The system of record and the business logic: reference data, evidence, saved packages, the forecasting and risk model, tender criteria checks, recommendations, Ask and Learn. It also fronts the graph service.
+- **`services/graph`**: FastAPI and [Semantica](https://github.com/semantica-agi/semantica). Builds the knowledge graph from the graph collections the API seeds into MongoDB, resolves supplier names, records provenance, computes graph analytics.
+
+Docs: [architecture](docs/architecture.md), [design system](docs/design-system.md), [backend design](docs/superpowers/specs/2026-11-18-express-mongodb-backend-design.md).
 
 ## Quick start
 
 ```bash
-docker compose up --build        # web on http://localhost:3000, graph service on :8000
+docker compose up --build        # web on http://localhost:3000; API :4000, graph :8000, MongoDB :27017 (localhost only)
 ```
+
+On first start the API loads `data/seed/` into MongoDB, including the read-only **example package**.
 
 ### Without Docker
 
-Prerequisites: Node 24+, [uv](https://docs.astral.sh/uv/) (it installs Python 3.12 for the service).
+Prerequisites: Node 24+, [uv](https://docs.astral.sh/uv/) (it installs Python 3.12 for the graph service), and a MongoDB 8 (`docker compose up -d mongo` is the quickest).
 
 ```bash
-# graph service
-cd services/graph && uv sync && GRAPH_API_KEY=dev-key uv run uvicorn app.main:app --reload --port 8000
-
-# web app (another terminal)
-cd apps/web && npm install && npm run dev       # http://localhost:3000
+docker compose up -d mongo                                                     # MongoDB on localhost:27017
+cd services/api && npm install && npm run dev                                  # API on :4000, seeds on start
+cd services/graph && uv sync && MONGO_URL=mongodb://localhost:27017 uv run uvicorn app.main:app --reload --port 8000
+cd apps/web && npm install && npm run dev                                      # http://localhost:3000
 ```
 
-If the graph service is not running, the web app serves a saved snapshot of the graph and shows a **Snapshot** badge instead of **Live · Semantica**.
+Start the API before the graph service: the graph service reads the collections the API seeds. If the graph service is down, the API answers graph requests from a saved snapshot and the app shows a **Snapshot** badge instead of **Live · Semantica**. If the API is down, the app shows **Backend unreachable** and reconnects on its own.
 
 ### Environment
 
 | Variable | Where | Default | Purpose |
 |---|---|---|---|
-| `GRAPH_API_KEY` | both | `dev-key` | Shared secret sent as `X-API-Key`. Use a long random value outside local dev |
-| `GRAPH_SERVICE_URL` | web (server only) | `http://localhost:8000` | Where the web app's API route reaches the service |
-| `EXPOSE_DOCS` | graph service | `false` | Serve the interactive API docs at `/docs`. Keep it off on public deployments |
+| `MONGO_URL` | API, graph | `mongodb://localhost:27017/procurement` (API) | MongoDB. The graph service also takes `MONGO_DB` (default `procurement`) |
+| `API_KEY` | web, API | `dev-key` | Shared secret the web server sends to the API as `X-API-Key` |
+| `API_URL` | web (server only) | `http://localhost:4000` | Where the web app's `/api/*` route reaches the API |
+| `GRAPH_API_KEY` | API, graph | `dev-key` | Shared secret the API sends to the graph service |
+| `GRAPH_SERVICE_URL` | API | `http://localhost:8000` | Where the API reaches the graph service |
+| `EXPOSE_DOCS` | API, graph | `false` | Serve interactive API docs at `/docs`. Keep it off on public deployments |
+| `SEED_DIR` | API, graph | `data/seed` (API) | Seed files. The graph service uses it only without `MONGO_URL` (tests use `tests/fixtures/seed`) |
+
+Use long random keys outside local development. The keys only default to `dev-key` in development: in production (`NODE_ENV=production`) the API refuses to start without `API_KEY` and `GRAPH_API_KEY`, and the web app's `/api` route refuses to forward without `API_KEY`. The route also refuses writes sent by other sites (`Sec-Fetch-Site: cross-site` or a foreign `Origin`).
 
 ## Tests
 
 ```bash
-cd apps/web && npm test                 # Vitest: model, scenario store, graph proxy and fallback, layout
-cd services/graph && uv run pytest      # graph build, supplier merges, provenance, API contract
-cd apps/web && npm run test:e2e         # Playwright, desktop + 390 px phone, against the real service
-cd apps/web && npm run test:e2e:dev     # hydration check against `next dev` (reuses a running dev server)
+cd services/api && npm test            # Vitest + supertest on an in-memory MongoDB: model, packages, seeding, graph derivation, proxy, contract
+cd services/graph && uv run pytest     # graph build, supplier merges, provenance, API contract, Mongo seed loader
+cd apps/web && npm test                # Vitest: API proxy, save queue, legacy import, layout, geometry
+cd apps/web && npm run test:e2e        # Playwright, desktop + 390 px phone, against MongoDB, the API and the graph service
+cd apps/web && npm run test:e2e:dev    # hydration check against `next dev`
 ```
 
-Playwright starts the graph service with uv and the web app with `next build && next start`. If a service is already running on :8000 (for example from Docker Compose), it reuses it. Map tiles, terrain and elevation are served from local stubs. Every page is also checked for accessibility (axe, in both themes), console errors and horizontal overflow. React only reports hydration mismatches in development builds, so `test:e2e:dev` loads every route under `next dev` with a saved scenario and fails on any of them. CI runs all three suites on every push and pull request.
+Playwright starts MongoDB (Docker Compose), the API, the graph service and the web app, reusing any that are already running. Map tiles, terrain and elevation are served from local stubs. Every page is also checked for accessibility (axe, in both themes), console errors and horizontal overflow. CI runs all suites on every push and pull request.
 
-After changing the service's response models or seed data, run `npm run snapshot` from the repo root with the service running. It regenerates the web app's offline snapshot and its TypeScript API types.
+Contracts are generated, never hand-edited:
+
+- `npm run contracts` (repo root) rewrites `services/api/openapi.json`, the graph service's test fixture (`services/graph/tests/fixtures/seed`) and the web app's API types. CI fails if either generated file is out of date.
+- After changing the graph service's response models, run `npm run snapshot` with the graph service running. It regenerates the API's offline graph snapshot and the graph API types.
 
 ## Getting around quickly
 
+- **Packages** are saved on the server. Switch, create, duplicate or delete them from the menu next to the package name; `?pkg=<id>` links to one. The **example** is read-only: your first edit saves a copy and switches to it.
 - **Package** puts plan, tender design and execution on one page: a summary strip, three stage columns, and tabbed details. The details cover market approach, signature curve, risk drivers, progress, milestones, disbursement vs peers, who wins, evidence conflict and precedents.
 - **⌘K / Ctrl+K** (or `/`) opens the command menu: jump to a view, a package section or a contract, run an action, or ask a question.
 - **1–6** switch views when you aren't typing in a field.
@@ -63,11 +79,13 @@ After changing the service's response models or seed data, run `npm run snapshot
 
 ## Bringing your own data
 
-- **Countries:** choose *Add a country…* in the Country menu, or edit any country's CPIA, WGI regulatory quality and fragility under **More**. The forecasts use these scores immediately.
+Everything you change is saved to your current package on the server, not to the browser.
+
+- **Countries:** choose *Add a country…* in the Country menu, or edit any country's CPIA, WGI regulatory quality and fragility under **More**. They belong to this package, and the forecasts use them immediately.
 - **Sectors:** type any sector under **More**.
-- **Contracts:** *Add your own contract* in the Execution column. The warning score and signals are computed from progress and payment days, and tagged as your data.
+- **Contracts:** *Add your own contract* in the Execution column. The API computes the warning score and signals from progress and payment days and tags them as your data.
 - **Supplier names:** paste award-row names under Knowledge graph → Supplier name resolution.
-- **Scenarios:** everything is kept in this browser between visits. **Export** saves a JSON file; **Import** loads one; **Reset** returns to the example. Files exported by the earlier version of the app still load.
+- **Scenarios:** **Export** downloads the package as JSON; **Import** creates a new package from a file; **Reset** restores a package to the example. Files exported by earlier versions still load, and a scenario saved in this browser by an earlier version is imported once as a new package.
 
 ## Where each module from the brief lives
 
@@ -86,14 +104,14 @@ After changing the service's response models or seed data, run `npm run snapshot
 | Satellite imagery | [Sentinel-2 cloudless](https://s2maps.eu) annual mosaics by EOX IT Services GmbH (2018–2024 available) | 10 m resolution. The 2018+ mosaics are licensed CC BY-NC-SA 4.0: fine for a demo, but commercial use needs an EOX licence or self-processed Copernicus data |
 | High-resolution basemap | Esri World Imagery | Subject to Esri's terms of use |
 | Terrain (3D) and elevation profile | AWS Terrain Tiles (Terrarium encoding) | No key needed. The profile samples real elevation every 250 m along the alignment |
-| Road alignments | OpenStreetMap, routed via OSRM (`apps/web/data/roads.ts`) | ODbL. Status per chainage segment and change values are illustrative |
+| Road alignments | OpenStreetMap, routed via OSRM (`data/seed/roads.json`, served by the API) | ODbL. Status per chainage segment and change values are illustrative |
 
 A production version would compute change per segment from individual Sentinel-2 L2A scenes (for example through Microsoft Planetary Computer or Copernicus Data Space STAC), rather than relying on annual mosaics.
 
 ## Notes
 
 - **What's real:** the imagery, road geometry, elevation and Semantica's graph processing.
-- **What's illustrative:** all other data. Records follow the shapes of World Bank Contract Awards, Projects, Finances, Documents & Reports, CPIA and WGI data, but the project IDs, firms, passages and figures are synthetic, including the graph service's seed data in `services/graph/data/seed`.
-- **The models** in `apps/web/lib/model.ts` are linearised stand-ins (a Weibull time-to-award model and logistic risk scores) that run in the browser. They respond to every input, but they were not fitted to real data.
+- **What's illustrative:** all other data. Records follow the shapes of World Bank Contract Awards, Projects, Finances, Documents & Reports, CPIA and WGI data, but the project IDs, firms, passages and figures are synthetic. All of it lives in `data/seed/` and is loaded into MongoDB by the API.
+- **The models** in `services/api/src/modules/analysis/` are linearised stand-ins (a Weibull time-to-award model and logistic risk scores). They respond to every input, but they were not fitted to real data.
 - **Ask the evidence** uses prepared answers and grounding scores to demonstrate the behaviour; no language model is called at runtime.
-- **The evidence corpus** lives in `apps/web/data/sources.ts`. Replace it with a retrieval API to connect real indexes.
+- **No accounts:** everyone who can reach the app sees and edits the same saved packages. Two people editing the same package at once is handled by version checks: the later save is re-applied on top, and the app says so.

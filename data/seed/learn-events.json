@@ -1,0 +1,101 @@
+{
+  "initial": [
+    {
+      "when": "2025-10-28",
+      "layer": "retrospective",
+      "title": "ICR published: Coastal Water Security Project (P169822)",
+      "updates": [
+        [
+          "Document index",
+          "+212 chunks from 96 pages, 6 tables kept whole"
+        ],
+        [
+          "Knowledge graph",
+          "+9 lessons linked to 14 contracts by Project ID"
+        ],
+        [
+          "Conflict check",
+          "1 disagreement with ISR 11 queued for weighting"
+        ]
+      ]
+    },
+    {
+      "when": "2025-10-21",
+      "layer": "ledger",
+      "title": "Contract amendment: RRA-W-07 extended 120 days",
+      "updates": [
+        [
+          "Early warning",
+          "RRA-W-07 score 0.64 → 0.71"
+        ],
+        [
+          "Amendment model",
+          "New positive label; 312 since last retrain"
+        ]
+      ]
+    },
+    {
+      "when": "2025-10-14",
+      "layer": "procedure",
+      "title": "ISR 12 filed: Rural Access and Connectivity Project",
+      "updates": [
+        [
+          "Ratings history",
+          "Procurement rating MU → MS"
+        ],
+        [
+          "Document index",
+          "+18 chunks; previous ISR kept, marked superseded"
+        ]
+      ]
+    }
+  ],
+  "incoming": [
+    {
+      "layer": "ledger",
+      "title": "Re-tender recorded: Makueni bridges package",
+      "updates": [
+        [
+          "Re-tender model",
+          "New positive label; cohort statistics refreshed"
+        ],
+        [
+          "Knowledge graph",
+          "Package linked to bid evaluation report by notice number"
+        ],
+        [
+          "Drift monitor",
+          "Re-tender base rate in AFE works: 27.6% → 27.9%"
+        ]
+      ]
+    },
+    {
+      "layer": "retrospective",
+      "title": "IEG review published: Feeder Roads and Market Access Project",
+      "updates": [
+        [
+          "Document index",
+          "+64 chunks; ICR lessons cross-referenced"
+        ],
+        [
+          "Conflict check",
+          "IEG downgrades outcome rating; ICR passages now show the later view"
+        ]
+      ]
+    },
+    {
+      "layer": "procedure",
+      "title": "User feedback: \"Recommendation not applicable, works already lotted\"",
+      "updates": [
+        [
+          "Recommendation rules",
+          "Lot-split rule now checks the lots field before firing"
+        ],
+        [
+          "Evaluation set",
+          "Added as a negative example for retrieval relevance"
+        ]
+      ]
+    }
+  ]
+}

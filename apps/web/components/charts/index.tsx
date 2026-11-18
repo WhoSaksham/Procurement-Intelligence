@@ -21,10 +21,9 @@ import {
   YAxis,
 } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { RATING_NAMES, RATING_SCALE, type RatingPoint } from '@/data/reference';
 import type { ProfilePoint } from '@/lib/elevation';
 import { cssPct } from '@/lib/format';
-import type { Contract, Milestone, Prediction, RoadSegment } from '@/lib/types';
+import type { Analysis, Contract, Milestone, RatingPoint, RoadSegment } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
 // Charts are built on Recharts through shadcn/ui's ChartContainer, coloured
@@ -61,38 +60,21 @@ function Legend({ items }: { items: { label: string; swatch: ReactNode }[] }) {
   );
 }
 
-/** Share of comparable packages signed by day t: model curve plus the cohort's empirical curve. */
-export function DurationCurve({ result, sample, planned, H = 240 }: { result: Prediction; sample: number[]; planned: number; W?: number; H?: number }) {
-  const maxT = Math.max(360, Math.ceil((result.p80 * 1.6) / 60) * 60);
-  const data = useMemo(() => {
-    const sorted = [...sample].sort((a, b) => a - b);
-    const emp = (t: number) => {
-      let lo = 0;
-      let hi = sorted.length;
-      while (lo < hi) {
-        const mid = (lo + hi) >> 1;
-        if (sorted[mid] <= t) lo = mid + 1;
-        else hi = mid;
-      }
-      return lo / sorted.length;
-    };
-    return Array.from({ length: 121 }, (_, i) => {
-      const t = Math.round((i / 120) * maxT);
-      return { t, model: round(result.cdf(t), 4), history: round(emp(t), 4) };
-    });
-  }, [result, sample, maxT]);
+/** Share of comparable packages signed by day t: model curve plus the cohort's empirical curve (points from the API). */
+export function DurationCurve({ curve, p50, p80, sampleSize, planned, H = 240 }: { curve: Analysis['curve']; p50: number; p80: number; sampleSize: number; planned: number; H?: number }) {
+  const maxT = curve.at(-1)?.t ?? 360;
 
   return (
     <>
       <Legend
         items={[
           { label: 'Model estimate', swatch: <i className="lg-line" /> },
-          { label: `Comparable packages (${sample.length})`, swatch: <i className="lg-line lg-dash" /> },
+          { label: `Comparable packages (${sampleSize})`, swatch: <i className="lg-line lg-dash" /> },
           { label: 'Your plan', swatch: <i className="lg-rule" /> },
         ]}
       />
-      <Frame height={H} label={`Share of comparable packages signed by day. Median ${Math.round(result.p50)} days, 80th percentile ${Math.round(result.p80)} days.`}>
-        <ComposedChart data={data} margin={{ top: 16, right: 16, bottom: 4, left: 0 }} accessibilityLayer={false}>
+      <Frame height={H} label={`Share of comparable packages signed by day. Median ${Math.round(p50)} days, 80th percentile ${Math.round(p80)} days.`}>
+        <ComposedChart data={curve} margin={{ top: 16, right: 16, bottom: 4, left: 0 }} accessibilityLayer={false}>
           <CartesianGrid vertical={false} stroke="var(--rule)" />
           <XAxis dataKey="t" type="number" domain={[0, maxT]} ticks={Array.from({ length: maxT / 60 + 1 }, (_, i) => i * 60)} tick={axisTick} tickLine={false} axisLine={false} />
           <YAxis domain={[0, 1]} ticks={[0, 0.25, 0.5, 0.75, 1]} tickFormatter={(v: number) => `${v * 100}%`} tick={axisTick} tickLine={false} axisLine={false} width={44} />
@@ -110,8 +92,8 @@ export function DurationCurve({ result, sample, planned, H = 240 }: { result: Pr
           />
           <Area dataKey="model" type="monotone" stroke="var(--ink)" strokeWidth={2} fill="var(--ink)" fillOpacity={0.06} isAnimationActive={false} />
           <Line dataKey="history" type="monotone" stroke="var(--muted-ink)" strokeWidth={2} strokeDasharray="4 3" dot={false} isAnimationActive={false} />
-          <ReferenceLine x={Math.round(result.p50)} stroke="var(--ink)" strokeDasharray="2 3" label={{ value: `P50 ${Math.round(result.p50)}d`, position: 'insideTopRight', fill: 'var(--ink)', fontSize: 12, fontWeight: 700 }} />
-          <ReferenceLine x={Math.round(result.p80)} stroke="var(--ink)" strokeDasharray="2 3" label={{ value: `P80 ${Math.round(result.p80)}d`, position: 'insideTopRight', fill: 'var(--ink)', fontSize: 12, fontWeight: 700 }} />
+          <ReferenceLine x={Math.round(p50)} stroke="var(--ink)" strokeDasharray="2 3" label={{ value: `P50 ${Math.round(p50)}d`, position: 'insideTopRight', fill: 'var(--ink)', fontSize: 12, fontWeight: 700 }} />
+          <ReferenceLine x={Math.round(p80)} stroke="var(--ink)" strokeDasharray="2 3" label={{ value: `P80 ${Math.round(p80)}d`, position: 'insideTopRight', fill: 'var(--ink)', fontSize: 12, fontWeight: 700 }} />
           {planned <= maxT && (
             <ReferenceLine x={planned} stroke="var(--worse)" strokeWidth={1.5} strokeDasharray="5 4" label={{ value: `Plan ${planned}d`, position: 'insideTopLeft', fill: 'var(--worse)', fontSize: 12, fontWeight: 700 }} />
           )}
@@ -150,11 +132,11 @@ function Diamond({ cx, cy }: { cx?: number | null; cy?: number | null }) {
 }
 
 /** Ordinal step chart of supervision ratings, with the retrospective ICR rating as a distinct mark. */
-export function RatingChart({ history, onPick }: { history: RatingPoint[]; onPick?: (cite: string) => void }) {
+export function RatingChart({ history, scale, names, onPick }: { history: RatingPoint[]; scale: string[]; names: Record<string, string>; onPick?: (cite: string) => void }) {
   const data = history.map((h) => ({
     ...h,
-    isr: h.retrospective ? null : RATING_SCALE.indexOf(h.rating),
-    icr: h.retrospective ? RATING_SCALE.indexOf(h.rating) : null,
+    isr: h.retrospective ? null : scale.indexOf(h.rating),
+    icr: h.retrospective ? scale.indexOf(h.rating) : null,
   }));
   return (
     <>
@@ -178,7 +160,7 @@ export function RatingChart({ history, onPick }: { history: RatingPoint[]; onPic
           <ReferenceArea y1={-0.5} y2={2.5} fill="var(--worse)" fillOpacity={0.06} label={{ value: 'Unsatisfactory range', position: 'insideBottomRight', fill: 'var(--muted-ink)', fontSize: 11 }} />
           <CartesianGrid vertical={false} stroke="var(--rule)" />
           <XAxis dataKey="label" tick={axisTick} tickLine={false} axisLine={false} interval={0} />
-          <YAxis domain={[0, 5]} ticks={[0, 1, 2, 3, 4, 5]} tickFormatter={(v: number) => RATING_SCALE[v]} tick={axisTick} tickLine={false} axisLine={false} width={40} />
+          <YAxis domain={[0, 5]} ticks={[0, 1, 2, 3, 4, 5]} tickFormatter={(v: number) => scale[v]} tick={axisTick} tickLine={false} axisLine={false} width={40} />
           <Tooltip
             content={({ active, payload }) => {
               const p = payload?.[0]?.payload as (typeof data)[number] | undefined;
@@ -188,7 +170,7 @@ export function RatingChart({ history, onPick }: { history: RatingPoint[]; onPic
                   <strong>
                     {p.label}, {p.date}
                   </strong>
-                  <span>{RATING_NAMES[p.rating]}</span>
+                  <span>{names[p.rating]}</span>
                   {p.cite && <span className="muted">Click to open source</span>}
                 </div>
               );
@@ -487,7 +469,7 @@ export function TargetBar({ base, now, target }: { base: number; now: number; ta
  * One dot per comparable package by days to signature. Move the plan line
  * (drag, click or arrow keys on the slider) to read how many were signed by then.
  */
-export function ComparablesStrip({ sample, planned, onPlanned }: { sample: number[]; planned: number; onPlanned: (days: number) => void }) {
+export function ComparablesStrip({ sample, planned, onPlanned, onCommit }: { sample: number[]; planned: number; onPlanned: (days: number) => void; onCommit?: () => void }) {
   const sorted = useMemo(() => [...sample].sort((a, b) => a - b), [sample]);
   const q = (p: number) => sorted[Math.min(sorted.length - 1, Math.floor(p * sorted.length))];
   const maxT = Math.max(360, Math.ceil((q(0.97) * 1.05) / 60) * 60);
@@ -534,6 +516,8 @@ export function ComparablesStrip({ sample, planned, onPlanned }: { sample: numbe
           step={5}
           value={Math.min(planned, maxT)}
           onChange={(e) => onPlanned(Number(e.target.value))}
+          onPointerUp={onCommit}
+          onKeyUp={onCommit}
           aria-label="Planned days to signature"
           aria-valuenow={planned}
           aria-valuetext={`${planned} days; ${within} of ${sorted.length} comparable packages signed by then`}

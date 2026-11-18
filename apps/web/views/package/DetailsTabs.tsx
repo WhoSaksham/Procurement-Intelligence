@@ -1,33 +1,32 @@
 'use client';
 
-import { useMemo } from 'react';
 import { AgentTrace } from '@/components/AgentTrace';
 import { DisbursementPeers, DriverBars, DurationCurve, HBars, MethodRange, MilestoneChart, ProgressCurve, RatingChart } from '@/components/charts';
 import { Cite } from '@/components/evidence/Cite';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ISR_HISTORY } from '@/data/reference';
-import { cohortSample, comparables, compareMethods } from '@/lib/model';
-import { useScenario } from '@/lib/store';
-import type { Contract, Prediction } from '@/lib/types';
-import { useUi } from '@/lib/ui-store';
-import { ACTUAL, CONFLICT, PAST_SPECS, PEERS, PRECEDENTS, RISKS, traceSteps, weight, WINNERS } from './data';
-import { SubTitle } from './parts';
+import { useLoadedPackage } from '@/lib/api/package';
+import { useReference } from '@/lib/api/queries';
 import { cssPct } from '@/lib/format';
+import type { Contract } from '@/lib/types';
+import { useUi } from '@/lib/ui-store';
+import { usePackageContent } from './content';
+import { SubTitle } from './parts';
 
 const Note = ({ children }: { children: React.ReactNode }) => <p className="mb-3 max-w-[80ch] text-sm text-muted-ink">{children}</p>;
 
-export function DetailsTabs({ result, stringency, best, selected }: { result: Prediction; stringency: number; best: string | null; selected: Contract }) {
-  const pkg = useScenario((s) => s.pkg);
-  const countries = useScenario((s) => s.countries);
-  const setPkg = useScenario((s) => s.setPkg);
+export function DetailsTabs({ selected }: { selected: Contract }) {
+  const { pkg, analysis, edit } = useLoadedPackage();
   const openEvidence = useUi((s) => s.openEvidence);
-  const sample = useMemo(() => cohortSample(pkg, countries), [pkg, countries]);
-  const options = useMemo(() => compareMethods(pkg, countries, stringency), [pkg, countries, stringency]);
-  const cohort = comparables(pkg, countries);
-  const total = CONFLICT.reduce((s, r) => s + weight(r), 0);
-  const forUnsat = CONFLICT.filter((r) => r.src !== 'isr1').reduce((s, r) => s + weight(r), 0);
+  const ref = useReference().data;
+  const content = usePackageContent().data;
+  if (!content || !ref) return null;
+  const { risks, conflict, resolution, precedents, pastSpecs, peers, actual, winners } = content;
+  const result = analysis.prediction;
+  const best = analysis.best;
+  const options = analysis.methods;
+  const cohort = analysis.comparables;
 
   const tabs = [
     {
@@ -40,7 +39,7 @@ export function DetailsTabs({ result, stringency, best, selected }: { result: Pr
             {options
               .filter((o) => !o.current && !o.limit)
               .map((o) => (
-                <Button key={o.method} variant="outline" size="sm" onClick={() => setPkg({ method: o.method })}>
+                <Button key={o.method} variant="outline" size="sm" onClick={() => edit({ pkg: { method: o.method } })}>
                   Use {o.method}
                 </Button>
               ))}
@@ -48,7 +47,7 @@ export function DetailsTabs({ result, stringency, best, selected }: { result: Pr
         </>
       ),
     },
-    { id: 'curve', label: 'Signature curve', content: <DurationCurve result={result} sample={sample} planned={pkg.plannedDays} W={1000} H={280} /> },
+    { id: 'curve', label: 'Signature curve', content: <DurationCurve curve={analysis.curve} p50={result.p50} p80={result.p80} sampleSize={analysis.sample.length} planned={pkg.plannedDays} H={280} /> },
     {
       id: 'drivers',
       label: 'Risk drivers',
@@ -58,7 +57,7 @@ export function DetailsTabs({ result, stringency, best, selected }: { result: Pr
             <SubTitle>Days to signature</SubTitle>
             <DriverBars compact drivers={result.timelineDrivers.map((d) => ({ label: d.label, v: d.pct }))} unit="%" />
           </div>
-          {RISKS.map(({ key, name }) => (
+          {risks.map(({ key, name }) => (
             <div key={key}>
               <SubTitle>{name}</SubTitle>
               <DriverBars compact drivers={result[key].drivers.slice(0, 5).map((d) => ({ label: d.label, v: d.pp }))} unit=" pts" />
@@ -83,7 +82,7 @@ export function DetailsTabs({ result, stringency, best, selected }: { result: Pr
             some of it.
             <Cite ids={['fin1']} />
           </Note>
-          <DisbursementPeers actual={ACTUAL} peers={PEERS} months={72} W={1000} H={280} />
+          <DisbursementPeers actual={actual} peers={peers} months={72} W={1000} H={280} />
         </>
       ),
     },
@@ -96,7 +95,7 @@ export function DetailsTabs({ result, stringency, best, selected }: { result: Pr
             Winners of the {cohort.n} comparable awards. Domestic firms won most lots under US$5M; foreign firms concentrate on larger single-lot packages.
             <Cite ids={['ca3']} />
           </Note>
-          <HBars rows={WINNERS} unit=" wins" />
+          <HBars rows={winners} unit=" wins" />
         </>
       ),
     },
@@ -106,9 +105,11 @@ export function DetailsTabs({ result, stringency, best, selected }: { result: Pr
       content: (
         <>
           <Note>Supervision rated the parent project Satisfactory through 2023; the completion report rates the same period Moderately Unsatisfactory. Click a point to read the source.</Note>
-          <RatingChart history={ISR_HISTORY} onPick={openEvidence} />
+          <RatingChart history={ref.isrHistory} scale={ref.ratingScale} names={ref.ratingNames} onPick={openEvidence} />
           <div className="my-4 rounded-lg border-l-4 border-retro bg-retro-tint p-3 text-sm">
-            <p className="font-semibold text-ink">Resolved toward Moderately Unsatisfactory, {Math.round((forUnsat / total) * 100)}% of evidence weight</p>
+            <p className="font-semibold text-ink">
+              {resolution.contested ? 'Contested' : `Resolved toward ${resolution.toward}`}, {Math.round(resolution.share * 100)}% of evidence weight
+            </p>
             <p className="text-ink-2">
               The ISR rating is kept as the record of what supervisors believed at the time. The independent review explains the gap: unpaid certificates built up without being
               reflected in ratings.
@@ -116,7 +117,7 @@ export function DetailsTabs({ result, stringency, best, selected }: { result: Pr
             </p>
           </div>
           <div className="weights" aria-label="Evidence weights">
-            {CONFLICT.map((r) => (
+            {conflict.map((r) => (
               <div key={r.src} className="weight-row">
                 <span className="w-label">
                   {r.label}
@@ -124,9 +125,9 @@ export function DetailsTabs({ result, stringency, best, selected }: { result: Pr
                 </span>
                 <span className="w-says">{r.says}</span>
                 <span className="w-track">
-                  <span style={{ width: cssPct((weight(r) / total) * 100) }} className={r.src === 'isr1' ? 'is-minor' : ''} />
+                  <span style={{ width: cssPct(r.share * 100) }} className={r.says === conflict[0].says && r.says !== resolution.toward ? 'is-minor' : ''} />
                 </span>
-                <span className="w-val">{Math.round((weight(r) / total) * 100)}%</span>
+                <span className="w-val">{Math.round(r.share * 100)}%</span>
               </div>
             ))}
           </div>
@@ -140,7 +141,7 @@ export function DetailsTabs({ result, stringency, best, selected }: { result: Pr
       content: (
         <>
           <ul className="grid gap-4 md:grid-cols-3">
-            {PRECEDENTS.map((p) => (
+            {precedents.map((p) => (
               <li key={p.name} className="grid content-start gap-1 text-sm">
                 <span className="h-1.5 rounded-full bg-sunk" role="img" aria-label={`Similarity ${Math.round(p.match * 100)}%`}>
                   <span className="block h-full rounded-full bg-procedure" style={{ width: cssPct(p.match * 100) }} />
@@ -158,7 +159,7 @@ export function DetailsTabs({ result, stringency, best, selected }: { result: Pr
           </ul>
           <SubTitle>Similar past bidding documents</SubTitle>
           <ul className="grid gap-2 text-sm">
-            {PAST_SPECS.map((s) => (
+            {pastSpecs.map((s) => (
               <li key={s.title} className="grid grid-cols-[3rem_minmax(0,1fr)] gap-2">
                 <span className="font-semibold text-procedure">{Math.round(s.sim * 100)}%</span>
                 <span className="text-ink-2">
@@ -171,7 +172,7 @@ export function DetailsTabs({ result, stringency, best, selected }: { result: Pr
         </>
       ),
     },
-    { id: 'trace', label: 'How this was built', content: <AgentTrace steps={traceSteps(pkg, countries)} /> },
+    { id: 'trace', label: 'How this was built', content: <AgentTrace steps={analysis.trace} /> },
   ];
 
   return (

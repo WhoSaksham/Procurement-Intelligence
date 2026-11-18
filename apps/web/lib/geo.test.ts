@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { ROADS } from '@/data/roads';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { decodeTerrarium, gradeProfile, profileStats } from '@/lib/elevation';
 import { alignment, haversine, headingAt, lerpAngle, pointAt } from '@/lib/geo';
+import type { Road } from '@/lib/types';
+
+// The real alignment from the seed data the API serves (read at run time: it lives outside this app).
+const ROADS = JSON.parse(readFileSync(path.resolve(__dirname, '../../../data/seed/roads.json'), 'utf8')) as Record<string, Road>;
 
 describe('geo', () => {
   it('measures one degree of latitude as about 111 km', () => {

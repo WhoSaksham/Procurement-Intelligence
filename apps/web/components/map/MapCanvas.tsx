@@ -88,7 +88,7 @@ function setImagery(map: MlMap, basemap: Basemap, year: number) {
 
 export interface MapCanvasProps {
   road: Road;
-  ends: [string, string];
+  ends?: [string, string];
   basemap: Basemap;
   year: number;
   terrain: boolean;
@@ -182,7 +182,7 @@ export function MapCanvas({ road, ends, basemap, year, terrain, selected, onSele
     });
     markers.current.forEach((m) => m.remove());
     const segs = road.segments;
-    const towns = ends.map((name, i) => {
+    const towns = (ends ?? []).map((name, i) => {
       const at = i === 0 ? segs[0].coords[0] : segs[segs.length - 1].coords[segs[segs.length - 1].coords.length - 1];
       const node = Object.assign(document.createElement('div'), { className: 'town-marker', textContent: name });
       return new Marker({ element: node, anchor: 'bottom' }).setLngLat(at).addTo(map);
