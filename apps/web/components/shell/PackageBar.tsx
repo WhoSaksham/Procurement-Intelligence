@@ -157,16 +157,17 @@ export function PackageBar() {
   return (
     <header className="z-20 border-b border-rule bg-paper/95 backdrop-blur supports-backdrop-filter:bg-paper/80 lg:sticky lg:top-0">
       <div className="grid max-w-[1280px] gap-2 px-4 py-2.5 md:px-8">
-        <div className="flex items-center gap-1 sm:gap-3">
+        {/* On a phone the name gets its own full-width line under the switcher and details button. */}
+        <div className="flex flex-wrap items-center gap-x-1 gap-y-1.5 sm:flex-nowrap sm:gap-3">
           <PackageSwitcher />
           <TextInput
             aria-label="Package name"
             maxLength={200}
             value={pkg.name}
             onChange={(name) => setPkg({ name })}
-            className="h-8 min-w-0 flex-1 border-transparent bg-transparent px-1 font-serif text-base font-semibold shadow-none hover:border-rule focus-visible:bg-surface md:max-w-md"
+            className="order-last h-8 min-w-0 basis-full border-transparent bg-transparent px-1 font-serif text-base font-semibold shadow-none hover:border-rule focus-visible:bg-surface sm:order-none sm:flex-1 sm:basis-auto md:max-w-md"
           />
-          <Button variant="outline" size="sm" className="lg:hidden" aria-expanded={open} aria-controls="package-fields" onClick={() => setOpen(!open)}>
+          <Button variant="outline" size="sm" className="ml-auto sm:ml-0 lg:hidden" aria-expanded={open} aria-controls="package-fields" onClick={() => setOpen(!open)}>
             <SlidersHorizontalIcon /> Package details
           </Button>
           {jump}

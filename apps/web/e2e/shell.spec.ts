@@ -102,3 +102,15 @@ test('a saved package loads without hydration warnings', async ({ page, newPacka
   await openMore(page, info.project.name === 'phone');
   await expect(page.getByLabel('Estimate, US$ M')).toHaveValue('9');
 });
+
+test('the package name has room on a phone', async ({ page }, info) => {
+  test.skip(info.project.name !== 'phone', 'phone layout');
+  await page.goto('/package');
+  const name = page.getByLabel('Package name');
+  await expect(name).toBeVisible();
+  const box = (await name.boundingBox())!;
+  // Its own line, close to the full width (390 px viewport, 16 px gutters).
+  expect(box.width).toBeGreaterThan(330);
+  await expect(page.getByRole('button', { name: /switch package/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Package details' })).toBeVisible();
+});

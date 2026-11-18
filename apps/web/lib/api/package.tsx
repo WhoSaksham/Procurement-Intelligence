@@ -8,7 +8,7 @@ import { ApiError, isUnreachable } from './client';
 import { reportFailure } from './backend';
 import { EXAMPLE_ID, initialPackageId, useCurrentPackage } from './current-package';
 import { importLegacyScenario } from './legacy-import';
-import { qk } from './queries';
+import { qk, refresh } from './queries';
 import type { Analysis, Criteria, Package, PackageSummary, PackageView } from './types';
 import { createWriteQueue, type Change, type WriteQueue } from './write-queue';
 
@@ -75,7 +75,7 @@ export function PackageProvider({ children }: { children: ReactNode }) {
       },
       onSwitch: (copy) => {
         qc.setQueryData(qk.pkg(copy.id), copy);
-        void qc.invalidateQueries({ queryKey: qk.packages });
+        void refresh(qc, qk.packages);
         // Show the copy only if the example is still on screen; otherwise just carry the edits.
         const showing = useCurrentPackage.getState().id === EXAMPLE_ID;
         useCurrentPackage.getState().adoptCopy(EXAMPLE_ID, copy.id);
@@ -95,7 +95,7 @@ export function PackageProvider({ children }: { children: ReactNode }) {
         const down = isUnreachable(e) || (e instanceof ApiError && e.status >= 500);
         if (!down && !(e instanceof ApiError && e.status === 404)) {
           toast.error(errorText(e));
-          void qc.invalidateQueries({ queryKey: qk.pkg(failedId) });
+          void refresh(qc, qk.pkg(failedId));
         }
         sync();
       },
@@ -109,7 +109,7 @@ export function PackageProvider({ children }: { children: ReactNode }) {
     void importLegacyScenario(window.localStorage, client.importPackage).then((v) => {
       if (!v) return;
       qc.setQueryData(qk.pkg(v.id), v);
-      void qc.invalidateQueries({ queryKey: qk.packages });
+      void refresh(qc, qk.packages);
       setId(v.id);
       toast(`Your saved scenario was imported as “${v.pkg.name}”`);
     });
@@ -161,8 +161,8 @@ export function PackageProvider({ children }: { children: ReactNode }) {
       if (!v) return null;
       try {
         const out = await queue.run(v.id, v.version, v.example, fn);
-        void qc.invalidateQueries({ queryKey: qk.portfolio(out.id) });
-        void qc.invalidateQueries({ queryKey: qk.packages });
+        void refresh(qc, qk.portfolio(out.id));
+        void refresh(qc, qk.packages);
         return out;
       } catch (e) {
         reportFailure(e);

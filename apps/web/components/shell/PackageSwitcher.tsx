@@ -11,7 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import * as client from '@/lib/api/client';
 import { EXAMPLE_ID, useCurrentPackage } from '@/lib/api/current-package';
 import { usePackage } from '@/lib/api/package';
-import { qk, usePackages } from '@/lib/api/queries';
+import { qk, refresh, usePackages } from '@/lib/api/queries';
 import type { PackageView } from '@/lib/api/types';
 import { cn } from '@/lib/utils';
 
@@ -26,7 +26,7 @@ export function PackageSwitcher() {
 
   const opened = (v: PackageView) => {
     qc.setQueryData(qk.pkg(v.id), v);
-    void qc.invalidateQueries({ queryKey: qk.packages });
+    void refresh(qc, qk.packages);
     setId(v.id);
     setOpen(false);
   };
@@ -107,7 +107,7 @@ export function PackageSwitcher() {
                   if (!id) return;
                   await client.deletePackage(id);
                   qc.removeQueries({ queryKey: qk.pkg(id) });
-                  void qc.invalidateQueries({ queryKey: qk.packages });
+                  void refresh(qc, qk.packages);
                   setId(EXAMPLE_ID);
                   setConfirm(false);
                   setOpen(false);

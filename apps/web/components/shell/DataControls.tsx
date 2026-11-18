@@ -6,7 +6,7 @@ import * as client from '@/lib/api/client';
 import { ApiError } from '@/lib/api/client';
 import { useCurrentPackage } from '@/lib/api/current-package';
 import { usePackage } from '@/lib/api/package';
-import { qk, useReference } from '@/lib/api/queries';
+import { qk, refresh, useReference } from '@/lib/api/queries';
 import type { LayerId } from '@/lib/types';
 
 const SWATCH: Record<LayerId, string> = { ledger: 'bg-ledger', procedure: 'bg-procedure', retrospective: 'bg-retro' };
@@ -29,7 +29,7 @@ export function useScenarioFile() {
     try {
       const v = await client.importPackage(await file.text());
       qc.setQueryData(qk.pkg(v.id), v);
-      void qc.invalidateQueries({ queryKey: qk.packages });
+      void refresh(qc, qk.packages);
       setId(v.id);
       toast.success(`Loaded ${file.name} as “${v.pkg.name}”`);
     } catch (e) {

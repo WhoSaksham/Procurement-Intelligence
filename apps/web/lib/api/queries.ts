@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, type QueryClient, type QueryKey } from '@tanstack/react-query';
 import * as client from './client';
 import type { Content } from './types';
 
@@ -17,6 +17,16 @@ export const qk = {
   questions: ['questions'] as const,
   road: (id: string) => ['road', id] as const,
 };
+
+/**
+ * Refresh data after a write. A request already in flight may have started
+ * before the write, and TanStack Query reuses an in-flight request for a query
+ * that has no data yet instead of starting a new one, so cancel it first.
+ */
+export async function refresh(qc: QueryClient, queryKey: QueryKey): Promise<void> {
+  await qc.cancelQueries({ queryKey });
+  await qc.invalidateQueries({ queryKey });
+}
 
 // Seeded data only changes when the API is reseeded: fetch once per visit.
 const STATIC = { staleTime: Infinity, gcTime: Infinity } as const;
