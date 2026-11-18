@@ -6,9 +6,9 @@ import { expect, test } from './fixtures';
 const ROUTES = ['/package', '/map', '/learn', '/ask', '/graph', '/pipeline'];
 
 for (const route of ROUTES) {
-  test(`${route} hydrates cleanly with a saved scenario`, async ({ page, seedScenario }) => {
-    await seedScenario({ pkg: { value: 9.7, lots: 2, plannedDays: 150 }, criteria: { turnover: 21 } });
-    await page.goto(route);
+  test(`${route} hydrates cleanly with a saved package`, async ({ page, newPackage }) => {
+    const id = await newPackage({ pkg: { value: 9.7, lots: 2, plannedDays: 150 }, criteria: { turnover: 21 } });
+    await page.goto(`${route}?pkg=${id}`);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible({ timeout: 60_000 });
     await page.waitForLoadState('networkidle');
     // Let React finish hydrating and report.

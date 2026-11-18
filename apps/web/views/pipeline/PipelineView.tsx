@@ -10,9 +10,10 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { LAYERS } from '@/data/sources';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useReference } from '@/lib/api/queries';
 import { cn } from '@/lib/utils';
-import { FEEDS, ICR_TREE, LINKING, QUALITY, RUN, SAMPLE_CHUNK, STAGES } from './data';
+import { usePipelineContent } from './content';
 import { cssPct } from '@/lib/format';
 
 const BAR = { ledger: 'bg-ledger', procedure: 'bg-procedure', retrospective: 'bg-retro' } as const;
@@ -20,6 +21,10 @@ const Note = ({ children }: { children: React.ReactNode }) => <p className="mb-3
 
 export function PipelineView() {
   const [open, setOpen] = useState<string | null>('V. Lessons and recommendations');
+  const content = usePipelineContent().data;
+  const layers = useReference().data?.layers;
+  if (!content || !layers) return <Skeleton aria-label="Loading the pipeline" className="h-96 w-full" />;
+  const { feeds: FEEDS, stages: STAGES, linking: LINKING, run: RUN, icrTree: ICR_TREE, sampleChunk: SAMPLE_CHUNK, quality: QUALITY } = content;
   const total = RUN.reduce((t, r) => t + r.min, 0);
   const starts = RUN.map((_, i) => RUN.slice(0, i).reduce((t, r) => t + r.min, 0));
 
@@ -64,7 +69,7 @@ export function PipelineView() {
                       </TableCell>
                       <TableCell>
                         <Badge variant="outline" className={LAYER_CHIP[f.layer]}>
-                          {LAYERS[f.layer].name}
+                          {layers[f.layer]?.name}
                         </Badge>
                       </TableCell>
                       <TableCell className="hidden md:table-cell">{f.format}</TableCell>
@@ -140,7 +145,7 @@ export function PipelineView() {
                     <li key={r.step} className="grid grid-cols-[minmax(0,1.4fr)_minmax(0,1.2fr)_4rem] items-center gap-3 text-sm">
                       <span className="text-ink">
                         {r.step}
-                        {'note' in r && r.note && <span className="text-xs text-muted-ink"> {r.note}</span>}
+                        {r.note && <span className="text-xs text-muted-ink"> {r.note}</span>}
                       </span>
                       <span className="relative h-3 rounded bg-sunk">
                         <span className={cn('absolute inset-y-0 rounded', r.status === 'warn' ? 'bg-watch' : 'bg-good')} style={{ left: cssPct(left), width: cssPct((r.min / total) * 100) }} />

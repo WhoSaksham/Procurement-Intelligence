@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import snapshotJson from '@/data/graph-snapshot.json';
-import { subgraph } from '@/lib/graph/fallback';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { canvasHeight, layout, nodeRadius } from '@/lib/graph/layout';
 import type { Snapshot } from '@/lib/graph/types';
 
-const snapshot = snapshotJson as unknown as Snapshot;
-const g = subgraph(snapshot.full, 'C1', 2)!;
+// The API's offline snapshot is a realistic graph to lay out (the whole graph).
+const snapshot = JSON.parse(readFileSync(path.resolve(__dirname, '../../../../services/api/data/graph-snapshot.json'), 'utf8')) as Snapshot;
+const g = snapshot.full;
 
 describe('graph layout', () => {
   it('is deterministic', () => {

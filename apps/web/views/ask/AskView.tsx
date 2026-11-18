@@ -2,6 +2,7 @@
 
 import { ChevronDownIcon } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 import { useState, type FormEvent } from 'react';
 import { AgentTrace } from '@/components/AgentTrace';
 import { Cite } from '@/components/evidence/Cite';
@@ -10,25 +11,29 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
-import { ANSWERS, INJECTION, match, STEPS, SUPPORT_MIN, type Answer } from './data';
+import { Skeleton } from '@/components/ui/skeleton';
+import * as client from '@/lib/api/client';
+import { useQuestions } from '@/lib/api/queries';
 import { cssPct } from '@/lib/format';
+import { cn } from '@/lib/utils';
 
-type Asked = { q: string; at: number } & ({ blocked: true } | { blocked?: false; answer: Answer | null });
+/** A question and when it was asked (asking the same question again replays the trace). */
+type Asked = { q: string; at: number };
 
 function Suggestions({ onAsk }: { onAsk: (q: string) => void }) {
+  const questions = useQuestions().data?.questions ?? [];
   return (
     <div className="flex flex-wrap gap-2">
-      {ANSWERS.map((x) => (
-        <Button key={x.q} variant="outline" size="sm" className="h-auto max-w-full shrink bg-surface py-1.5 text-left whitespace-normal" onClick={() => onAsk(x.q)}>
-          {x.q}
+      {questions.map((q) => (
+        <Button key={q} variant="outline" size="sm" className="h-auto max-w-full shrink bg-surface py-1.5 text-left whitespace-normal" onClick={() => onAsk(q)}>
+          {q}
         </Button>
       ))}
     </div>
   );
 }
 
-const evaluate = (q: string, at: number): Asked => (INJECTION.test(q) ? { q, at, blocked: true } : { q, at, answer: match(q) });
+const evaluate = (q: string, at: number): Asked => ({ q, at });
 
 /** Answers only from indexed passages; every sentence is checked against its source. */
 export function AskView() {
@@ -39,7 +44,7 @@ export function AskView() {
   // A question in the URL (from the command menu or a shared link) runs immediately.
   const [input, setInput] = useState(fromUrl);
   const [asked, setAsked] = useState<Asked | null>(() => (fromUrl.trim() ? evaluate(fromUrl, 0) : null));
-  const [running, setRunning] = useState(() => !!asked && !asked.blocked);
+  const [running, setRunning] = useState(() => !!asked);
   const [seen, setSeen] = useState(fromUrl);
   // A new question arriving in the URL while this view is open (command menu).
   if (fromUrl !== seen) {
@@ -48,7 +53,7 @@ export function AskView() {
       const next = evaluate(fromUrl, (asked?.at ?? 0) + 1);
       setInput(fromUrl);
       setAsked(next);
-      setRunning(!next.blocked);
+      setRunning(true);
     }
   }
 
@@ -57,13 +62,19 @@ export function AskView() {
     setInput(q);
     const next = evaluate(q, (asked?.at ?? 0) + 1);
     setAsked(next);
-    setRunning(!next.blocked);
+    setRunning(true);
     router.replace(`${pathname}?q=${encodeURIComponent(q)}`, { scroll: false });
   };
 
-  const a = asked && !asked.blocked ? asked.answer : null;
-  const kept = a?.claims.filter((c) => c.support >= SUPPORT_MIN) ?? [];
-  const dropped = a?.claims.filter((c) => c.support < SUPPORT_MIN) ?? [];
+  // The API refuses instruction-like questions, matches a prepared answer and marks each claim kept or removed.
+  const result = useQuery({ queryKey: ['ask', asked?.q], queryFn: () => client.ask(asked!.q), enabled: !!asked, staleTime: Infinity, retry: false });
+  const r = result.data;
+  const blocked = r?.blocked === true;
+  const answered = r && r.blocked === false ? r : null;
+  const a = answered?.answer ?? null;
+  const supportMin = answered?.supportMin ?? 0.75;
+  const kept = a?.claims.filter((c) => c.kept) ?? [];
+  const dropped = a?.claims.filter((c) => !c.kept) ?? [];
 
   return (
     <>
@@ -77,7 +88,7 @@ export function AskView() {
       >
         <div className="flex max-w-3xl gap-2">
           <Input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask about a project, method or risk" aria-label="Your question" className="h-10 bg-surface" />
-          <Button type="submit" className="h-10" disabled={running || !input.trim()}>
+          <Button type="submit" className="h-10" disabled={(running && !blocked) || !input.trim()}>
             Ask
           </Button>
         </div>
@@ -87,13 +98,19 @@ export function AskView() {
       {asked && (
         <Card data-testid="answer-panel">
           <CardContent className="grid gap-4">
-            {asked.blocked ? (
+            {result.isError ? (
+              <p className="text-ink-2" role="alert">
+                <strong className="text-ink">Couldn&apos;t ask right now.</strong> {result.error instanceof Error ? result.error.message : 'Try again.'}
+              </p>
+            ) : !r ? (
+              <Skeleton className="h-24 w-full" aria-label="Searching" />
+            ) : blocked ? (
               <p className="text-ink-2">
                 <strong className="text-ink">Not answered.</strong> The question contains instructions to the assistant, so nothing was searched or generated. Ask about a project,
                 method or risk instead.
               </p>
             ) : running ? (
-              <AgentTrace key={asked.q + asked.at} steps={STEPS(a?.claims.length ?? 0)} running stepMs={200} onDone={() => setRunning(false)} />
+              <AgentTrace key={asked.q + asked.at} steps={answered?.steps ?? []} running stepMs={200} onDone={() => setRunning(false)} />
             ) : a ? (
               <>
                 <div className="grid max-w-[75ch] gap-3 font-serif text-[16px] leading-relaxed text-ink" data-testid="answer">
@@ -112,7 +129,7 @@ export function AskView() {
                   <CollapsibleContent className="mt-3">
                     <ul className="grid gap-2" data-testid="grounding">
                       {a.claims.map((c) => {
-                        const ok = c.support >= SUPPORT_MIN;
+                        const ok = c.kept;
                         return (
                           <li key={c.text} className="grid grid-cols-[5.5rem_4.5rem_minmax(0,1fr)] items-start gap-3 text-sm max-md:grid-cols-[5.5rem_minmax(0,1fr)]">
                             <span className="flex items-center gap-1.5 text-xs text-muted-ink">
@@ -131,7 +148,7 @@ export function AskView() {
                       })}
                     </ul>
                     <p className="fine">
-                      Support is the probability that the cited passage states the claim; threshold {SUPPORT_MIN}. Numbers must also match the passage exactly. Removed sentences
+                      Support is the probability that the cited passage states the claim; threshold {supportMin}. Numbers must also match the passage exactly. Removed sentences
                       are logged for review.
                     </p>
                   </CollapsibleContent>
@@ -146,7 +163,7 @@ export function AskView() {
                 <Suggestions onAsk={ask} />
               </div>
             )}
-            {!running && (
+            {(!running || blocked || result.isError) && (
               <button
                 type="button"
                 className="w-fit text-sm font-medium text-procedure hover:underline"

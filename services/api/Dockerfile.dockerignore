@@ -1,0 +1,9 @@
+# The API image is built from the repository root; send only what it needs.
+*
+!services/api/package.json
+!services/api/package-lock.json
+!services/api/tsconfig.json
+!services/api/tsconfig.build.json
+!services/api/src
+!services/api/data
+!data/seed

@@ -12,7 +12,7 @@ import { Switch } from '@/components/ui/switch';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getAnalytics, getClusters, getFullGraph, getGraph, getNode, GraphError } from '@/lib/graph/client';
-import { DEFAULT_FOCUS, DEFAULT_HOPS } from '@/lib/graph/fallback';
+import { DEFAULT_FOCUS, DEFAULT_HOPS } from '@/lib/graph/defaults';
 import type { GraphNode } from '@/lib/graph/types';
 import { useAsync } from '@/lib/use-async';
 import { GraphCanvas, GraphLegend } from './GraphCanvas';

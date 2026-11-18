@@ -1,0 +1,44 @@
+{
+  "name": "procurement-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/server.js",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "seed": "tsx src/seed/cli.ts",
+    "openapi": "tsx src/openapi/export.ts",
+    "export:graph-seed": "tsx src/seed/export-graph-seed.ts",
+    "types:graph": "openapi-typescript ../graph/openapi.json -o src/modules/graph/schema.d.ts"
+  },
+  "dependencies": {
+    "@asteasolutions/zod-to-openapi": "9.1.0",
+    "express": "5.3.0",
+    "helmet": "8.3.0",
+    "mongoose": "9.12.2",
+    "pino": "10.4.0",
+    "pino-http": "11.0.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@types/express": "5.0.6",
+    "@types/node": "24.19.2",
+    "@types/supertest": "7.2.1",
+    "eslint": "9.39.5",
+    "mongodb-memory-server": "11.3.0",
+    "openapi-typescript": "7.13.0",
+    "supertest": "7.3.2",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.73.0",
+    "vitest": "5.1.1"
+  }
+}

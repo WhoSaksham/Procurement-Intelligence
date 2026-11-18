@@ -12,6 +12,7 @@ from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
 
 from app.engine import GraphEngine
 from app.models import Analytics, GraphResponse, Health, NodeDetail, Resolution, ResolveRequest, SupplierCluster
+from app.seed import load_configured_seed
 from app.settings import Settings
 
 DEFAULT_FOCUS = "C1"  # the working package's closest precedent
@@ -21,7 +22,7 @@ DEFAULT_FOCUS = "C1"  # the working package's closest precedent
 async def lifespan(app: FastAPI):
     settings = Settings()
     app.state.settings = settings
-    app.state.engine = GraphEngine.build(settings.seed_dir)
+    app.state.engine = GraphEngine.build(load_configured_seed(settings))
     yield
 
 

@@ -1,0 +1,4114 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Procurement Intelligence API",
+    "version": "1.0.0",
+    "description": "System of record and business logic for Procurement Intelligence. Every /v1 route requires X-API-Key."
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "security": [
+    {
+      "ApiKey": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "ApiKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      }
+    },
+    "schemas": {
+      "Reference": {
+        "type": "object",
+        "properties": {
+          "countries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Country"
+            }
+          },
+          "sectors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Category"
+            }
+          },
+          "methods": {
+            "type": "object",
+            "properties": {
+              "Civil Works": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "Goods": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "Consulting Services": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "Non-consulting Services": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "defaultPackage": {
+            "$ref": "#/components/schemas/Package"
+          },
+          "defaultCriteria": {
+            "$ref": "#/components/schemas/Criteria"
+          },
+          "layers": {
+            "type": "object",
+            "properties": {
+              "ledger": {
+                "$ref": "#/components/schemas/Layer"
+              },
+              "procedure": {
+                "$ref": "#/components/schemas/Layer"
+              },
+              "retrospective": {
+                "$ref": "#/components/schemas/Layer"
+              }
+            }
+          },
+          "ratingScale": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ratingNames": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "isrHistory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RatingPoint"
+            }
+          }
+        },
+        "required": [
+          "countries",
+          "sectors",
+          "categories",
+          "methods",
+          "defaultPackage",
+          "defaultCriteria",
+          "layers",
+          "ratingScale",
+          "ratingNames",
+          "isrHistory"
+        ]
+      },
+      "Country": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 12
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "region": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "cpia": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 6
+          },
+          "rq": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "fcv": {
+            "type": "boolean"
+          },
+          "cpiaImputed": {
+            "type": "boolean"
+          },
+          "custom": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "region",
+          "cpia",
+          "rq",
+          "fcv",
+          "cpiaImputed"
+        ]
+      },
+      "Category": {
+        "type": "string",
+        "enum": [
+          "Civil Works",
+          "Goods",
+          "Consulting Services",
+          "Non-consulting Services"
+        ]
+      },
+      "Package": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "country": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 12
+          },
+          "sector": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "category": {
+            "$ref": "#/components/schemas/Category"
+          },
+          "method": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "value": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 100000
+          },
+          "durationMonths": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 240
+          },
+          "review": {
+            "type": "string",
+            "enum": [
+              "Prior",
+              "Post"
+            ]
+          },
+          "agency": {
+            "type": "string",
+            "enum": [
+              "first",
+              "some",
+              "experienced"
+            ]
+          },
+          "lots": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "esRisk": {
+            "type": "string",
+            "enum": [
+              "Low",
+              "Moderate",
+              "Substantial",
+              "High"
+            ]
+          },
+          "plannedDays": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 3650
+          }
+        },
+        "required": [
+          "name",
+          "country",
+          "sector",
+          "category",
+          "method",
+          "value",
+          "durationMonths",
+          "review",
+          "agency",
+          "lots",
+          "esRisk",
+          "plannedDays"
+        ]
+      },
+      "Criteria": {
+        "type": "object",
+        "properties": {
+          "turnover": {
+            "type": "number",
+            "minimum": 0
+          },
+          "similarContracts": {
+            "type": "number",
+            "minimum": 0
+          },
+          "similarValuePct": {
+            "type": "number",
+            "minimum": 0
+          },
+          "bidSecurityPct": {
+            "type": "number",
+            "minimum": 0
+          },
+          "submissionDays": {
+            "type": "number",
+            "minimum": 0
+          },
+          "validityDays": {
+            "type": "number",
+            "minimum": 0
+          },
+          "jvAllowed": {
+            "type": "boolean"
+          },
+          "specText": {
+            "type": "string",
+            "maxLength": 10000
+          }
+        },
+        "required": [
+          "turnover",
+          "similarContracts",
+          "similarValuePct",
+          "bidSecurityPct",
+          "submissionDays",
+          "validityDays",
+          "jvAllowed",
+          "specText"
+        ]
+      },
+      "Layer": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "question": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "question",
+          "note"
+        ]
+      },
+      "RatingPoint": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "string"
+          },
+          "cite": {
+            "type": "string"
+          },
+          "retrospective": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "label",
+          "date",
+          "rating"
+        ]
+      },
+      "Problem": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "number"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "message"
+              ]
+            }
+          }
+        },
+        "required": [
+          "type",
+          "title",
+          "status",
+          "detail",
+          "instance",
+          "requestId"
+        ],
+        "additionalProperties": {}
+      },
+      "SourceIndex": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "layer": {
+                  "$ref": "#/components/schemas/LayerId"
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "layer",
+                "kind",
+                "title"
+              ]
+            }
+          }
+        },
+        "required": [
+          "items"
+        ]
+      },
+      "LayerId": {
+        "type": "string",
+        "enum": [
+          "ledger",
+          "procedure",
+          "retrospective"
+        ]
+      },
+      "Source": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "layer": {
+            "$ref": "#/components/schemas/LayerId"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "project": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "locator": {
+            "type": "string"
+          },
+          "before": {
+            "type": "string"
+          },
+          "quote": {
+            "type": "string"
+          },
+          "after": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "layer",
+          "kind",
+          "title",
+          "project",
+          "date",
+          "locator",
+          "quote"
+        ]
+      },
+      "Road": {
+        "type": "object",
+        "properties": {
+          "ends": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "cite": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "lengthKm": {
+            "type": "number"
+          },
+          "segments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoadSegment"
+            }
+          }
+        },
+        "required": [
+          "lengthKm",
+          "segments"
+        ]
+      },
+      "RoadSegment": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "number"
+          },
+          "to": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "sealed",
+              "base",
+              "earthworks",
+              "not-started"
+            ]
+          },
+          "change": {
+            "type": "number"
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "coords": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "from",
+          "to",
+          "status",
+          "change",
+          "note",
+          "coords"
+        ]
+      },
+      "AskResponse": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "blocked": {
+                "type": "boolean",
+                "enum": [
+                  true
+                ]
+              }
+            },
+            "required": [
+              "blocked"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "blocked": {
+                "type": "boolean",
+                "enum": [
+                  false
+                ]
+              },
+              "answer": {
+                "$ref": "#/components/schemas/AskAnswer"
+              },
+              "steps": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Step"
+                }
+              },
+              "supportMin": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "blocked",
+              "answer",
+              "steps",
+              "supportMin"
+            ]
+          }
+        ]
+      },
+      "AskAnswer": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "q": {
+            "type": "string"
+          },
+          "keys": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "claims": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/KeptClaim"
+            }
+          }
+        },
+        "required": [
+          "q",
+          "keys",
+          "claims"
+        ]
+      },
+      "KeptClaim": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "cite": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "support": {
+            "type": "number"
+          },
+          "kept": {
+            "type": "boolean",
+            "description": "support ≥ supportMin; removed claims are shown struck out"
+          }
+        },
+        "required": [
+          "text",
+          "cite",
+          "support",
+          "kept"
+        ]
+      },
+      "Step": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "tool": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "tool",
+          "detail"
+        ]
+      },
+      "AskRequest": {
+        "type": "object",
+        "properties": {
+          "q": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "q"
+        ]
+      },
+      "LearnState": {
+        "type": "object",
+        "properties": {
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LearnEvent"
+            }
+          },
+          "remaining": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "events",
+          "remaining"
+        ]
+      },
+      "LearnEvent": {
+        "type": "object",
+        "properties": {
+          "when": {
+            "type": "string"
+          },
+          "layer": {
+            "$ref": "#/components/schemas/LayerId"
+          },
+          "title": {
+            "type": "string"
+          },
+          "updates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "fresh": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "layer",
+          "title",
+          "updates",
+          "fresh"
+        ]
+      },
+      "PackageSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "example": {
+            "type": "boolean"
+          },
+          "signedOff": {
+            "type": "boolean"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "country",
+          "example",
+          "signedOff",
+          "updatedAt"
+        ]
+      },
+      "PackageView": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "example": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "number"
+          },
+          "pkg": {
+            "$ref": "#/components/schemas/Package"
+          },
+          "criteria": {
+            "$ref": "#/components/schemas/Criteria"
+          },
+          "countries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Country"
+            }
+          },
+          "contracts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Contract"
+            }
+          },
+          "signoff": {
+            "$ref": "#/components/schemas/Signoff"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "analysis": {
+            "$ref": "#/components/schemas/Analysis"
+          }
+        },
+        "required": [
+          "id",
+          "example",
+          "version",
+          "pkg",
+          "criteria",
+          "countries",
+          "contracts",
+          "signoff",
+          "updatedAt",
+          "analysis"
+        ]
+      },
+      "Contract": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40
+          },
+          "title": {
+            "type": "string"
+          },
+          "supplier": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          },
+          "signed": {
+            "type": "string"
+          },
+          "planned": {
+            "type": "number"
+          },
+          "actual": {
+            "type": "number"
+          },
+          "warning": {
+            "type": "number"
+          },
+          "mapped": {
+            "type": "boolean"
+          },
+          "custom": {
+            "type": "boolean"
+          },
+          "signals": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Signal"
+            }
+          },
+          "milestones": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Milestone"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "supplier",
+          "value",
+          "signed",
+          "planned",
+          "actual",
+          "warning",
+          "signals",
+          "milestones"
+        ]
+      },
+      "Signal": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "cite": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "own": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "text",
+          "level"
+        ]
+      },
+      "Milestone": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "planned": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "actual": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "planned",
+          "actual"
+        ]
+      },
+      "Signoff": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "at": {
+            "type": "string"
+          },
+          "brief": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "at",
+          "brief"
+        ]
+      },
+      "Analysis": {
+        "type": "object",
+        "properties": {
+          "country": {
+            "$ref": "#/components/schemas/Country"
+          },
+          "check": {
+            "$ref": "#/components/schemas/CriteriaCheck"
+          },
+          "prediction": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PredictionView"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "onTime": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "onTime"
+                ]
+              }
+            ]
+          },
+          "atBenchmark": {
+            "$ref": "#/components/schemas/PredictionView"
+          },
+          "curve": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "t": {
+                  "type": "number"
+                },
+                "model": {
+                  "type": "number"
+                },
+                "history": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "t",
+                "model",
+                "history"
+              ]
+            }
+          },
+          "methods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MethodOption"
+            }
+          },
+          "best": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "comparables": {
+            "$ref": "#/components/schemas/Comparables"
+          },
+          "sample": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "benchmarkDays": {
+            "type": "number"
+          },
+          "recommendations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Recommendation"
+            }
+          },
+          "trace": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Step"
+            }
+          },
+          "stale": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "country",
+          "check",
+          "prediction",
+          "atBenchmark",
+          "curve",
+          "methods",
+          "best",
+          "comparables",
+          "sample",
+          "benchmarkDays",
+          "recommendations",
+          "trace",
+          "stale"
+        ]
+      },
+      "CriteriaCheck": {
+        "type": "object",
+        "properties": {
+          "findings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Finding"
+            }
+          },
+          "stringency": {
+            "type": "number"
+          },
+          "annualCash": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "findings",
+          "stringency",
+          "annualCash"
+        ]
+      },
+      "Finding": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "benchmark": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "watch",
+              "flag"
+            ]
+          },
+          "advice": {
+            "type": "string"
+          },
+          "cite": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "weight": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "value",
+          "benchmark",
+          "status",
+          "advice",
+          "cite",
+          "weight"
+        ]
+      },
+      "Risk": {
+        "type": "object",
+        "properties": {
+          "p": {
+            "type": "number"
+          },
+          "drivers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "pp": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "label",
+                "pp"
+              ]
+            }
+          }
+        },
+        "required": [
+          "p",
+          "drivers"
+        ]
+      },
+      "PredictionView": {
+        "type": "object",
+        "properties": {
+          "scale": {
+            "type": "number"
+          },
+          "shape": {
+            "type": "number"
+          },
+          "p20": {
+            "type": "number"
+          },
+          "p50": {
+            "type": "number"
+          },
+          "p80": {
+            "type": "number"
+          },
+          "timelineDrivers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "pct": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "label",
+                "pct"
+              ]
+            }
+          },
+          "rebid": {
+            "$ref": "#/components/schemas/Risk"
+          },
+          "amend": {
+            "$ref": "#/components/schemas/Risk"
+          },
+          "slip": {
+            "$ref": "#/components/schemas/Risk"
+          }
+        },
+        "required": [
+          "scale",
+          "shape",
+          "p20",
+          "p50",
+          "p80",
+          "timelineDrivers",
+          "rebid",
+          "amend",
+          "slip"
+        ]
+      },
+      "MethodOption": {
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string"
+          },
+          "p20": {
+            "type": "number"
+          },
+          "p50": {
+            "type": "number"
+          },
+          "p80": {
+            "type": "number"
+          },
+          "rebid": {
+            "type": "number"
+          },
+          "current": {
+            "type": "boolean"
+          },
+          "limit": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "method",
+          "p20",
+          "p50",
+          "p80",
+          "rebid",
+          "current",
+          "limit"
+        ]
+      },
+      "Comparables": {
+        "type": "object",
+        "properties": {
+          "n": {
+            "type": "number"
+          },
+          "widened": {
+            "type": "boolean"
+          },
+          "close": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "n",
+          "widened"
+        ]
+      },
+      "Recommendation": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "cite": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "stage": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "body",
+          "cite",
+          "stage"
+        ]
+      },
+      "CreatePackageRequest": {
+        "type": "object",
+        "properties": {
+          "fromId": {
+            "type": "string",
+            "pattern": "^[\\w-]{1,40}$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          }
+        },
+        "additionalProperties": false
+      },
+      "PatchPackageRequest": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "pkg": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "country": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 12
+              },
+              "sector": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "category": {
+                "$ref": "#/components/schemas/Category"
+              },
+              "method": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "value": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 100000
+              },
+              "durationMonths": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 240
+              },
+              "review": {
+                "type": "string",
+                "enum": [
+                  "Prior",
+                  "Post"
+                ]
+              },
+              "agency": {
+                "type": "string",
+                "enum": [
+                  "first",
+                  "some",
+                  "experienced"
+                ]
+              },
+              "lots": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 50
+              },
+              "esRisk": {
+                "type": "string",
+                "enum": [
+                  "Low",
+                  "Moderate",
+                  "Substantial",
+                  "High"
+                ]
+              },
+              "plannedDays": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 3650
+              }
+            },
+            "additionalProperties": false
+          },
+          "criteria": {
+            "type": "object",
+            "properties": {
+              "turnover": {
+                "type": "number",
+                "minimum": 0
+              },
+              "similarContracts": {
+                "type": "number",
+                "minimum": 0
+              },
+              "similarValuePct": {
+                "type": "number",
+                "minimum": 0
+              },
+              "bidSecurityPct": {
+                "type": "number",
+                "minimum": 0
+              },
+              "submissionDays": {
+                "type": "number",
+                "minimum": 0
+              },
+              "validityDays": {
+                "type": "number",
+                "minimum": 0
+              },
+              "jvAllowed": {
+                "type": "boolean"
+              },
+              "specText": {
+                "type": "string",
+                "maxLength": 10000
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "version"
+        ],
+        "additionalProperties": false
+      },
+      "VersionRequest": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "version"
+        ],
+        "additionalProperties": false
+      },
+      "SignOffRequest": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          }
+        },
+        "required": [
+          "version",
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "UpsertCountryRequest": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "country": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 12
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "region": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "cpia": {
+                "type": "number",
+                "minimum": 1,
+                "maximum": 6
+              },
+              "rq": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "fcv": {
+                "type": "boolean"
+              },
+              "cpiaImputed": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "region",
+              "cpia",
+              "rq",
+              "fcv",
+              "cpiaImputed"
+            ]
+          }
+        },
+        "required": [
+          "version",
+          "country"
+        ],
+        "additionalProperties": false
+      },
+      "AddContractRequest": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "draft": {
+            "$ref": "#/components/schemas/ContractDraft"
+          }
+        },
+        "required": [
+          "version",
+          "draft"
+        ],
+        "additionalProperties": false
+      },
+      "ContractDraft": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "supplier": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "value": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "signed": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}$"
+          },
+          "paymentDays": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000
+          },
+          "planned": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "actual": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          }
+        },
+        "required": [
+          "title",
+          "supplier",
+          "value",
+          "paymentDays",
+          "planned",
+          "actual"
+        ]
+      },
+      "GraphEnvelope": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "live",
+                  "snapshot"
+                ]
+              },
+              "data": {}
+            },
+            "required": [
+              "source"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "live",
+                  "snapshot"
+                ]
+              },
+              "error": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "source",
+              "error"
+            ]
+          }
+        ]
+      }
+    },
+    "parameters": {}
+  },
+  "paths": {
+    "/v1/reference": {
+      "get": {
+        "summary": "Countries, sectors, methods, layers and defaults for the package editor",
+        "tags": [
+          "reference"
+        ],
+        "responses": {
+          "200": {
+            "description": "Reference data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Reference"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sources": {
+      "get": {
+        "summary": "The evidence catalogue: what each citation chip shows, in citation-number order",
+        "tags": [
+          "evidence"
+        ],
+        "responses": {
+          "200": {
+            "description": "Source index",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceIndex"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sources/{id}": {
+      "get": {
+        "summary": "One evidence passage",
+        "tags": [
+          "evidence"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The passage",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Source"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/contracts/{id}/road": {
+      "get": {
+        "summary": "Road alignment and chainage segments for a mapped contract",
+        "tags": [
+          "contracts"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Road",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Road"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/content/{view}": {
+      "get": {
+        "summary": "Illustrative content for a view (package, pipeline, learn)",
+        "tags": [
+          "content"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "package",
+                "pipeline",
+                "learn"
+              ]
+            },
+            "required": true,
+            "name": "view",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "View content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ask/questions": {
+      "get": {
+        "summary": "Suggested questions and the grounding threshold",
+        "tags": [
+          "ask"
+        ],
+        "responses": {
+          "200": {
+            "description": "Questions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "questions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "supportMin": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "questions",
+                    "supportMin"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ask": {
+      "post": {
+        "summary": "Answer a question from prepared, grounded answers (instruction-like text is refused)",
+        "tags": [
+          "ask"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AskRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Answer, refusal, or no match",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/learn/events": {
+      "get": {
+        "summary": "Feedback events applied so far",
+        "tags": [
+          "learn"
+        ],
+        "responses": {
+          "200": {
+            "description": "Applied events, newest first, and how many remain queued",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearnState"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/learn/events/next": {
+      "post": {
+        "summary": "Receive the next sample event",
+        "tags": [
+          "learn"
+        ],
+        "responses": {
+          "200": {
+            "description": "Applied events, newest first, and how many remain queued",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearnState"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/learn/events/reset": {
+      "post": {
+        "summary": "Put every sample event back in the queue",
+        "tags": [
+          "learn"
+        ],
+        "responses": {
+          "200": {
+            "description": "Applied events, newest first, and how many remain queued",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearnState"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/packages": {
+      "get": {
+        "summary": "Saved packages, the example first, then most recently updated",
+        "tags": [
+          "packages"
+        ],
+        "responses": {
+          "200": {
+            "description": "Packages",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/PackageSummary"
+                      }
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a package from the defaults, or as a copy of `fromId`",
+        "tags": [
+          "packages"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePackageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackageView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/packages/import": {
+      "post": {
+        "summary": "Create a package from an exported scenario file (old exports and browser saves load)",
+        "tags": [
+          "packages"
+        ],
+        "requestBody": {
+          "content": {
+            "text/plain": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackageView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/packages/{id}": {
+      "get": {
+        "summary": "A package and its analysis",
+        "tags": [
+          "packages"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\w-]{1,40}$"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Package",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackageView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Change package fields and/or criteria (optimistic concurrency on `version`)",
+        "tags": [
+          "packages"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\w-]{1,40}$"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchPackageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackageView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a user package",
+        "tags": [
+          "packages"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\w-]{1,40}$"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/packages/{id}/reset": {
+      "post": {
+        "summary": "Restore a user package to the example's content",
+        "tags": [
+          "packages"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\w-]{1,40}$"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackageView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/packages/{id}/benchmark": {
+      "post": {
+        "summary": "Move criteria to the benchmark values",
+        "tags": [
+          "packages"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\w-]{1,40}$"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackageView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/packages/{id}/signoff": {
+      "post": {
+        "summary": "Sign off the brief by name",
+        "tags": [
+          "packages"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\w-]{1,40}$"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignOffRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Signed off",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackageView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/packages/{id}/countries/{countryId}": {
+      "put": {
+        "summary": "Add or override a country for this package",
+        "tags": [
+          "packages"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\w-]{1,40}$"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 12
+            },
+            "required": true,
+            "name": "countryId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertCountryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackageView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove this package's country override",
+        "tags": [
+          "packages"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\w-]{1,40}$"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 12
+            },
+            "required": true,
+            "name": "countryId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "required": true,
+            "name": "version",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackageView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/packages/{id}/contracts": {
+      "post": {
+        "summary": "Add your own contract; the server scores its warning and signals",
+        "tags": [
+          "packages"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\w-]{1,40}$"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddContractRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackageView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/packages/{id}/contracts/{contractId}": {
+      "delete": {
+        "summary": "Remove one of your own contracts",
+        "tags": [
+          "packages"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\w-]{1,40}$"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40
+            },
+            "required": true,
+            "name": "contractId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "required": true,
+            "name": "version",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PackageView"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/packages/{id}/export": {
+      "get": {
+        "summary": "Download the scenario file",
+        "tags": [
+          "packages"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\w-]{1,40}$"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Scenario JSON (version 1)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {}
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/packages/{id}/portfolio": {
+      "get": {
+        "summary": "Portfolio under supervision plus this package’s own contracts, by warning",
+        "tags": [
+          "packages"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\w-]{1,40}$"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contracts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Contract"
+                      }
+                    }
+                  },
+                  "required": [
+                    "items"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/graph/health": {
+      "get": {
+        "summary": "Graph service health (snapshot when down)",
+        "tags": [
+          "graph"
+        ],
+        "responses": {
+          "200": {
+            "description": "Envelope with live or snapshot data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/graph/graph": {
+      "get": {
+        "summary": "Neighbourhood of a node",
+        "tags": [
+          "graph"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "focus",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            },
+            "required": false,
+            "name": "hops",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Envelope with live or snapshot data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/graph/full": {
+      "get": {
+        "summary": "Whole graph",
+        "tags": [
+          "graph"
+        ],
+        "responses": {
+          "200": {
+            "description": "Envelope with live or snapshot data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/graph/nodes/{id}": {
+      "get": {
+        "summary": "Node, its links and provenance",
+        "tags": [
+          "graph"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Envelope with live or snapshot data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/graph/suppliers/clusters": {
+      "get": {
+        "summary": "Canonical suppliers and their name variants",
+        "tags": [
+          "graph"
+        ],
+        "responses": {
+          "200": {
+            "description": "Envelope with live or snapshot data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/graph/analytics": {
+      "get": {
+        "summary": "Centrality ranking and communities",
+        "tags": [
+          "graph"
+        ],
+        "responses": {
+          "200": {
+            "description": "Envelope with live or snapshot data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/graph/suppliers/resolve": {
+      "post": {
+        "summary": "Resolve supplier names (live service only)",
+        "tags": [
+          "graph"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "names": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "names"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Envelope with live or snapshot data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "webhooks": {}
+}

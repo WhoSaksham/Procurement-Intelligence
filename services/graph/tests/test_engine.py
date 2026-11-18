@@ -4,7 +4,7 @@ import pytest
 
 from app.engine import GraphEngine
 
-SEED = Path(__file__).resolve().parents[1] / "data" / "seed"
+SEED = Path(__file__).resolve().parent / "fixtures" / "seed"
 MERIDIAN = "SUP-004417"
 
 

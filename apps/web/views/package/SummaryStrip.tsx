@@ -1,13 +1,12 @@
 'use client';
 
+import { Loader2Icon } from 'lucide-react';
 import { Cite } from '@/components/evidence/Cite';
 import { NumberField } from '@/components/shell/fields';
-import { pct, riskLevel } from '@/lib/model';
-import { useScenario } from '@/lib/store';
-import type { Prediction } from '@/lib/types';
+import { useLoadedPackage } from '@/lib/api/package';
+import { cssPct, pct, riskLevel } from '@/lib/format';
 import { cn } from '@/lib/utils';
-import { RISKS } from './data';
-import { cssPct } from '@/lib/format';
+import { usePackageContent } from './content';
 
 const RISK_TONE: Record<string, string> = { High: 'text-worse', Elevated: 'text-watch', Low: 'text-good' };
 const RISK_BAR: Record<string, string> = { High: 'bg-worse', Elevated: 'bg-watch', Low: 'bg-good' };
@@ -21,10 +20,11 @@ function Stat({ label, children, className }: { label?: string; children: React.
   );
 }
 
-export function SummaryStrip({ result }: { result: Prediction }) {
-  const pkg = useScenario((s) => s.pkg);
-  const setPkg = useScenario((s) => s.setPkg);
-  const onTime = result.cdf(pkg.plannedDays);
+export function SummaryStrip() {
+  const { pkg, analysis, edit, updating } = useLoadedPackage();
+  const risks = usePackageContent().data?.risks ?? [];
+  const result = analysis.prediction;
+  const onTime = result.onTime;
   const p80 = Math.round(result.p80);
   return (
     <section aria-label="Summary" className="mb-5 grid grid-cols-2 gap-3 md:grid-cols-5">
@@ -38,17 +38,18 @@ export function SummaryStrip({ result }: { result: Prediction }) {
         </p>
       </Stat>
       <Stat className={onTime < 0.5 ? 'border-worse/30 bg-worse-tint' : 'border-good/30 bg-good-tint'}>
-        <NumberField label="Your plan, days" min={10} max={600} value={pkg.plannedDays} onChange={(plannedDays) => setPkg({ plannedDays })} className="[&_input]:mt-1 [&_input]:w-24 [&_input]:text-lg [&_input]:font-semibold" />
+        <NumberField label="Your plan, days" min={10} max={600} value={pkg.plannedDays} onChange={(plannedDays) => edit({ pkg: { plannedDays } })} className="[&_input]:mt-1 [&_input]:w-24 [&_input]:text-lg [&_input]:font-semibold" />
         <p className="mt-1 flex flex-wrap items-center gap-x-2 text-xs text-ink-2">
-          {pct(onTime)} chance on time
+          <span data-testid="on-time">{pct(onTime)} chance on time</span>
+          {updating && <Loader2Icon aria-label="Updating" role="status" className="size-3 animate-spin text-muted-ink" />}
           {pkg.plannedDays < p80 && (
-            <button type="button" className="font-semibold text-procedure-ink underline-offset-2 hover:underline" onClick={() => setPkg({ plannedDays: p80 })}>
+            <button type="button" className="font-semibold text-procedure-ink underline-offset-2 hover:underline" onClick={() => edit({ pkg: { plannedDays: p80 } })}>
               Use {p80}
             </button>
           )}
         </p>
       </Stat>
-      {RISKS.map(({ key, name, cite }) => {
+      {risks.map(({ key, name, cite }) => {
         const p = result[key].p;
         const level = riskLevel(p);
         return (

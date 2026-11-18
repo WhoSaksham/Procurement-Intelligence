@@ -89,9 +89,9 @@ class GraphEngine:
     # ---------- build ----------
 
     @classmethod
-    def build(cls, seed_dir: Path) -> GraphEngine:
+    def build(cls, source: Path | Seed) -> GraphEngine:
         t0 = time.perf_counter()
-        seed = load_seed(seed_dir)
+        seed = source if isinstance(source, Seed) else load_seed(source)
         eng = cls()
         jv_rows = [r for r in seed.suppliers_raw if JV_PATTERN.search(r.name)]
         firm_rows = [r for r in seed.suppliers_raw if not JV_PATTERN.search(r.name)]

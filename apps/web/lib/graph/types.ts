@@ -18,7 +18,7 @@ export type Stats = S['Stats'];
 /** Where the data in a response came from. */
 export type Source = 'live' | 'snapshot';
 
-/** Everything the app can show when the service is unavailable. */
+/** The API's offline answer set when the graph service is unavailable (used by tests here). */
 export interface Snapshot {
   generated_at: string;
   health: Health;

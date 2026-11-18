@@ -42,6 +42,20 @@ test('learn tabs all render', async ({ page }) => {
   }
 });
 
+test('learn: receive the next event, then reset the shared feed', async ({ page }, info) => {
+  // The event feed is shared by every visitor, so only one project exercises it.
+  test.skip(info.project.name !== 'desktop', 'shared state');
+  await page.goto('/learn');
+  await page.getByRole('button', { name: 'Reset events' }).click();
+  await expect(page.getByText('New', { exact: true })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Receive next event' }).click();
+  await expect(page.getByText('New', { exact: true })).toHaveCount(1);
+  await page.reload();
+  await expect(page.getByText('New', { exact: true })).toHaveCount(1);
+  await page.getByRole('button', { name: 'Reset events' }).click();
+  await expect(page.getByText('New', { exact: true })).toHaveCount(0);
+});
+
 test('pipeline tabs all render and the service card shows counts', async ({ page }) => {
   await page.goto('/pipeline');
   await expect(page.getByTestId('service-health')).toContainText('53');

@@ -1,7 +1,6 @@
 'use client';
 
 import { create } from 'zustand';
-import { PORTFOLIO } from '@/data/reference';
 
 /** Transient interface state shared across the shell (not persisted). */
 interface UiState {
@@ -10,9 +9,9 @@ interface UiState {
   /** Source id whose passage is open in the evidence sheet. */
   evidence: string | null;
   openEvidence: (id: string | null) => void;
-  /** Contract selected in the Execution column and on the map. */
-  contract: string;
-  setContract: (id: string) => void;
+  /** Contract selected in the Execution column (null: the highest-risk one). */
+  contract: string | null;
+  setContract: (id: string | null) => void;
 }
 
 export const useUi = create<UiState>()((set) => ({
@@ -20,6 +19,6 @@ export const useUi = create<UiState>()((set) => ({
   setPalette: (palette) => set({ palette }),
   evidence: null,
   openEvidence: (evidence) => set({ evidence }),
-  contract: PORTFOLIO[0].id,
+  contract: null,
   setContract: (contract) => set({ contract }),
 }));

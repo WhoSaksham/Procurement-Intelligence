@@ -1,0 +1,548 @@
+[
+  {
+    "id": "KE",
+    "type": "Country",
+    "label": "Kenya",
+    "layer": "ledger",
+    "attrs": {
+      "CPIA public sector mgmt": "3.6",
+      "WGI regulatory quality": "38th pct",
+      "FCV": "No"
+    },
+    "source_id": "wgi1",
+    "locator": "CPIA cluster D · WGI RQ 2024",
+    "column": 0
+  },
+  {
+    "id": "TR",
+    "type": "Sector",
+    "label": "Transport (TR)",
+    "layer": "context",
+    "attrs": {
+      "Sector code": "TR · rural and inter-urban roads"
+    },
+    "source_id": "proj1",
+    "locator": "Projects API · sector code",
+    "column": 0
+  },
+  {
+    "id": "RRA",
+    "type": "Agency",
+    "label": "Rural Roads Authority",
+    "layer": "context",
+    "attrs": {
+      "Prior operations": "2",
+      "Prior-review contracts": "11"
+    },
+    "source_id": "proj1",
+    "locator": "Projects API · implementing agency field",
+    "column": 0
+  },
+  {
+    "id": "P171204",
+    "type": "Project",
+    "label": "P171204 Rural Access",
+    "layer": "ledger",
+    "attrs": {
+      "Commitment": "US$150M",
+      "Approved": "2019-06",
+      "Closed": "2024-12",
+      "E&S risk": "Substantial"
+    },
+    "source_id": "fin1",
+    "locator": "Projects API · P171204",
+    "column": 1
+  },
+  {
+    "id": "P165530",
+    "type": "Project",
+    "label": "P165530 Feeder Roads",
+    "layer": "ledger",
+    "attrs": {
+      "Commitment": "US$95M",
+      "Approved": "2017-03",
+      "Closed": "2023-06"
+    },
+    "source_id": "icr3",
+    "locator": "Projects API · P165530",
+    "column": 1
+  },
+  {
+    "id": "P180112",
+    "type": "Project",
+    "label": "P180112 Rural Roads II",
+    "layer": "ledger",
+    "attrs": {
+      "Commitment": "US$210M",
+      "Approved": "2023-09",
+      "Status": "Active",
+      "E&S risk": "Substantial"
+    },
+    "source_id": "proj1",
+    "locator": "Projects API · P180112",
+    "column": 1
+  },
+  {
+    "id": "PAD",
+    "type": "PAD",
+    "label": "Appraisal document",
+    "layer": "retrospective",
+    "attrs": {
+      "Procurement risk": "Substantial",
+      "Pages": "118"
+    },
+    "source_id": "pad1",
+    "locator": "Annex 3, Procurement arrangements · p. 61",
+    "column": 1
+  },
+  {
+    "id": "SBD",
+    "type": "Guidance",
+    "label": "Standard Bidding Document, Works",
+    "layer": "procedure",
+    "attrs": {
+      "Edition": "2023-09",
+      "Sections": "I–VIII"
+    },
+    "source_id": "sbd1",
+    "locator": "Request for Bids, Works",
+    "column": 1
+  },
+  {
+    "id": "REG",
+    "type": "Guidance",
+    "label": "Procurement Regulations",
+    "layer": "procedure",
+    "attrs": {
+      "Edition": "2023-09"
+    },
+    "source_id": "notice1",
+    "locator": "Procurement Regulations for IPF Borrowers",
+    "column": 1
+  },
+  {
+    "id": "ESF",
+    "type": "Guidance",
+    "label": "ESHS guidance note",
+    "layer": "retrospective",
+    "attrs": {
+      "Issued": "2022-06"
+    },
+    "source_id": "esf1",
+    "locator": "Section 4 · ESHS in bidding documents",
+    "column": 1
+  },
+  {
+    "id": "CPF",
+    "type": "Strategy",
+    "label": "Kenya CPF FY23–27",
+    "layer": "retrospective",
+    "attrs": {
+      "Issued": "2022-11"
+    },
+    "source_id": "cpf1",
+    "locator": "Annex 5, Fiduciary context · p. 88",
+    "column": 1
+  },
+  {
+    "id": "C1",
+    "type": "Contract",
+    "label": "RW-ICB-03 Lot 2",
+    "layer": "ledger",
+    "attrs": {
+      "Value": "US$14.2M → 16.9M",
+      "Method": "RFB, open international",
+      "Review": "Prior"
+    },
+    "source_id": "ca2",
+    "locator": "Award row 4,118 · amended 2022-01-09",
+    "column": 2
+  },
+  {
+    "id": "C2",
+    "type": "Contract",
+    "label": "RW-ICB-03 Lot 1",
+    "layer": "ledger",
+    "attrs": {
+      "Value": "US$11.8M",
+      "Method": "RFB, open international",
+      "Review": "Prior"
+    },
+    "source_id": "ca2",
+    "locator": "Award row 4,117",
+    "column": 2
+  },
+  {
+    "id": "C3",
+    "type": "Contract",
+    "label": "FR-NCB-02 Lot 1",
+    "layer": "ledger",
+    "attrs": {
+      "Value": "US$4.6M",
+      "Method": "RFB, open national",
+      "Review": "Post"
+    },
+    "source_id": "ca3",
+    "locator": "Award row 3,402",
+    "column": 2
+  },
+  {
+    "id": "C4",
+    "type": "Contract",
+    "label": "FR-ICB-01",
+    "layer": "ledger",
+    "attrs": {
+      "Value": "US$9.3M",
+      "Method": "RFB, open international",
+      "Review": "Prior"
+    },
+    "source_id": "ca3",
+    "locator": "Award row 3,388",
+    "column": 2
+  },
+  {
+    "id": "C5",
+    "type": "Contract",
+    "label": "RA-CS-04 Supervision",
+    "layer": "ledger",
+    "attrs": {
+      "Value": "US$1.9M",
+      "Method": "QCBS",
+      "Review": "Prior"
+    },
+    "source_id": "ca4",
+    "locator": "Award row 4,201",
+    "column": 2
+  },
+  {
+    "id": "RRA-W-07",
+    "type": "Contract",
+    "label": "RRA-W-07 Kitui–Mwingi",
+    "layer": "ledger",
+    "attrs": {
+      "Value": "US$12.6M",
+      "Signed": "2024-02-12",
+      "Progress": "37% vs 58% planned"
+    },
+    "source_id": "ca2",
+    "locator": "Award row 5,012",
+    "column": 2
+  },
+  {
+    "id": "RRA-W-08",
+    "type": "Contract",
+    "label": "RRA-W-08 Wote–Kathonzweni",
+    "layer": "ledger",
+    "attrs": {
+      "Value": "US$6.9M",
+      "Signed": "2024-05-03",
+      "Progress": "44% vs 49% planned"
+    },
+    "source_id": "ca2",
+    "locator": "Award row 5,019",
+    "column": 2
+  },
+  {
+    "id": "RRA-C-02",
+    "type": "Contract",
+    "label": "RRA-C-02 Supervision",
+    "layer": "ledger",
+    "attrs": {
+      "Value": "US$2.4M",
+      "Signed": "2023-11-20",
+      "Progress": "55% vs 62% planned",
+      "Method": "QCBS"
+    },
+    "source_id": "ca4",
+    "locator": "Award row 4,977",
+    "column": 2
+  },
+  {
+    "id": "RRA-G-04",
+    "type": "Contract",
+    "label": "RRA-G-04 Survey equipment",
+    "layer": "ledger",
+    "attrs": {
+      "Value": "US$0.9M",
+      "Signed": "2024-08-15",
+      "Progress": "100% vs 100% planned",
+      "Method": "RFB, open international"
+    },
+    "source_id": "ca1",
+    "locator": "Award row 5,044",
+    "column": 2
+  },
+  {
+    "id": "BER",
+    "type": "Bid evaluation",
+    "label": "Evaluation report, Lot 2",
+    "layer": "procedure",
+    "attrs": {
+      "Bids": "9 received, 2 responsive",
+      "Outcome": "Re-tendered"
+    },
+    "source_id": "ber1",
+    "locator": "Section 5, Post-qualification · p. 14",
+    "column": 2
+  },
+  {
+    "id": "ISR7",
+    "type": "ISR",
+    "label": "ISR 7 (2023-06)",
+    "layer": "procedure",
+    "attrs": {
+      "Implementation progress": "Satisfactory"
+    },
+    "source_id": "isr1",
+    "locator": "Key ratings · implementation progress",
+    "column": 2
+  },
+  {
+    "id": "ISR9",
+    "type": "ISR",
+    "label": "ISR 9 (2024-05)",
+    "layer": "procedure",
+    "attrs": {
+      "Implementation progress": "Moderately Unsatisfactory"
+    },
+    "source_id": "isr2",
+    "locator": "Key issues · procurement",
+    "column": 2
+  },
+  {
+    "id": "ICR",
+    "type": "ICR",
+    "label": "Completion report",
+    "layer": "retrospective",
+    "attrs": {
+      "Implementation rating": "Moderately Unsatisfactory",
+      "Pages": "112",
+      "Chunks": "241"
+    },
+    "source_id": "icr2",
+    "locator": "ICR, Rural Access and Connectivity Project",
+    "column": 2
+  },
+  {
+    "id": "ICR2",
+    "type": "ICR",
+    "label": "Completion report, P165530",
+    "layer": "retrospective",
+    "attrs": {
+      "Pages": "96",
+      "Chunks": "198"
+    },
+    "source_id": "icr3",
+    "locator": "ICR, Feeder Roads and Market Access Project",
+    "column": 2
+  },
+  {
+    "id": "IEG",
+    "type": "IEG review",
+    "label": "IEG assessment",
+    "layer": "retrospective",
+    "attrs": {
+      "Rating": "Validates MU"
+    },
+    "source_id": "ieg2",
+    "locator": "Ratings summary · p. 3",
+    "column": 2
+  },
+  {
+    "id": "IEG-T",
+    "type": "IEG review",
+    "label": "IEG rural transport review",
+    "layer": "retrospective",
+    "attrs": {
+      "Scope": "Thematic, 41 projects"
+    },
+    "source_id": "ieg1",
+    "locator": "Chapter 3 · p. 22",
+    "column": 2
+  },
+  {
+    "id": "S2W07",
+    "type": "Satellite analysis",
+    "label": "Sentinel-2 change, Kitui–Mwingi",
+    "layer": "ledger",
+    "attrs": {
+      "Window": "2019 vs 2024",
+      "Flag": "km 44–57 no change"
+    },
+    "source_id": "s2w07",
+    "locator": "10 m pixels within 30 m of the alignment",
+    "column": 2
+  },
+  {
+    "id": "S2W08",
+    "type": "Satellite analysis",
+    "label": "Sentinel-2 change, Wote road",
+    "layer": "ledger",
+    "attrs": {
+      "Window": "2019 vs 2024",
+      "Flag": "Matches reports"
+    },
+    "source_id": "s2w08",
+    "locator": "10 m pixels within 30 m of the alignment",
+    "column": 2
+  },
+  {
+    "id": "L1",
+    "type": "Lesson",
+    "label": "Lesson: size criteria per lot",
+    "layer": "retrospective",
+    "attrs": {
+      "Location": "Section V, para 88, p. 41",
+      "Topics": "qualification criteria, lotting"
+    },
+    "source_id": "icr1",
+    "locator": "Section V, Lessons learned · para 88 · p. 41",
+    "column": 3
+  },
+  {
+    "id": "L2",
+    "type": "Lesson",
+    "label": "Finding: payment delays",
+    "layer": "retrospective",
+    "attrs": {
+      "Location": "Section III, para 52, p. 27",
+      "Topics": "contract management, counterpart funds"
+    },
+    "source_id": "icr2",
+    "locator": "Section III · para 52 · p. 27",
+    "column": 3
+  },
+  {
+    "id": "L3",
+    "type": "Lesson",
+    "label": "Lesson: drainage surveys",
+    "layer": "retrospective",
+    "attrs": {
+      "Location": "Section V, para 74, p. 38",
+      "Topics": "design, variations"
+    },
+    "source_id": "icr3",
+    "locator": "Section V, Lessons learned · para 74 · p. 38",
+    "column": 3
+  },
+  {
+    "id": "PS-sbd1",
+    "type": "Passage",
+    "label": "Turnover: 1.5–2.5× cash flow",
+    "layer": "procedure",
+    "attrs": {
+      "Section": "III, note 2"
+    },
+    "source_id": "sbd1",
+    "locator": "Section III, Evaluation and Qualification Criteria · notes 2.3–2.4",
+    "column": 3
+  },
+  {
+    "id": "PS-sbd2",
+    "type": "Passage",
+    "label": "Experience: 2 contracts at 80%",
+    "layer": "procedure",
+    "attrs": {
+      "Section": "III, 4.2(a)"
+    },
+    "source_id": "sbd2",
+    "locator": "Section III · criterion 4.2(a)",
+    "column": 3
+  },
+  {
+    "id": "PS-sbd3",
+    "type": "Passage",
+    "label": "Brands only with 'or equivalent'",
+    "layer": "procedure",
+    "attrs": {
+      "Section": "VII"
+    },
+    "source_id": "sbd3",
+    "locator": "Section VII · general specifications note",
+    "column": 3
+  },
+  {
+    "id": "PS-notice1",
+    "type": "Passage",
+    "label": "30 business days to bid (OIC)",
+    "layer": "procedure",
+    "attrs": {
+      "Paragraph": "6.36"
+    },
+    "source_id": "notice1",
+    "locator": "Procurement Regulations · open international competition",
+    "column": 3
+  },
+  {
+    "id": "PS-ber1",
+    "type": "Passage",
+    "label": "7 of 9 bids failed turnover",
+    "layer": "procedure",
+    "attrs": {
+      "Page": "14"
+    },
+    "source_id": "ber1",
+    "locator": "Section 5, Post-qualification · p. 14",
+    "column": 3
+  },
+  {
+    "id": "PS-isr2",
+    "type": "Passage",
+    "label": "Certificates paid in 61–80 days",
+    "layer": "procedure",
+    "attrs": {
+      "Section": "Key issues"
+    },
+    "source_id": "isr2",
+    "locator": "Key issues · procurement",
+    "column": 3
+  },
+  {
+    "id": "PS-pad1",
+    "type": "Passage",
+    "label": "Agency capacity: Substantial risk",
+    "layer": "retrospective",
+    "attrs": {
+      "Page": "61"
+    },
+    "source_id": "pad1",
+    "locator": "Annex 3, Procurement arrangements · p. 61",
+    "column": 3
+  },
+  {
+    "id": "PS-ieg1",
+    "type": "Passage",
+    "label": "New agencies 2× re-tender rate",
+    "layer": "retrospective",
+    "attrs": {
+      "Page": "22"
+    },
+    "source_id": "ieg1",
+    "locator": "Chapter 3, Procurement and contract management · p. 22",
+    "column": 3
+  },
+  {
+    "id": "PS-esf1",
+    "type": "Passage",
+    "label": "ESHS performance security",
+    "layer": "retrospective",
+    "attrs": {
+      "Section": "4"
+    },
+    "source_id": "esf1",
+    "locator": "Section 4 · ESHS in bidding documents",
+    "column": 3
+  },
+  {
+    "id": "PS-cpf1",
+    "type": "Passage",
+    "label": "National e-GP accepted for NCB",
+    "layer": "retrospective",
+    "attrs": {
+      "Page": "88"
+    },
+    "source_id": "cpf1",
+    "locator": "Annex 5, Fiduciary context · p. 88",
+    "column": 3
+  }
+]
