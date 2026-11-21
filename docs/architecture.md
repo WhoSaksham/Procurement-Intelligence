@@ -52,9 +52,26 @@ All `/v1` routes require `X-API-Key`; `/health` (liveness) and `/ready` (MongoDB
 | GET | `/v1/packages/{id}/export`, `/portfolio` | Scenario file download; portfolio plus your contracts by warning |
 | POST | `/v1/packages/import` | New package from a scenario file (old exports and browser saves load) |
 | GET | `/v1/contracts/{id}/road`, `/v1/content/{view}` | Road alignment for the map; illustrative content for package, pipeline, learn |
-| GET / POST | `/v1/ask/questions`, `/v1/ask` | Suggested questions; refuse, match or decline a question, with each claim marked kept or removed |
+| GET | `/v1/ask/questions` | Suggested questions and the support threshold |
+| POST | `/v1/ask` | Ask a question (optionally continuing `threadId`, with the open `packageId`): a refusal, or the answered turn with each claim kept or removed |
+| GET | `/v1/ask/threads/{id}` | A conversation, every turn as it was answered |
 | GET / POST | `/v1/learn/events`, `/next`, `/reset` | Shared feedback-event feed |
 | GET / POST | `/v1/graph/*` | Graph service, with snapshot fallback |
+
+## Ask the evidence
+
+`services/api/src/modules/ask`. A LangGraph state graph per question, with the model behind a small port (`model-port.ts`): Gemini through LangChain's structured output (`gemini.ts`) in production, scripted fakes in tests, and a deterministic stand-in (`fake-model.ts`) that end-to-end tests select with `x-ask-model: fake` (honoured only when the API runs with `E2E=1`).
+
+1. **Guard.** Instruction-like text is refused before anything is searched (nothing is stored). Then the limits: 5 questions a minute and 100 a day across all users (`ASK_RPM`, `ASK_DAILY_LIMIT`; global because every request arrives through the web proxy), and a 60 s pause after Gemini reports its quota is used up.
+2. **Rewrite follow-up** (model; follow-ups only). The question is rewritten to stand alone from the last four turns (each turn's question and kept claims only), and checked for scope.
+3. **Find passages** (no model). BM25 over the 25 evidence passages with procurement synonyms; the top 8, plus the open package rendered as a citable passage with id `pkg`.
+4. **Draft** (model). At most six claims, each citing passage ids. Passages, the package and the question go in tagged, escaped blocks declared as data; the system prompt is fixed in code. On a first question this call also decides scope.
+5. **Check** (no model). Citations to passages the model was not given are dropped; every number in a claim must appear in a passage it cites.
+6. **Score support** (model). Each remaining claim is scored against only the passages it cites; claims below 0.75 are removed, shown struck out with the reason, and logged (`askRemoved`).
+
+Any model failure (quota, timeout, invalid output, upstream error), or a run over 20 s, routes to the **prepared** node: the best prepared answer, matched on the rewritten question (or the previous question plus this one), with a notice. Each model call has its own 8 s limit; the web proxy waits 30 s for `/v1/ask`, so the fallback always arrives first.
+
+Every turn is saved to `askThreads` with its steps, claims, mode and, when a package was used, the package passage exactly as it was cited. Conversations hold 20 turns and expire 30 days after the last question. When `LANGSMITH_TRACING` and `LANGSMITH_API_KEY` are set, each run is traced in LangSmith (to the agent named by `LANGSMITH_AGENT_ID` and `LANGSMITH_AGENT_ENVIRONMENT`, else to `LANGSMITH_PROJECT`) with its thread, package and request id, and the run id is logged.
 
 ## Seeding and one source of truth
 
@@ -111,7 +128,7 @@ The design system (tokens, light and dark themes, usage rules) is documented in 
 
 | Layer | Tool | What it proves |
 |---|---|---|
-| API | Vitest + supertest on mongodb-memory-server (`services/api/test`) | The moved model reproduces the original outputs exactly; every endpoint's contract; validation and import sanitising; version conflicts, including concurrent writers; the example is read-only; seeding is idempotent and never touches user packages; graph derivation and dangling references; graph proxy fallback; the OpenAPI document and graph fixture are current |
+| API | Vitest + supertest on mongodb-memory-server (`services/api/test`) | Ask: retrieval, claim checks, prompts, the graph's routing and fallbacks, limits, threads and package snapshots (no real model); the moved model reproduces the original outputs exactly; every endpoint's contract; validation and import sanitising; version conflicts, including concurrent writers; the example is read-only; seeding is idempotent and never touches user packages; graph derivation and dangling references; graph proxy fallback; the OpenAPI document and graph fixture are current |
 | Graph service | pytest (`services/graph/tests`) | Graph build, expected supplier merges, joint ventures kept separate, provenance on every node and link, API contract, key enforcement, input validation, the Mongo seed loader |
 | Web units | Vitest (`apps/web/lib/**/*.test.ts`) | The API pass-through route, the save queue (coalescing, one request in flight, edits bound to their package, one copy of the example per burst, conflict re-apply), legacy browser-save import, graph layout, geometry |
 | Hydration | Playwright against `next dev` | Every route loads without React hydration-mismatch reports |
@@ -128,4 +145,5 @@ The design system (tokens, light and dark themes, usage rules) is documented in 
 
 - Start order matters only on first deploy: the API seeds MongoDB, then the graph service reads it. On scale-to-zero hosts the first request after idling takes a few seconds; the snapshot covers the graph service, and the app's "Backend unreachable" state covers the API.
 - Set long random `API_KEY` (web ↔ API) and `GRAPH_API_KEY` (API ↔ graph) values; point `API_URL` and `GRAPH_SERVICE_URL` at the services and `MONGO_URL` at the database.
+- For a live Ask, add `GEMINI_API_KEY` (and optionally `LANGSMITH_TRACING=true`, `LANGSMITH_API_KEY`) to the API. Nothing changes on the web app or the graph service. Run `npm run eval:ask` against the deployed database first to see answer quality.
 - Sentinel-2 cloudless 2018+ mosaics are CC BY-NC-SA (non-commercial). A commercial deployment needs an EOX licence or self-processed Copernicus data.

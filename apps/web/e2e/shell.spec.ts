@@ -26,7 +26,9 @@ test('palette falls through to asking the evidence', async ({ page }) => {
   await page.locator('body').press(`${mod}+k`);
   await page.keyboard.type('why re-tender');
   await page.getByRole('option', { name: /Ask the evidence: “why re-tender”/ }).click();
-  await expect(page).toHaveURL(/\/ask\?q=why(\+|%20)re-tender$/);
+  // The question goes in the URL; once answered, the URL names the conversation instead.
+  await expect(page).toHaveURL(/\/ask\?(q=why(\+|%20)re-tender|t=[a-z0-9]{10})$/);
+  await expect(page.getByTestId('asked')).toHaveText('why re-tender');
 });
 
 test('a custom country changes the forecast', async ({ page }, info) => {

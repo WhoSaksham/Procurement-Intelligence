@@ -29,8 +29,10 @@ test.describe('ask the evidence', () => {
 
   test('a question in the URL runs without a click', async ({ page }) => {
     await page.goto('/ask?q=why%20re-tender');
-    await expect(page.getByLabel('Your question')).toHaveValue('why re-tender');
+    await expect(page.getByTestId('asked')).toHaveText('why re-tender');
     await expect(page.getByTestId('answer')).toContainText('27.6%', { timeout: 15_000 });
+    // Once answered, the address points at the conversation so it survives a reload.
+    await expect(page).toHaveURL(/\/ask\?t=[a-z0-9]{10}$/);
   });
 });
 

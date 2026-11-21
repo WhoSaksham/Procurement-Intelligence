@@ -15,6 +15,7 @@ export const qk = {
   content: (view: string) => ['content', view] as const,
   learn: ['learn'] as const,
   questions: ['questions'] as const,
+  askThread: (id: string) => ['ask-thread', id] as const,
   road: (id: string) => ['road', id] as const,
 };
 

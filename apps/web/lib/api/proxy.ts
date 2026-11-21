@@ -32,7 +32,13 @@ function crossSiteWrite(request: Request): boolean {
     return true;
   }
 }
-const FORWARD_REQUEST = ['content-type', 'accept', 'x-request-id', 'x-graph-simulate-down'];
+const FORWARD_REQUEST = ['content-type', 'accept', 'x-request-id', 'x-graph-simulate-down', 'x-ask-model'];
+
+/**
+ * Ask runs up to three model calls with a 20 s budget and answers from prepared answers when
+ * that runs out, so the proxy must wait longer than the API's budget. Undefined = the default.
+ */
+export const timeoutFor = (segments: string[]): number | undefined => (segments[0] === 'v1' && segments[1] === 'ask' ? 30_000 : undefined);
 const FORWARD_RESPONSE = ['content-type', 'content-disposition', 'cache-control', 'x-graph-source', 'x-request-id'];
 
 const problem = (status: number, slug: string, title: string, detail: string) =>

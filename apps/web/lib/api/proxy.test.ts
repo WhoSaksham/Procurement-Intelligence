@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { proxyApi, type ApiProxyOptions } from '@/lib/api/proxy';
+import { proxyApi, timeoutFor, type ApiProxyOptions } from '@/lib/api/proxy';
 
 const opts = (fetchImpl: ApiProxyOptions['fetchImpl'], extra: Partial<ApiProxyOptions> = {}): ApiProxyOptions => ({
   apiUrl: 'http://api:4000',
@@ -103,3 +103,19 @@ describe('proxyApi', () => {
   });
 });
 
+
+describe('proxy timeouts and Ask', () => {
+  it('Ask gets a longer timeout than other routes', () => {
+    expect(timeoutFor(['v1', 'ask'])).toBe(30_000);
+    expect(timeoutFor(['v1', 'ask', 'threads', 'x'])).toBe(30_000);
+    expect(timeoutFor(['v1', 'ask', 'questions'])).toBe(30_000);
+    expect(timeoutFor(['v1', 'packages'])).toBeUndefined();
+  });
+
+  it('forwards x-ask-model so e2e tests can pick the stand-in model', async () => {
+    const fetchImpl = vi.fn(async () => ok({}));
+    await proxyApi(new Request('http://web/api/v1/ask', { method: 'POST', body: '{}', headers: { 'x-ask-model': 'fake' } }), ['v1', 'ask'], opts(fetchImpl));
+    const [, init] = fetchImpl.mock.calls[0] as unknown as [string, RequestInit];
+    expect(new Headers(init.headers).get('x-ask-model')).toBe('fake');
+  });
+});

@@ -1,5 +1,6 @@
 import type {
   AskResponse,
+  AskThread,
   Content,
   Country,
   ContractDraft,
@@ -56,7 +57,8 @@ export const getRoad = (contractId: string) => api<Road>(`v1/contracts/${enc(con
 export const getContent = <T = Content>(view: 'package' | 'pipeline' | 'learn') => api<T>(`v1/content/${view}`);
 
 export const getQuestions = () => api<{ questions: string[]; supportMin: number }>('v1/ask/questions');
-export const ask = (q: string) => api<AskResponse>('v1/ask', send('POST', { q }));
+export const ask = (q: string, o: { threadId?: string; packageId?: string } = {}) => api<AskResponse>('v1/ask', send('POST', { q, ...o }));
+export const getThread = (id: string) => api<AskThread>(`v1/ask/threads/${enc(id)}`);
 
 export const getLearnEvents = () => api<LearnState>('v1/learn/events');
 export const nextLearnEvent = () => api<LearnState>('v1/learn/events/next', send('POST'));

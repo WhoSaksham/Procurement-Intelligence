@@ -1,24 +1,19 @@
 'use client';
 
-import { ChevronDownIcon } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
-import { useState, type FormEvent } from 'react';
-import { AgentTrace } from '@/components/AgentTrace';
-import { Cite } from '@/components/evidence/Cite';
+import { useQueries, useQuery } from '@tanstack/react-query';
+import { useEffect, useState, type FormEvent } from 'react';
 import { PageHead } from '@/components/page-head';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
-import { Skeleton } from '@/components/ui/skeleton';
 import * as client from '@/lib/api/client';
-import { useQuestions } from '@/lib/api/queries';
-import { cssPct } from '@/lib/format';
-import { cn } from '@/lib/utils';
+import { usePackage } from '@/lib/api/package';
+import { qk, useQuestions } from '@/lib/api/queries';
+import type { AskThread } from '@/lib/api/types';
+import { AskTurn, type TurnState } from './AskTurn';
 
-/** A question and when it was asked (asking the same question again replays the trace). */
-type Asked = { q: string; at: number };
+/** A question asked in this page session, with what was sent alongside it. */
+type Entry = { key: number; q: string; threadId: string | null; packageId: string | null };
 
 function Suggestions({ onAsk }: { onAsk: (q: string) => void }) {
   const questions = useQuestions().data?.questions ?? [];
@@ -33,151 +28,175 @@ function Suggestions({ onAsk }: { onAsk: (q: string) => void }) {
   );
 }
 
-const evaluate = (q: string, at: number): Asked => ({ q, at });
+const message = (e: unknown) => (e instanceof Error ? e.message : 'Try again.');
 
-/** Answers only from indexed passages; every sentence is checked against its source. */
+/**
+ * A conversation with the evidence. Each answer is drafted only from retrieved passages
+ * (and the open package), and every sentence is checked against what it cites.
+ * `?t=` restores a conversation; `?q=` (command menu, shared links) starts one.
+ */
 export function AskView() {
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
-  const fromUrl = params.get('q') ?? '';
-  // A question in the URL (from the command menu or a shared link) runs immediately.
-  const [input, setInput] = useState(fromUrl);
-  const [asked, setAsked] = useState<Asked | null>(() => (fromUrl.trim() ? evaluate(fromUrl, 0) : null));
-  const [running, setRunning] = useState(() => !!asked);
-  const [seen, setSeen] = useState(fromUrl);
-  // A new question arriving in the URL while this view is open (command menu).
-  if (fromUrl !== seen) {
-    setSeen(fromUrl);
-    if (fromUrl.trim() && fromUrl !== asked?.q) {
-      const next = evaluate(fromUrl, (asked?.at ?? 0) + 1);
-      setInput(fromUrl);
-      setAsked(next);
-      setRunning(true);
-    }
-  }
+  const urlQ = params.get('q') ?? '';
+  const urlT = params.get('t');
+  const { id: packageId, pkg } = usePackage();
 
-  const ask = (q: string) => {
-    if (!q.trim()) return;
-    setInput(q);
-    const next = evaluate(q, (asked?.at ?? 0) + 1);
-    setAsked(next);
-    setRunning(true);
-    router.replace(`${pathname}?q=${encodeURIComponent(q)}`, { scroll: false });
+  const [input, setInput] = useState(urlQ);
+  const [base, setBase] = useState<AskThread | null>(null);
+  const [entries, setEntries] = useState<Entry[]>([]);
+  const [nextKey, setNextKey] = useState(1);
+  const [animated, setAnimated] = useState<number[]>([]);
+  const [withPackage, setWithPackage] = useState(true);
+  const [seenQ, setSeenQ] = useState<string | null>(null);
+  // A conversation the analyst left with "New conversation": never restore it from a lagging URL.
+  const [dismissed, setDismissed] = useState<string | null>(null);
+
+  // POST /v1/ask once per entry; cached by entry key so re-renders never ask again.
+  const results = useQueries({
+    queries: entries.map((e) => ({
+      queryKey: ['ask', e.key],
+      queryFn: () => client.ask(e.q, { ...(e.threadId ? { threadId: e.threadId } : {}), ...(e.packageId ? { packageId: e.packageId } : {}) }),
+      staleTime: Infinity,
+      gcTime: Infinity,
+      retry: false,
+    })),
+  });
+
+  // The conversation continues on the thread of the latest answer (or the restored one).
+  let threadId: string | null = base?.id ?? null;
+  for (const r of results) if (r.data?.threadId) threadId = r.data.threadId;
+
+  // Restore a conversation from the URL (reload, shared link, back button).
+  const wantRestore = urlT && urlT !== threadId && urlT !== dismissed && !entries.length ? urlT : null;
+  const restore = useQuery({ queryKey: qk.askThread(wantRestore ?? ''), queryFn: () => client.getThread(wantRestore!), enabled: !!wantRestore, retry: false });
+  if (wantRestore && restore.data?.id === wantRestore && base?.id !== wantRestore) setBase(restore.data);
+
+  const start = (q: string, fresh: boolean) => {
+    const entry: Entry = { key: nextKey, q, threadId: fresh ? null : threadId, packageId: withPackage ? packageId : null };
+    setNextKey(nextKey + 1);
+    if (fresh) setBase(null);
+    setEntries(fresh ? [entry] : [...entries, entry]);
+    setInput('');
   };
 
-  // The API refuses instruction-like questions, matches a prepared answer and marks each claim kept or removed.
-  const result = useQuery({ queryKey: ['ask', asked?.q], queryFn: () => client.ask(asked!.q), enabled: !!asked, staleTime: Infinity, retry: false });
-  const r = result.data;
-  const blocked = r?.blocked === true;
-  const answered = r && r.blocked === false ? r : null;
-  const a = answered?.answer ?? null;
-  const supportMin = answered?.supportMin ?? 0.75;
-  const kept = a?.claims.filter((c) => c.kept) ?? [];
-  const dropped = a?.claims.filter((c) => !c.kept) ?? [];
+  // A question arriving in the URL (command menu) starts a new conversation once the open package is known.
+  if (urlQ !== seenQ && packageId !== null) {
+    setSeenQ(urlQ);
+    if (urlQ.trim()) start(urlQ, true);
+  }
+
+  // Keep the address pointing at the conversation, so reload and sharing work.
+  useEffect(() => {
+    if (threadId && params.get('t') !== threadId) router.replace(`${pathname}?t=${threadId}`, { scroll: false });
+  }, [threadId, params, pathname, router]);
+
+  // Busy while an answer is coming or animating, and while a conversation is loading (a question
+  // asked then would start a new thread and drop the one on its way).
+  const restoring = !!wantRestore && restore.isPending;
+  const busy = restoring || results.some((r, i) => r.isPending || (r.data?.blocked === false && !animated.includes(entries[i].key)));
+  const hasTurns = !!base?.turns.length || entries.length > 0;
+  const supportMin = useQuestions().data?.supportMin ?? 0.75;
+
+  const ask = (q: string) => {
+    if (!q.trim() || busy) return;
+    start(q.trim(), false);
+  };
+
+  const reset = () => {
+    setDismissed(threadId ?? urlT);
+    setBase(null);
+    setEntries([]);
+    setWithPackage(true);
+    setInput('');
+    router.replace(pathname, { scroll: false });
+  };
+
+  const noAnswer = (
+    <>
+      <p className="text-sm text-muted-ink">Name a project, method or risk, or try one of these:</p>
+      <Suggestions onAsk={ask} />
+    </>
+  );
 
   return (
     <>
-      <PageHead title="Ask the evidence" lede="Answers come only from indexed records and documents, and every sentence is checked against its source." />
+      <PageHead
+        title="Ask the evidence"
+        lede="Answers come only from indexed records and documents (and your package), and every sentence is checked against its source. Ask follow-ups to keep going."
+      />
+
+      {hasTurns && (
+        <div className="mb-6 grid max-w-4xl gap-6">
+          {base?.turns.map((t, i) => (
+            <AskTurn key={`base-${i}`} q={t.q} state={{ status: 'answered', turn: t, supportMin, animate: false }} onAnimated={() => {}} noAnswer={noAnswer} />
+          ))}
+          {entries.map((e, i) => {
+            const r = results[i];
+            const state: TurnState = r.isError
+              ? { status: 'error', message: message(r.error) }
+              : !r.data
+                ? { status: 'pending' }
+                : r.data.blocked
+                  ? { status: 'blocked' }
+                  : { status: 'answered', turn: r.data.turn, supportMin: r.data.supportMin, animate: !animated.includes(e.key) };
+            return <AskTurn key={e.key} q={e.q} state={state} onAnimated={() => setAnimated((a) => [...a, e.key])} noAnswer={noAnswer} />;
+          })}
+        </div>
+      )}
+      {wantRestore && restore.isError && (
+        <p className="mb-4 text-ink-2" role="alert">
+          <strong className="text-ink">That conversation is no longer available.</strong> Conversations are kept for 30 days after the last question.
+        </p>
+      )}
+
       <form
-        className="mb-4 grid gap-3"
+        className="mb-4 grid max-w-3xl gap-3"
         onSubmit={(e: FormEvent) => {
           e.preventDefault();
           ask(input);
         }}
       >
-        <div className="flex max-w-3xl gap-2">
-          <Input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask about a project, method or risk" aria-label="Your question" className="h-10 bg-surface" />
-          <Button type="submit" className="h-10" disabled={(running && !blocked) || !input.trim()}>
+        <div className="flex gap-2">
+          <Input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={hasTurns ? 'Ask a follow-up' : 'Ask about a project, method or risk'}
+            aria-label="Your question"
+            className="h-10 bg-surface"
+          />
+          <Button type="submit" className="h-10" disabled={busy || !input.trim()}>
             Ask
           </Button>
         </div>
-        {!asked && <Suggestions onAsk={ask} />}
-      </form>
-
-      {asked && (
-        <Card data-testid="answer-panel">
-          <CardContent className="grid gap-4">
-            {result.isError ? (
-              <p className="text-ink-2" role="alert">
-                <strong className="text-ink">Couldn&apos;t ask right now.</strong> {result.error instanceof Error ? result.error.message : 'Try again.'}
-              </p>
-            ) : !r ? (
-              <Skeleton className="h-24 w-full" aria-label="Searching" />
-            ) : blocked ? (
-              <p className="text-ink-2">
-                <strong className="text-ink">Not answered.</strong> The question contains instructions to the assistant, so nothing was searched or generated. Ask about a project,
-                method or risk instead.
-              </p>
-            ) : running ? (
-              <AgentTrace key={asked.q + asked.at} steps={answered?.steps ?? []} running stepMs={200} onDone={() => setRunning(false)} />
-            ) : a ? (
+        {pkg && (
+          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-ink-2" data-testid="ask-package">
+            {withPackage ? (
               <>
-                <div className="grid max-w-[75ch] gap-3 font-serif text-[16px] leading-relaxed text-ink" data-testid="answer">
-                  {kept.map((c) => (
-                    <p key={c.text}>
-                      {c.text}
-                      <Cite ids={c.cite} />
-                    </p>
-                  ))}
-                </div>
-                <Collapsible>
-                  <CollapsibleTrigger className="group flex items-center gap-1 text-sm font-medium text-procedure hover:underline">
-                    {kept.length} of {a.claims.length} sentences verified{dropped.length ? `, ${dropped.length} removed` : ''}
-                    <ChevronDownIcon className="size-4 transition-transform group-data-[state=open]:rotate-180" />
-                  </CollapsibleTrigger>
-                  <CollapsibleContent className="mt-3">
-                    <ul className="grid gap-2" data-testid="grounding">
-                      {a.claims.map((c) => {
-                        const ok = c.kept;
-                        return (
-                          <li key={c.text} className="grid grid-cols-[5.5rem_4.5rem_minmax(0,1fr)] items-start gap-3 text-sm max-md:grid-cols-[5.5rem_minmax(0,1fr)]">
-                            <span className="flex items-center gap-1.5 text-xs text-muted-ink">
-                              <span className="h-1.5 w-10 rounded-full bg-sunk">
-                                <span className={cn('block h-full rounded-full', ok ? 'bg-good' : 'bg-worse')} style={{ width: cssPct(c.support * 100) }} />
-                              </span>
-                              {c.support.toFixed(2)}
-                            </span>
-                            <span className={cn('font-semibold', ok ? 'text-good' : 'text-worse')}>{ok ? 'Kept' : 'Removed'}</span>
-                            <span className={cn('text-ink-2 max-md:col-span-2', !ok && 'line-through decoration-worse/60')}>
-                              {c.text}
-                              {ok ? <Cite ids={c.cite} /> : <span className="text-muted-ink no-underline"> No passage supports this.</span>}
-                            </span>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                    <p className="fine">
-                      Support is the probability that the cited passage states the claim; threshold {supportMin}. Numbers must also match the passage exactly. Removed sentences
-                      are logged for review.
-                    </p>
-                  </CollapsibleContent>
-                </Collapsible>
+                <span>
+                  Using: <strong className="font-medium text-ink">{pkg.name}</strong>
+                </span>
+                <button type="button" className="font-medium text-procedure hover:underline" onClick={() => setWithPackage(false)}>
+                  Don&apos;t use it
+                </button>
               </>
             ) : (
-              <div className="grid gap-3">
-                <p className="text-ink-2">
-                  <strong className="text-ink">No grounded answer.</strong> Nothing in the index supports an answer above the relevance threshold, so none is given.
-                </p>
-                <p className="text-sm text-muted-ink">Name a project, method or risk, or try one of these:</p>
-                <Suggestions onAsk={ask} />
-              </div>
+              <>
+                <span>Not using your package.</span>
+                <button type="button" className="font-medium text-procedure hover:underline" onClick={() => setWithPackage(true)}>
+                  Use it
+                </button>
+              </>
             )}
-            {(!running || blocked || result.isError) && (
-              <button
-                type="button"
-                className="w-fit text-sm font-medium text-procedure hover:underline"
-                onClick={() => {
-                  setAsked(null);
-                  setInput('');
-                  router.replace(pathname, { scroll: false });
-                }}
-              >
-                Ask something else
-              </button>
-            )}
-          </CardContent>
-        </Card>
+          </p>
+        )}
+        {!hasTurns && <Suggestions onAsk={ask} />}
+      </form>
+      {hasTurns && !busy && (
+        <button type="button" className="w-fit text-sm font-medium text-procedure hover:underline" onClick={reset}>
+          New conversation
+        </button>
       )}
     </>
   );

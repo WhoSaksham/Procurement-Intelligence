@@ -18,6 +18,11 @@ services:
     build:
       context: .
       dockerfile: services/api/Dockerfile
+    # Optional settings such as GEMINI_API_KEY and LANGSMITH_* come from services/api/.env
+    # (the same file `npm run dev` reads). The values below always win over that file.
+    env_file:
+      - path: services/api/.env
+        required: false
     environment:
       MONGO_URL: mongodb://mongo:27017/procurement
       API_KEY: ${API_KEY:-dev-key}

@@ -8,6 +8,7 @@
     "dev:graph": "uv run --directory services/graph uvicorn app.main:app --reload --port 8000",
     "dev:mongo": "docker compose up -d mongo",
     "seed": "npm --prefix services/api run seed",
+    "eval:ask": "npm --prefix services/api run eval:ask",
     "test": "npm --prefix services/api test && npm --prefix apps/web test && uv run --directory services/graph pytest -q",
     "test:e2e": "npm --prefix apps/web run test:e2e",
     "lint": "npm --prefix services/api run lint && npm --prefix apps/web run lint",
