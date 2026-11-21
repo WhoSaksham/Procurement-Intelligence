@@ -17,7 +17,8 @@ export interface PackageView extends Scenario {
   analysis: Analysis;
 }
 
-const newId = () => {
+/** A random 10-character id (packages and Ask conversations). */
+export const newId = () => {
   const alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
   return Array.from(randomBytes(10), (b) => alphabet[b % 36]).join('');
 };
@@ -81,6 +82,12 @@ export async function listPackages() {
 export async function getPackage(id: string): Promise<PackageView> {
   const [d, { ref }] = await Promise.all([find(id), context()]);
   return toView(d, ref);
+}
+
+/** The package with its analysis, or null when it does not exist (Ask then answers without it). */
+export async function packageForAsk(id: string): Promise<PackageView | null> {
+  const [d, { ref }] = await Promise.all([PackageModel.findById(id).lean<PackageDoc>(), context()]);
+  return d ? toView(d, ref) : null;
 }
 
 async function insert(s: Scenario, ref: Ref, contractSeq = 0): Promise<PackageView> {

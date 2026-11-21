@@ -592,6 +592,9 @@
                 "enum": [
                   true
                 ]
+              },
+              "threadId": {
+                "type": "string"
               }
             },
             "required": [
@@ -607,14 +610,26 @@
                   false
                 ]
               },
-              "answer": {
-                "$ref": "#/components/schemas/AskAnswer"
+              "threadId": {
+                "type": "string"
               },
-              "steps": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Step"
-                }
+              "turn": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/AskTurn"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "index": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "index"
+                    ]
+                  }
+                ]
               },
               "supportMin": {
                 "type": "number"
@@ -622,39 +637,11 @@
             },
             "required": [
               "blocked",
-              "answer",
-              "steps",
+              "threadId",
+              "turn",
               "supportMin"
             ]
           }
-        ]
-      },
-      "AskAnswer": {
-        "type": [
-          "object",
-          "null"
-        ],
-        "properties": {
-          "q": {
-            "type": "string"
-          },
-          "keys": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "claims": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/KeptClaim"
-            }
-          }
-        },
-        "required": [
-          "q",
-          "keys",
-          "claims"
         ]
       },
       "KeptClaim": {
@@ -675,6 +662,14 @@
           "kept": {
             "type": "boolean",
             "description": "support ≥ supportMin; removed claims are shown struck out"
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "no valid citation",
+              "number not in passage",
+              "below threshold"
+            ]
           }
         },
         "required": [
@@ -703,6 +698,75 @@
           "detail"
         ]
       },
+      "AskTurn": {
+        "type": "object",
+        "properties": {
+          "q": {
+            "type": "string"
+          },
+          "standalone": {
+            "type": "string",
+            "description": "The question as searched: rewritten to stand alone when it was a follow-up."
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "llm",
+              "prepared"
+            ],
+            "description": "`prepared` when the live model was not configured or not available."
+          },
+          "model": {
+            "type": "string"
+          },
+          "notice": {
+            "type": "string"
+          },
+          "outOfScope": {
+            "type": "boolean"
+          },
+          "claims": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/KeptClaim"
+            }
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Step"
+            }
+          },
+          "pkg": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "text"
+            ],
+            "description": "The package passage exactly as the claims were checked against it."
+          },
+          "at": {
+            "type": "string",
+            "description": "ISO time"
+          }
+        },
+        "required": [
+          "q",
+          "standalone",
+          "mode",
+          "claims",
+          "steps",
+          "at"
+        ]
+      },
       "AskRequest": {
         "type": "object",
         "properties": {
@@ -710,10 +774,40 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 500
+          },
+          "threadId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40,
+            "description": "Continue this conversation; omit to start a new one."
+          },
+          "packageId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40,
+            "description": "The open package, given to the model as a citable passage (id `pkg`)."
           }
         },
         "required": [
           "q"
+        ]
+      },
+      "AskThread": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "turns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AskTurn"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "turns"
         ]
       },
       "LearnState": {
@@ -2106,7 +2200,7 @@
     },
     "/v1/ask": {
       "post": {
-        "summary": "Answer a question from prepared, grounded answers (instruction-like text is refused)",
+        "summary": "Answer a question from the evidence: retrieve, draft cited claims, verify each one (instruction-like text is refused)",
         "tags": [
           "ask"
         ],
@@ -2121,7 +2215,7 @@
         },
         "responses": {
           "200": {
-            "description": "Answer, refusal, or no match",
+            "description": "Answer turn, or refusal",
             "content": {
               "application/json": {
                 "schema": {
@@ -2151,7 +2245,79 @@
             }
           },
           "404": {
-            "description": "Not found",
+            "description": "Error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ask/threads/{id}": {
+      "get": {
+        "summary": "A conversation, with every turn as it was answered",
+        "tags": [
+          "ask"
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 40
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conversation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AskThread"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid API key",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error",
             "content": {
               "application/problem+json": {
                 "schema": {

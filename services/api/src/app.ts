@@ -7,6 +7,7 @@ import { dbReady as mongoReady } from './db.js';
 import { requireApiKey } from './http/api-key.js';
 import { errorHandler, HttpProblem } from './http/problem.js';
 import { requestId } from './http/request-id.js';
+import type { AskModel } from './modules/ask/model-port.js';
 import { askRouter } from './modules/ask/routes.js';
 import { contentRouter } from './modules/content/routes.js';
 import { contractsRouter } from './modules/contracts/routes.js';
@@ -25,6 +26,8 @@ export interface AppDeps {
   routers?: Router[];
   /** Where logs go (stdout by default; tests capture them). */
   logStream?: DestinationStream;
+  /** The model behind Ask; undefined builds Gemini from config (or none without a key). */
+  askModel?: AskModel | null;
 }
 
 const DOCS_HTML = `<!doctype html><html><head><meta charset="utf-8"><title>Procurement API</title>
@@ -33,13 +36,13 @@ const DOCS_HTML = `<!doctype html><html><head><meta charset="utf-8"><title>Procu
 <script>SwaggerUIBundle({ url: '/openapi.json', dom_id: '#ui' });</script></body></html>`;
 
 /** Every module's /v1 router. Building them also registers their routes in the OpenAPI document. */
-export function moduleRouters(config: Config = loadConfig({}), fetchImpl: typeof fetch = fetch): Router[] {
+export function moduleRouters(config: Config = loadConfig({}), fetchImpl: typeof fetch = fetch, askModel?: AskModel | null): Router[] {
   return [
     referenceRouter(),
     sourcesRouter(),
     contractsRouter(),
     contentRouter(),
-    askRouter(),
+    askRouter(config, askModel),
     learnRouter(),
     packagesRouter(),
     graphRouter(config, fetchImpl),
@@ -69,7 +72,7 @@ export function createApp(deps: AppDeps): express.Express {
   });
 
   // Build the routers before /openapi.json can be requested, so the document is complete.
-  const routers = [...moduleRouters(config, fetchImpl), ...(deps.routers ?? [])];
+  const routers = [...moduleRouters(config, fetchImpl, deps.askModel), ...(deps.routers ?? [])];
 
   app.get('/ready', async (_req, res) => {
     const mongo = dbReady() ? 'up' : 'down';

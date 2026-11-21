@@ -57,6 +57,9 @@ export default defineConfig({
               GRAPH_API_KEY,
               E2E: '1',
               LOG_LEVEL: 'warn',
+              // Never reach a real model from tests, even if the shell has a key.
+              GEMINI_API_KEY: '',
+              LANGSMITH_TRACING: '',
             },
             reuseExistingServer: !process.env.CI,
             timeout: 120_000,

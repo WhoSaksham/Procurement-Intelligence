@@ -456,7 +456,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Answer a question from prepared, grounded answers (instruction-like text is refused) */
+        /** Answer a question from the evidence: retrieve, draft cited claims, verify each one (instruction-like text is refused) */
         post: {
             parameters: {
                 query?: never;
@@ -470,7 +470,7 @@ export interface paths {
                 };
             };
             responses: {
-                /** @description Answer, refusal, or no match */
+                /** @description Answer turn, or refusal */
                 200: {
                     headers: {
                         [name: string]: unknown;
@@ -497,7 +497,7 @@ export interface paths {
                         "application/problem+json": components["schemas"]["Problem"];
                     };
                 };
-                /** @description Not found */
+                /** @description Error */
                 404: {
                     headers: {
                         [name: string]: unknown;
@@ -517,6 +517,80 @@ export interface paths {
                 };
             };
         };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/ask/threads/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** A conversation, with every turn as it was answered */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Conversation */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["AskThread"];
+                    };
+                };
+                /** @description Invalid request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Missing or invalid API key */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Error */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+                /** @description Internal error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/problem+json": components["schemas"]["Problem"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -2586,32 +2660,62 @@ export interface components {
         AskResponse: {
             /** @enum {boolean} */
             blocked: true;
+            threadId?: string;
         } | {
             /** @enum {boolean} */
             blocked: false;
-            answer: components["schemas"]["AskAnswer"];
-            steps: components["schemas"]["Step"][];
+            threadId: string;
+            turn: components["schemas"]["AskTurn"] & {
+                index: number;
+            };
             supportMin: number;
         };
-        AskAnswer: {
-            q: string;
-            keys: string[];
-            claims: components["schemas"]["KeptClaim"][];
-        } | null;
         KeptClaim: {
             text: string;
             cite: string[];
             support: number;
             /** @description support ≥ supportMin; removed claims are shown struck out */
             kept: boolean;
+            /** @enum {string} */
+            reason?: "no valid citation" | "number not in passage" | "below threshold";
         };
         Step: {
             name: string;
             tool: string;
             detail: string;
         };
+        AskTurn: {
+            q: string;
+            /** @description The question as searched: rewritten to stand alone when it was a follow-up. */
+            standalone: string;
+            /**
+             * @description `prepared` when the live model was not configured or not available.
+             * @enum {string}
+             */
+            mode: "llm" | "prepared";
+            model?: string;
+            notice?: string;
+            outOfScope?: boolean;
+            claims: components["schemas"]["KeptClaim"][];
+            steps: components["schemas"]["Step"][];
+            /** @description The package passage exactly as the claims were checked against it. */
+            pkg?: {
+                name: string;
+                text: string;
+            };
+            /** @description ISO time */
+            at: string;
+        };
         AskRequest: {
             q: string;
+            /** @description Continue this conversation; omit to start a new one. */
+            threadId?: string;
+            /** @description The open package, given to the model as a citable passage (id `pkg`). */
+            packageId?: string;
+        };
+        AskThread: {
+            id: string;
+            turns: components["schemas"]["AskTurn"][];
         };
         LearnState: {
             events: components["schemas"]["LearnEvent"][];

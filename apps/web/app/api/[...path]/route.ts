@@ -1,5 +1,8 @@
 import type { NextRequest } from 'next/server';
-import { apiKeyFrom, proxyApi } from '@/lib/api/proxy';
+import { apiKeyFrom, proxyApi, timeoutFor } from '@/lib/api/proxy';
+
+// Ask can take up to ~20 s (live model with fallback); give the function room beyond the proxy's 30 s wait.
+export const maxDuration = 60;
 
 // Server-side only: the browser calls /api/v1/*, never the API directly, so the
 // API URL and key stay on the server.
@@ -12,7 +15,7 @@ const options = () => ({
 
 async function handle(request: NextRequest, ctx: RouteContext<'/api/[...path]'>) {
   const { path } = await ctx.params;
-  return proxyApi(request, path, options());
+  return proxyApi(request, path, { ...options(), timeoutMs: timeoutFor(path) });
 }
 
 export const GET = handle;

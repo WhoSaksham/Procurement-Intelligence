@@ -10,6 +10,201 @@ Three services, one repository:
 
 Docs: [architecture](docs/architecture.md), [design system](docs/design-system.md), [backend design](docs/superpowers/specs/2026-11-18-express-mongodb-backend-design.md).
 
+## How it works
+
+The diagrams below render on GitHub. Each one zooms in on one part. The details behind them are in [architecture](docs/architecture.md).
+
+### The whole system
+
+The browser talks only to the web app. The web app's `/api` route forwards to the API and adds the secret key. The API owns the data and the logic. It calls the graph service, Gemini and LangSmith; the browser never reaches them directly.
+
+```mermaid
+flowchart LR
+    user(["Browser"])
+
+    subgraph web["apps/web · Next.js"]
+        pages["Pages<br/>Package · Site map · Knowledge graph<br/>Ask · Data pipeline · Learn"]
+        proxy["/api/[...path] route<br/>adds X-API-Key"]
+    end
+
+    subgraph api["services/api · Express"]
+        modules["Domain modules<br/>packages · analysis · ask · learn<br/>reference · sources · contracts · content · graph"]
+        seeder["Seeder<br/>runs on startup"]
+    end
+
+    subgraph graphsvc["services/graph · FastAPI + Semantica"]
+        engine["In-memory knowledge graph"]
+    end
+
+    mongo[("MongoDB")]
+    seed[/"data/seed/*.json"/]
+    snapshot[/"Saved graph snapshot"/]
+    gemini["Google Gemini"]
+    langsmith["LangSmith"]
+
+    user --> pages
+    pages -->|"fetch /api/v1/*"| proxy
+    proxy -->|"HTTP + X-API-Key"| modules
+    modules <--> mongo
+    seed --> seeder --> mongo
+    mongo -->|"graph collections,<br/>read once at startup"| engine
+    modules -->|"/v1/graph/* + GRAPH_API_KEY"| engine
+    modules -.->|"graph service down"| snapshot
+    modules -->|"Ask, when GEMINI_API_KEY is set"| gemini
+    modules -.->|"traces, optional"| langsmith
+```
+
+### Editing a package, end to end
+
+Every change to a package follows this path. The analysis (forecast, risk, criteria checks, recommendations) is recomputed by the API on each save and returned with the package.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Analyst
+    participant V as Page
+    participant Q as Save queue
+    participant P as Next /api route
+    participant A as API
+    participant M as MongoDB
+
+    U->>V: Edit a field, for example planned days
+    V->>Q: Show the edit at once
+    Q->>P: PATCH /api/v1/packages/{id}, debounced 150 ms
+    P->>A: PATCH /v1/packages/{id} with X-API-Key
+    A->>A: Validate the body with zod
+    A->>M: Update only if the version is still current
+    alt Version still current
+        M-->>A: Updated package
+        A->>A: analyse() builds forecast, risk, criteria, recommendations
+        A-->>P: 200 package and analysis
+        P-->>Q: 200
+        Q-->>V: New package and analysis
+        V-->>U: Charts and forecasts update
+    else Another tab saved first
+        A-->>P: 409 with the current package
+        P-->>Q: 409
+        Q->>P: Send the edit again on top of the newer version
+    end
+    Note over P,A: API down or slow: 503, the app shows "Backend unreachable" and retries every 5 s
+```
+
+### Web app (`apps/web`)
+
+The web app holds no domain data and computes nothing. Pages read through TanStack Query hooks and write through the save queue. Both go through one typed client to the `/api` route.
+
+```mermaid
+flowchart TB
+    subgraph views["Pages, app/(views)"]
+        direction TB
+        pkgp["/package"]
+        mapp["/map"]
+        graphp["/graph"]
+        askp["/ask"]
+        pipep["/pipeline"]
+        learnp["/learn"]
+    end
+
+    shell["Shell<br/>package bar and switcher · ⌘K command menu · backend status"]
+    current["Current package<br/>?pkg=id"]
+    hooks["lib/api/queries.ts<br/>TanStack Query hooks (reads)"]
+    queue["lib/api/write-queue.ts<br/>save queue (writes)"]
+    client["lib/api/client.ts<br/>typed client, types generated from openapi.json"]
+    route["app/api/[...path]/route.ts<br/>only /v1 paths · adds X-API-Key · refuses cross-site writes<br/>waits 30 s for Ask, 10 s otherwise"]
+    apiS["services/api"]
+
+    views --> shell --> current
+    views --> hooks --> client
+    views -->|"edits"| queue --> client
+    client -->|"fetch /api/v1/*"| route
+    route -->|"HTTP + X-API-Key"| apiS
+```
+
+### API (`services/api`)
+
+The API is the system of record. Each domain is one folder with its model, schemas, service and routes. On startup the seeder loads `data/seed/` into MongoDB when its version changes. It never touches saved packages.
+
+```mermaid
+flowchart TB
+    req(["Request from the web app"]) --> mw["Middleware<br/>request id · X-API-Key · zod validation<br/>errors as application/problem+json"]
+    mw --> packages & askm & learnm & refm & graphm
+
+    subgraph mods["src/modules"]
+        packages["packages<br/>create, edit, copy,<br/>import, export, version checks"]
+        analysis["analysis<br/>survival model, risk scores,<br/>criteria checks, recommendations"]
+        askm["ask<br/>LangGraph pipeline"]
+        learnm["learn<br/>feedback events"]
+        refm["reference · sources<br/>contracts · content"]
+        graphm["graph<br/>forwarder + snapshot fallback"]
+    end
+
+    packages --> analysis
+    mods <--> mongo[("MongoDB")]
+    askm --> gem["Gemini"]
+    graphm --> gs["Graph service"]
+
+    seedfiles[/"data/seed/ + VERSION"/] --> seeder["Seeder, on startup<br/>runs when VERSION changes<br/>fills graph references from records"] --> mongo
+```
+
+### Ask the evidence
+
+A LangGraph state graph runs once per question. The model is called at most three times: to rewrite a follow-up, to draft, and to score support. Every other step is plain code. If any model step fails or the run passes 20 s, the answer comes from prepared answers instead, with a notice.
+
+```mermaid
+flowchart TB
+    q(["POST /v1/ask"]) --> inj{"Looks like an instruction<br/>to the assistant?"}
+    inj -->|"yes"| refused(["Refused, nothing stored"])
+    inj -->|"no"| load["Load the conversation (last 4 turns),<br/>the open package and the passages"]
+    load --> lim{"Model configured and within limits?<br/>5 a minute · 100 a day · 60 s pause after a 429"}
+    lim -->|"no"| prepared
+    lim -->|"yes"| fu{"Follow-up?"}
+    fu -->|"yes"| ctx["Rewrite to stand alone<br/>and check scope · Gemini"]
+    fu -->|"no"| ret
+    ctx --> ret["Retrieve · no model<br/>BM25 with synonyms: top 8 passages<br/>plus the open package as passage pkg"]
+    ret --> draft["Draft · Gemini<br/>up to 6 claims, each citing passages"]
+    draft --> pre["Check · no model<br/>drop citations it was not given<br/>numbers must appear in the cited passage"]
+    pre --> ver["Score support · Gemini<br/>each claim against only its cited passages"]
+    ver --> keep["Keep claims scoring 0.75 or more<br/>show the rest struck out, with the reason"]
+    ctx & draft & ver -.->|"model fails"| prepared["Prepared answer, with a notice<br/>when the model hits its quota, takes over 8 s,<br/>returns invalid output or an upstream error,<br/>or the run passes 20 s"]
+    keep --> save[("Save the turn to askThreads<br/>20 turns · expires after 30 days")]
+    prepared --> save
+    save --> out(["Turn returned to the web app"])
+```
+
+When `LANGSMITH_TRACING` and `LANGSMITH_API_KEY` are set, each run is traced in LangSmith with its thread, package and request id.
+
+### Knowledge graph (`services/graph`)
+
+The graph service builds its graph once, at startup, from the collections the API seeded. After that it only answers reads, plus name matching. Semantica does the building, deduplication, provenance and analytics; the service's own code holds joint ventures out of deduplication and finds neighbourhoods.
+
+```mermaid
+flowchart LR
+    subgraph startup["At startup"]
+        direction TB
+        m[("MongoDB<br/>graphNodes · graphEdges<br/>supplierRegistry · suppliersRaw")] --> seedpy["seed.py<br/>load and validate"]
+        seedpy --> jv["Hold out joint ventures<br/>JV · / · consortium"]
+        jv --> dedup["Semantica DuplicateDetector<br/>group name variants into firms"]
+        dedup --> build["Semantica GraphBuilder<br/>entities and relationships"]
+        build --> prov["Semantica ProvenanceManager<br/>lineage for every node and link"]
+        prov --> an["Semantica analytics<br/>degree centrality · Louvain communities"]
+    end
+
+    startup --> mem[("In-memory graph<br/>read-only")]
+
+    subgraph endpoints["FastAPI · X-API-Key"]
+        direction LR
+        e1["GET /v1/graph?focus&hops"]
+        e2["GET /v1/full · /v1/nodes/{id}"]
+        e3["GET /v1/suppliers/clusters · /v1/analytics"]
+        e4["POST /v1/suppliers/resolve<br/>Jaro-Winkler, match at 0.88 or more"]
+    end
+
+    mem --> endpoints
+    ui["Knowledge graph page<br/>Live · Semantica or Snapshot badge"] --> apiP["API /v1/graph/*"]
+    apiP --> endpoints
+    apiP -.->|"timeout · 401 · 5xx · unreachable"| snap[/"Saved snapshot<br/>x-graph-source: snapshot"/]
+```
+
 ## Quick start
 
 ```bash
@@ -42,20 +237,25 @@ Start the API before the graph service: the graph service reads the collections 
 | `GRAPH_SERVICE_URL` | API | `http://localhost:8000` | Where the API reaches the graph service |
 | `EXPOSE_DOCS` | API, graph | `false` | Serve interactive API docs at `/docs`. Keep it off on public deployments |
 | `SEED_DIR` | API, graph | `data/seed` (API) | Seed files. The graph service uses it only without `MONGO_URL` (tests use `tests/fixtures/seed`) |
+| `GEMINI_API_KEY` | API | unset | Turns on the live model for **Ask the evidence**. Without it, Ask answers from prepared answers and says so. Free key: [Google AI Studio](https://aistudio.google.com/apikey) |
+| `GEMINI_MODEL` | API | `gemini-3.5-flash-lite` | Gemini model id |
+| `ASK_RPM`, `ASK_DAILY_LIMIT` | API | `5`, `100` | Questions per minute and per UTC day sent to the model, across all users. Over either, Ask uses prepared answers |
+| `LANGSMITH_TRACING`, `LANGSMITH_API_KEY` | API | off | Trace every Ask run in LangSmith when both are set. `LANGSMITH_ENDPOINT` for a non-US workspace region. Runs go to the agent named by `LANGSMITH_AGENT_ID` + `LANGSMITH_AGENT_ENVIRONMENT` (`local`, `development`, `staging` or `production`), or else to `LANGSMITH_PROJECT` (default `procurement-ask`) |
 
-Use long random keys outside local development. The keys only default to `dev-key` in development: in production (`NODE_ENV=production`) the API refuses to start without `API_KEY` and `GRAPH_API_KEY`, and the web app's `/api` route refuses to forward without `API_KEY`. The route also refuses writes sent by other sites (`Sec-Fetch-Site: cross-site` or a foreign `Origin`).
+`npm run dev` in `services/api` and `docker compose` both read `services/api/.env` (see `.env.example`); put `GEMINI_API_KEY` there. After changing it, restart the API (`docker compose up -d api`). Use long random keys outside local development. The keys only default to `dev-key` in development: in production (`NODE_ENV=production`) the API refuses to start without `API_KEY` and `GRAPH_API_KEY`, and the web app's `/api` route refuses to forward without `API_KEY`. The route also refuses writes sent by other sites (`Sec-Fetch-Site: cross-site` or a foreign `Origin`).
 
 ## Tests
 
 ```bash
-cd services/api && npm test            # Vitest + supertest on an in-memory MongoDB: model, packages, seeding, graph derivation, proxy, contract
+cd services/api && npm test            # Vitest + supertest on an in-memory MongoDB: model, packages, seeding, graph derivation, proxy, Ask pipeline, contract
+cd services/api && npm run eval:ask    # manual: the five suggested questions against the live model (needs GEMINI_API_KEY; spends quota)
 cd services/graph && uv run pytest     # graph build, supplier merges, provenance, API contract, Mongo seed loader
 cd apps/web && npm test                # Vitest: API proxy, save queue, legacy import, layout, geometry
 cd apps/web && npm run test:e2e        # Playwright, desktop + 390 px phone, against MongoDB, the API and the graph service
 cd apps/web && npm run test:e2e:dev    # hydration check against `next dev`
 ```
 
-Playwright starts MongoDB (Docker Compose), the API, the graph service and the web app, reusing any that are already running. Map tiles, terrain and elevation are served from local stubs. Every page is also checked for accessibility (axe, in both themes), console errors and horizontal overflow. CI runs all suites on every push and pull request.
+Playwright starts MongoDB (Docker Compose), the API, the graph service and the web app, reusing any that are already running. Tests never call a real model: Ask runs on prepared answers, or on a deterministic stand-in model that the API accepts only in E2E mode (`x-ask-model: fake`). Map tiles, terrain and elevation are served from local stubs. Every page is also checked for accessibility (axe, in both themes), console errors and horizontal overflow. CI runs all suites on every push and pull request.
 
 Contracts are generated, never hand-edited:
 
@@ -113,5 +313,5 @@ A production version would compute change per segment from individual Sentinel-2
 - **What's real:** the imagery, road geometry, elevation and Semantica's graph processing.
 - **What's illustrative:** all other data. Records follow the shapes of World Bank Contract Awards, Projects, Finances, Documents & Reports, CPIA and WGI data, but the project IDs, firms, passages and figures are synthetic. All of it lives in `data/seed/` and is loaded into MongoDB by the API.
 - **The models** in `services/api/src/modules/analysis/` are linearised stand-ins (a Weibull time-to-award model and logistic risk scores). They respond to every input, but they were not fitted to real data.
-- **Ask the evidence** uses prepared answers and grounding scores to demonstrate the behaviour; no language model is called at runtime.
+- **Ask the evidence** calls a real model (Gemini, through LangChain and LangGraph) when `GEMINI_API_KEY` is set; see [Ask the evidence](docs/architecture.md#ask-the-evidence). Without a key, or when the model is over quota, slow or returns something unusable, it falls back to prepared answers and says so. Gemini's free tier may use prompts to improve Google's products; that is acceptable here only because all the data is synthetic.
 - **No accounts:** everyone who can reach the app sees and edits the same saved packages. Two people editing the same package at once is handled by version checks: the later save is re-applied on top, and the app says so.
